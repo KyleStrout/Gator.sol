@@ -2,14 +2,16 @@ import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import { makeStyles, themeProvider } from "@mui/material";
 import { Button } from "@mui/material";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 
 function LandingPage(props) {
   return (
-    <React.Fragment>
-      <div>
-        <h1>Landing Page</h1>
-      </div>
-    </React.Fragment>
+    <div>
+      <Container>
+        <Typography variant="h2">Landing Page</Typography>
+      </Container>
+    </div>
   );
 }
 
