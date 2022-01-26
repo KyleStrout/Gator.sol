@@ -35,8 +35,7 @@ function LandingPage() {
           }}
           variant="contained"
         >
-          {" "}
-          Start Course{" "}
+          Start Course
         </Button>
       </Box>
       <Box
