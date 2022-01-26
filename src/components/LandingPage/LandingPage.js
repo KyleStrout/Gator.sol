@@ -2,12 +2,15 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
+  let navigate = useNavigate();
   return (
     <Box
       sx={{
         width: "100%",
+        height: "100%",
         justifyContent: "space-around",
         alignItems: "center",
         display: "flex",
@@ -25,7 +28,15 @@ function LandingPage() {
         <Typography mb={3}>
           Welcome to our project. The goal is to learn about the blockchain!
         </Typography>
-        <Button variant="contained"> Start Course </Button>
+        <Button
+          onClick={() => {
+            // navigate to the course home page
+            navigate("/course-home");
+          }}
+          variant="contained"
+        >
+          Start Course
+        </Button>
       </Box>
       <Box
         sx={{
