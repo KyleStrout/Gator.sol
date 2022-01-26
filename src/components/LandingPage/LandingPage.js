@@ -8,6 +8,7 @@ function LandingPage() {
     <Box
       sx={{
         width: "100%",
+        height: "100%",
         justifyContent: "space-around",
         alignItems: "center",
         display: "flex",
