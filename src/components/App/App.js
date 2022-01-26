@@ -10,15 +10,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
 import "./App.css";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#2196f3",
-      secondary: "#ff5722",
-    },
-  },
-});
+import Theme from "../Theme";
 
 function App() {
   return (
@@ -28,7 +20,7 @@ function App() {
         height: "100%",
       }}
     >
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Theme}>
         <Navbar />
 
         <Box
