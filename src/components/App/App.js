@@ -31,12 +31,19 @@ function App() {
       <ThemeProvider theme={theme}>
         <Navbar />
 
-        <Routes>
-          <Route exact path="/" element={<LandingPage />}></Route>
-          <Route path="/about" element={<About />}></Route>
-          <Route path="/home" element={<LandingPage />}></Route>
-          <Route path="/course-home" element={<CourseHome />}></Route>
-        </Routes>
+        <Box
+          sx={{
+            height: "calc(100% - 4rem)",
+            width: "100%",
+          }}
+        >
+          <Routes>
+            <Route exact path="/" element={<LandingPage />}></Route>
+            <Route path="/about" element={<About />}></Route>
+            <Route path="/home" element={<LandingPage />}></Route>
+            <Route path="/course-home" element={<CourseHome />}></Route>
+          </Routes>
+        </Box>
       </ThemeProvider>
     </Box>
   );
