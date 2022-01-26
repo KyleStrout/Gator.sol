@@ -1,17 +1,44 @@
 import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
-import { makeStyles, themeProvider } from "@mui/material";
-import { Button } from "@mui/material";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
-function LandingPage(props) {
+function LandingPage() {
   return (
-    <div>
-      <Container>
-        <Typography variant="h2">Landing Page</Typography>
-      </Container>
-    </div>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        justifyContent: "space-around",
+        alignItems: "center",
+        display: "flex",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "15rem",
+          textAlign: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography mb={3}>
+          Welcome to our project. The goal is to learn about the blockchain!
+        </Typography>
+        <Button variant="contained"> Start Course </Button>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "40rem",
+          height: "30rem",
+          borderRadius: "2.5rem",
+          backgroundColor: "gray",
+        }}
+      ></Box>
+    </Box>
   );
 }
 
