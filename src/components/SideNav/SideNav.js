@@ -23,6 +23,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import { positions } from "@mui/system";
 
 function SideNav(props) {
   const drawerWidth = 75;
@@ -35,50 +36,48 @@ function SideNav(props) {
 
   let navigate = useNavigate();
 
-  const drawer = (
-    <div>
-      <ThemeProvider theme={Theme}>
-        <Toolbar>
-          <Typography variant="sub2">
-            <Button
-              onClick={() => {
-                navigate("/home");
-              }}
-            ></Button>
-            Logo
-          </Typography>
-        </Toolbar>
+  const menuItems = [
+    {
+      key: 0,
+      icon: <HomeIcon color="primary" />,
+      path: "/home",
+    },
+    {
+      key: 1,
+      icon: <FormatListBulletedIcon color="primary" />,
+      path: "/course-home",
+    },
+  ];
 
+  const drawer = (
+    <Box>
+      <Box>
         <Divider />
         <List>
-          {[
-            <HomeIcon fontSize="large" />,
-            <FormatListBulletedIcon fontSize="large" />,
-          ].map((icon, index) => (
-            <ListItemButton
-              onClick={() => {
-                if (index == 0) {
-                  navigate("/home");
-                } else if (index == 1) {
-                  navigate("/course-home");
-                }
-              }}
-            >
-              {/* Problem with icon alignment on sidebar */}
-              <ListItemIcon sx={{ align: "right" }}>{icon}</ListItemIcon>
-            </ListItemButton>
+          {menuItems.map((item) => (
+            <ListItem button key={item.key} onClick={() => navigate(item.path)}>
+              <ListItemIcon size="large">{item.icon}</ListItemIcon>
+            </ListItem>
           ))}
         </List>
         <Divider />
-      </ThemeProvider>
-    </div>
+      </Box>
+    </Box>
   );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        justifyContent: "space-around",
+        alignItems: "center",
+        display: "flex",
+      }}
+    >
       <Drawer
         container={container}
         variant="temporary"
@@ -103,8 +102,8 @@ function SideNav(props) {
           display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
+            height: "calc(100%)",
             width: drawerWidth,
-            height: "calc(100% - 4rem)",
           },
         }}
         open

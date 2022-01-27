@@ -1,18 +1,17 @@
 import React from "react";
 import ThemeProvider from "@mui/styles/ThemeProvider";
 import { createTheme } from "@mui/material/styles";
+import { orange, blue } from "@mui/material/colors";
 
-const theme = createTheme({
+const Theme = createTheme({
   palette: {
     primary: {
-      main: "#2196f3",
-      secondary: "#ff5722",
+      main: blue[500],
+    },
+    secondary: {
+      main: orange[400],
     },
   },
 });
-
-function Theme() {
-  return theme;
-}
 
 export default Theme;

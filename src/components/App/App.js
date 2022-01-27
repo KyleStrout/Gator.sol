@@ -3,7 +3,7 @@
 import LandingPage from "../LandingPage";
 import About from "../About";
 import React from "react";
-import { ThemeProvider } from "@mui/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
@@ -14,13 +14,13 @@ import Theme from "../Theme";
 
 function App() {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <ThemeProvider theme={Theme}>
+    <ThemeProvider theme={Theme}>
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <Navbar />
 
         <Box
@@ -36,8 +36,8 @@ function App() {
             <Route path="/course-home" element={<CourseHome />}></Route>
           </Routes>
         </Box>
-      </ThemeProvider>
-    </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 
