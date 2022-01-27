@@ -10,7 +10,7 @@ function About() {
     <div>
       <ThemeProvider theme={Theme}>
         <Container>
-          <Typography variant="h2">About</Typography>
+          <Typography variant="h2">About hi</Typography>
           <SideNav />
         </Container>
       </ThemeProvider>
