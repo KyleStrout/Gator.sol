@@ -6,6 +6,7 @@ import React from "react";
 import { ThemeProvider } from "@mui/styles";
 import { createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
@@ -22,30 +23,18 @@ const theme = createTheme({
 
 function App() {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
+    <Container fluid disableGutters>
       <ThemeProvider theme={theme}>
         <Navbar />
 
-        <Box
-          sx={{
-            height: "calc(100% - 4rem)",
-            width: "100%",
-          }}
-        >
-          <Routes>
-            <Route exact path="/" element={<LandingPage />}></Route>
-            <Route path="/about" element={<About />}></Route>
-            <Route path="/home" element={<LandingPage />}></Route>
-            <Route path="/course-home" element={<CourseHome />}></Route>
-          </Routes>
-        </Box>
+        <Routes>
+          <Route exact path="/" element={<LandingPage />}></Route>
+          <Route path="/about" element={<About />}></Route>
+          <Route path="/home" element={<LandingPage />}></Route>
+          <Route path="/course-home" element={<CourseHome />}></Route>
+        </Routes>
       </ThemeProvider>
-    </Box>
+    </Container>
   );
 }
 
