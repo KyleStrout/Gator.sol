@@ -3,9 +3,9 @@
 import LandingPage from "../LandingPage";
 import About from "../About";
 import React from "react";
+import { styled } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/styles";
 import { createTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
@@ -21,10 +21,16 @@ const theme = createTheme({
   },
 });
 
+const AppContainer = styled((props) => <Container disableGutters {...props} />)(
+  () => ({
+    height: `100%`,
+  })
+);
+
 function App() {
   return (
-    <Container fluid disableGutters>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <AppContainer>
         <Navbar />
 
         <Routes>
@@ -33,8 +39,8 @@ function App() {
           <Route path="/home" element={<LandingPage />}></Route>
           <Route path="/course-home" element={<CourseHome />}></Route>
         </Routes>
-      </ThemeProvider>
-    </Container>
+      </AppContainer>
+    </ThemeProvider>
   );
 }
 

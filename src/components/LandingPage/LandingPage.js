@@ -3,19 +3,25 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+
+const LandingContainer = styled((props) => (
+  <Box
+    sx={{
+      width: "100%",
+      height: "100%",
+      justifyContent: "space-around",
+      alignItems: "center",
+      display: "flex",
+    }}
+    {...props}
+  ></Box>
+))(() => {});
 
 function LandingPage() {
   let navigate = useNavigate();
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        justifyContent: "space-around",
-        alignItems: "center",
-        display: "flex",
-      }}
-    >
+    <LandingContainer>
       <Box
         sx={{
           display: "flex",
@@ -48,7 +54,7 @@ function LandingPage() {
           backgroundColor: "gray",
         }}
       ></Box>
-    </Box>
+    </LandingContainer>
   );
 }
 
