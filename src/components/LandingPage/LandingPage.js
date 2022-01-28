@@ -37,7 +37,7 @@ function LandingPage() {
         <Button
           onClick={() => {
             // navigate to the course home page
-            navigate("/course-home");
+            navigate("/course");
           }}
           variant="contained"
         >

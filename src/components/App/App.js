@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
+import CoursePage from "../CoursePage";
 
 const theme = createTheme({
   palette: {
@@ -20,11 +21,13 @@ const theme = createTheme({
   },
 });
 
-const AppContainer = styled((props) => <Container disableGutters {...props} />)(
-  () => ({
-    height: `100%`,
-  })
-);
+const AppContainer = styled((props) => (
+  <Container disableGutters fluid {...props} />
+))(() => ({
+  height: `100%`,
+  width: `100%`,
+  maxWidth: `100% !important`,
+}));
 
 function App() {
   return (
@@ -36,7 +39,12 @@ function App() {
           <Route exact path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<About />}></Route>
           <Route path="/home" element={<LandingPage />}></Route>
-          <Route path="/course/*" element={<CourseHome />}></Route>
+          <Route path="/course/*" element={<CourseHome />}>
+            <Route
+              path="blockchain"
+              element={<CoursePage title="Blockchain" />}
+            ></Route>
+          </Route>
         </Routes>
       </AppContainer>
     </ThemeProvider>

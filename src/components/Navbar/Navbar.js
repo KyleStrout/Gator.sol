@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar() {
   let navigate = useNavigate();
   return (
-    <AppBar position="static" sx={{ height: "4rem" }}>
+    <AppBar position="sticky" sx={{ height: "4rem" }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           <Button

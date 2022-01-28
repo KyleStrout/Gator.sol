@@ -10,6 +10,7 @@ const SideNavDrawer = styled(Drawer)(() => ({
     width: "12rem",
     boxSizing: "border-box",
     top: "4rem",
+    height: "100%",
   },
 }));
 

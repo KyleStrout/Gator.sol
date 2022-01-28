@@ -1,17 +1,16 @@
 // React Components
-import { Routes, Route } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 // Material Components
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 // Custom Components
 import SideNav from "../SideNav";
-import CoursePage from "../CoursePage";
 
 const CourseHomeContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "row",
-  height: "100%",
+  height: "calc(100% - 4rem)",
   width: "100%",
 }));
 
@@ -27,9 +26,7 @@ export default function CourseHome() {
     <CourseHomeContainer>
       <SideNav></SideNav>
       <ContentContainer>
-        <Routes>
-          <Route path="/course/blockchain" element={<CoursePage />}></Route>
-        </Routes>
+        <Outlet></Outlet>
       </ContentContainer>
     </CourseHomeContainer>
   );
