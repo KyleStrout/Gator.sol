@@ -7,7 +7,7 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 
 import SectionList from "../SectionList";
-
+import course from "../../data/course.js";
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(() => ({}));
@@ -43,19 +43,33 @@ export default function SideNavAccordion() {
     setExpanded(newExpanded ? panel : false);
   };
 
+  // set expanded to chapter 1 on load
+  React.useEffect(() => {
+    setExpanded(course.chapters[0].url);
+  }, []);
+
   return (
     <div>
-      <Accordion
-        expanded={expanded === "panel1"}
-        onChange={handleChange("panel1")}
-      >
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography fontSize={"0.75rem"}>Blockchain Concepts</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <SectionList></SectionList>
-        </AccordionDetails>
-      </Accordion>
+      {course.chapters.map((chapter, index) => (
+        <Accordion
+          expanded={expanded === chapter.url}
+          onChange={handleChange(chapter.url)}
+        >
+          <AccordionSummary
+            aria-controls={`${chapter.title}-content`}
+            id={`${chapter.title}-header`}
+          >
+            <Typography fontSize={"0.75rem"}>{chapter.title}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <SectionList
+              chapterIndex={index + 1}
+              chapterUrl={chapter.url}
+              sections={chapter.sections}
+            ></SectionList>
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </div>
   );
 }

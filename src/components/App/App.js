@@ -6,12 +6,12 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/styles";
 import { createTheme } from "@mui/material/styles";
-import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
 import SectionPage from "../SectionPage";
-
+import course from "../../data/course.js";
 const theme = createTheme({
   palette: {
     primary: {
@@ -21,12 +21,9 @@ const theme = createTheme({
   },
 });
 
-const AppContainer = styled((props) => (
-  <Container disableGutters fluid {...props} />
-))(() => ({
+const AppContainer = styled(Box)(() => ({
   height: `100%`,
   width: `100%`,
-  maxWidth: `100% !important`,
 }));
 
 function App() {
@@ -40,10 +37,14 @@ function App() {
           <Route path="/about" element={<About />}></Route>
           <Route path="/home" element={<LandingPage />}></Route>
           <Route path="/course/*" element={<CourseHome />}>
-            <Route
-              path="blockchain"
-              element={<SectionPage title="Blockchain" />}
-            ></Route>
+            {course.chapters.map((chapter) =>
+              chapter.sections.map((section) => (
+                <Route
+                  path={`${chapter.url}/${section.url}`}
+                  element={<SectionPage title={section.title} />}
+                />
+              ))
+            )}
           </Route>
         </Routes>
       </AppContainer>
