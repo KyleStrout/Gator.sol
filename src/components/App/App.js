@@ -10,7 +10,7 @@ import Container from "@mui/material/Container";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
-import CoursePage from "../CoursePage";
+import SectionPage from "../SectionPage";
 
 const theme = createTheme({
   palette: {
@@ -42,7 +42,7 @@ function App() {
           <Route path="/course/*" element={<CourseHome />}>
             <Route
               path="blockchain"
-              element={<CoursePage title="Blockchain" />}
+              element={<SectionPage title="Blockchain" />}
             ></Route>
           </Route>
         </Routes>
