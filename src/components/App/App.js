@@ -10,7 +10,6 @@ import Container from "@mui/material/Container";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
-import "./App.css";
 
 const theme = createTheme({
   palette: {
@@ -37,7 +36,7 @@ function App() {
           <Route exact path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<About />}></Route>
           <Route path="/home" element={<LandingPage />}></Route>
-          <Route path="/course-home" element={<CourseHome />}></Route>
+          <Route path="/course/*" element={<CourseHome />}></Route>
         </Routes>
       </AppContainer>
     </ThemeProvider>
