@@ -2,6 +2,10 @@
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+// Custom Components
+import SectionContent from "../SectionContent";
+// import SectionInteraction from "../SectionInteraction";
+
 const SectionPageContainer = styled(Box)(() => ({
   display: "flex",
   width: "100%",
@@ -11,7 +15,11 @@ const SectionPageContainer = styled(Box)(() => ({
 export default function SectionPage(props) {
   return (
     <SectionPageContainer>
-      <Typography variant="h1">{props.title}</Typography>
+      <SectionContent contentUrl={props.contentUrl}>
+        <Typography variant="h4">{props.chapterTitle}</Typography>
+        <Typography variant="h5">{props.title}</Typography>
+      </SectionContent>
+      {/* <SectionContent></SectionContent> */}
     </SectionPageContainer>
   );
 }

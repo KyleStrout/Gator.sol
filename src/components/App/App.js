@@ -31,7 +31,13 @@ function App() {
               chapter.sections.map((section) => (
                 <Route
                   path={`${chapter.url}/${section.url}`}
-                  element={<SectionPage title={section.title} />}
+                  element={
+                    <SectionPage
+                      chapterTitle={chapter.title}
+                      contentUrl={section.contentUrl}
+                      title={section.title}
+                    />
+                  }
                 />
               ))
             )}
