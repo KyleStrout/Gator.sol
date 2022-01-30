@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 export default function SectionContent(props) {
   const [content, setContent] = useState("");
@@ -37,7 +38,11 @@ export default function SectionContent(props) {
         margin: "0.5rem 1rem",
       }}
     >
-      <ReactMarkdown id="markdown" children={content} />
+      <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
+        id="markdown"
+        children={content}
+      />
     </Box>
   );
 }

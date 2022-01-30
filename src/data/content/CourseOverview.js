@@ -8,7 +8,9 @@ The course is divided into 4 different parts:
 
 We will expect that you already know some programming, such as python or javascript. If you’re completely new to programming, we recommend you try an introductory course first. 
 
-This course is designed to be interactive. For example, you might find a play button next to some content. Click the button to see what happens! <div id="play-button-example"></div>
+This course is designed to be interactive. For example, you might find a play button next to some content. Click the button to see what happens! 
+
+<div id="play-button-example"></div>
 
 To enhance your learning, you might throw some questions into the content. Don’t worry no one is grading you!
 
