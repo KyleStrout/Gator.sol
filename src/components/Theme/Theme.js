@@ -1,5 +1,3 @@
-import React from "react";
-import ThemeProvider from "@mui/styles/ThemeProvider";
 import { createTheme } from "@mui/material/styles";
 import { orange, blue } from "@mui/material/colors";
 

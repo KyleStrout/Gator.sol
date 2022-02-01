@@ -54,6 +54,7 @@ export default function SideNavAccordion() {
         <Accordion
           expanded={expanded === chapter.url}
           onChange={handleChange(chapter.url)}
+          key={index}
         >
           <AccordionSummary
             aria-controls={`${chapter.title}-content`}

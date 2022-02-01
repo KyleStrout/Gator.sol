@@ -1,6 +1,21 @@
 const course = {
   chapters: [
     {
+      title: "Course Introduction",
+      url: "course-introduction",
+      sections: [
+        {
+          title: "Course Overview",
+          url: "course-overview",
+          contentUrl: "CourseOverview.js",
+        },
+        {
+          title: "Wallet setup",
+          url: "wallet-setup",
+        },
+      ],
+    },
+    {
       title: "Blockchain Concepts",
       url: "blockchain-concepts",
       sections: [
