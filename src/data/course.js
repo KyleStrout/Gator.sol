@@ -74,7 +74,7 @@ const course = {
           url: "hello-world",
           hasCodeEditor: true,
           defaultCode:
-            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";}\n\n\n',
+            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";\n}\n\n\n',
         },
         {
           title: "...and more",
@@ -92,7 +92,7 @@ const course = {
           contentUrl: "SolidityAdvanced.js",
           hasCodeEditor: true,
           defaultCode:
-            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";}\n\n\n',
+            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";\n}\n\n\n',
         },
         {
           title: "...and more",

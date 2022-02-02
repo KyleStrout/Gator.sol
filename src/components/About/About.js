@@ -6,10 +6,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 
-import CodeEditor from "../CodeEditor";
-import EditorContent from "../EditorContent";
-import SectionContent from "../SectionContent";
-
 const ContentContainer = styled(Box)(() => ({
   width: "100%-(12rem)",
   marginLeft: "12rem",
@@ -20,13 +16,9 @@ const ContentContainer = styled(Box)(() => ({
 
 function About() {
   return (
-    //<SectionContent></SectionContent>
     <ContentContainer>
-      <SectionContent></SectionContent>
-      <EditorContent></EditorContent>
+      <Typography>Test stuff here if u want</Typography>
     </ContentContainer>
-
-    // hello world
   );
 }
 
