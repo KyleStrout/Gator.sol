@@ -2,7 +2,7 @@
 import { Outlet } from "react-router-dom";
 
 // Material Components
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 // Custom Components
 import SideNav from "../SideNav";
@@ -19,6 +19,7 @@ const ContentContainer = styled(Box)(() => ({
   marginLeft: "12rem",
   height: "100%",
   backgroundColor: "lightblue",
+  flexDirection: "row",
 }));
 
 export default function CourseHome() {

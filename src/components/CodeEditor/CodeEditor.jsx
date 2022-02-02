@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useState } from "react";
-import { render } from "react-dom";
-
 // monaco editor
 import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
 // mui
@@ -9,30 +7,16 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 
 // Can have default code/imports/version here and can be dynamic for exercises
-const defaultContent = 'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";\n}';
 
 
 
 export default function CodeEditor(props)
 {
-    /* ************ DYNAMIC NOT WORKING *************
-    *************** (POSSIBLE FIX: HAVE EXTRA CHECK FOR IF CHAPTER OBJECT HAS CODE EDITOR, if section has code editor, use different/nested container) *************
-    
-    const [defaultContent, setDefaultContent] = useState("");
+    const defaultCode = props.defaultCode;
 
-  useEffect(() => {
-    async function loadDefaultContent() {
-      if (!props.contentUrl) {
-        setDefaultContent("");
-        console.log("No content url");
-      } else {
-        const data = await import(`../../data/content/${props.contentUrl}`);
-        setDefaultContent(data?.default);
-      }
-    }
-    loadDefaultContent();
-  }, [props.contentUrl]);
-  */
+  
+
+
 
     const editorRef = useRef(null);
 
@@ -58,10 +42,10 @@ export default function CodeEditor(props)
     return (
         <Container>
         <Editor
-            height="90vh"
+            height="75.5vh"
             width="80vh"
             defaultLanguage="sol"
-            defaultValue={defaultContent}
+            defaultValue={defaultCode}
             language="sol"
             saveViewState={true}
             theme="vs-dark" // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
@@ -69,6 +53,7 @@ export default function CodeEditor(props)
             lineNumbers="on"
             automaticLayout={true}
             verticalScrollbarSize={12}
+            horizontalScrollbarSize={10}
             vertical="auto"
             horizontal="auto"
             scrollBeyondLastLine={false}
@@ -79,7 +64,7 @@ export default function CodeEditor(props)
         />
         {/* This button is like run/compile and will send value to remix api*/}
         {/* Can edit the button however we want it ==== nothing here is final ====*/}
-        <Button
+        <Button sx = {{marginTop: "5px"}}
         onClick={() => {
             showValue();
           }} 

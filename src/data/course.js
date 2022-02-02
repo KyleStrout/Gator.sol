@@ -8,6 +8,8 @@ const course = {
           title: "Course Overview",
           url: "course-overview",
           contentUrl: "CourseOverview.js",
+          hasCodeEditor: false,
+          defaultCode: "",
         },
         {
           title: "Wallet setup",
@@ -18,22 +20,30 @@ const course = {
     {
       title: "Blockchain Concepts",
       url: "blockchain-concepts",
+      // editor="true",
       sections: [
         {
           title: "What is Blockchain",
           url: "what-is-blockchain",
+          hasCodeEditor: false,
+          defaultCode: "",
         },
         {
           title: "Pillars of Blockchain",
           url: "pillars-of-blockchain",
+          hasCodeEditor: false,
+          defaultCode: "",
         },
         {
           title: "Types of Blockchain",
           url: "types-of-blockchain",
+          defaultCode: "",
         },
         {
           title: "What is Blockchain",
           url: "what-is-blockchain",
+          hasCodeEditor: false,
+          defaultCode: "",
         },
       ],
     },
@@ -44,10 +54,14 @@ const course = {
         {
           title: "What is a Smart Contract",
           url: "what-is-a-smart-contract",
+          hasCodeEditor: false,
+          defaultCode: "",
         },
         {
           title: "and more...",
           url: "and-more",
+          hasCodeEditor: false,
+          defaultCode: "",
         },
       ],
     },
@@ -58,6 +72,9 @@ const course = {
         {
           title: "Hello World",
           url: "hello-world",
+          hasCodeEditor: true,
+          defaultCode:
+            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";}\n\n\n',
         },
         {
           title: "...and more",
@@ -73,6 +90,9 @@ const course = {
           title: "Hello World",
           url: "hello-world",
           contentUrl: "SolidityAdvanced.js",
+          hasCodeEditor: true,
+          defaultCode:
+            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";}\n\n\n',
         },
         {
           title: "...and more",

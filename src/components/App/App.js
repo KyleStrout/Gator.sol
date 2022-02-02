@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
 import SectionPage from "../SectionPage";
+import SectionContent from "../SectionContent";
 import course from "../../data/course.js";
 import theme from "../Theme";
 
@@ -31,7 +32,13 @@ function App() {
               chapter.sections.map((section) => (
                 <Route
                   path={`${chapter.url}/${section.url}`}
-                  element={<SectionPage contentUrl={section.contentUrl} />}
+                  element={
+                    <SectionPage
+                      contentUrl={section.contentUrl}
+                      hasCodeEditor={section.hasCodeEditor}
+                      defaultCode={section.defaultCode}
+                    />
+                  }
                 />
               ))
             )}

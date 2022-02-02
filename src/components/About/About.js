@@ -7,29 +7,26 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 
 import CodeEditor from "../CodeEditor";
+import EditorContent from "../EditorContent";
+import SectionContent from "../SectionContent";
 
 const ContentContainer = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-  height: "fit-content",
-  maxHeight: "calc(100% - 2rem)",
-  justifyContent: "flex-start",
-  alignItems: "flex-start",
-  overflow: "scroll",
-  border: "1px solid black",
-  padding: "1rem",
-  margin: "0.5rem 1rem",
+  width: "100%-(12rem)",
+  marginLeft: "12rem",
+  height: "100%",
+  backgroundColor: "lightblue",
+  flexDirection: "row",
 }));
 
 function About() {
   return (
-    <div>
-      <ContentContainer>
-        <Typography variant="h2">About</Typography>
-        <CodeEditor />
-      </ContentContainer>
-    </div>
+    //<SectionContent></SectionContent>
+    <ContentContainer>
+      <SectionContent></SectionContent>
+      <EditorContent></EditorContent>
+    </ContentContainer>
+
+    // hello world
   );
 }
 

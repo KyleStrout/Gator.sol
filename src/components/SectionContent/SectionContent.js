@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-const ContentContainer = styled(Box)(() => ({
+let ContentContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
@@ -24,7 +24,6 @@ const ContentContainer = styled(Box)(() => ({
 
 export default function SectionContent(props) {
   const [content, setContent] = useState("");
-
   useEffect(() => {
     async function loadData() {
       if (!props.contentUrl) {
