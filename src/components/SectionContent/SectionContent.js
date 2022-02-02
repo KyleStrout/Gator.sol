@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-let ContentContainer = styled(Box)(() => ({
+const ContentContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",

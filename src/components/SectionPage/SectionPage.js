@@ -31,10 +31,7 @@ export default function SectionPage(props) {
 
   return (
     <SectionPageContainer>
-      <SectionContent
-        contentUrl={props.contentUrl}
-        hasCodeEditor={props.hasCodeEditor}
-      ></SectionContent>
+      <SectionContent contentUrl={props.contentUrl}></SectionContent>
       <EditorBox hasCodeEditor={props.hasCodeEditor}></EditorBox>
 
       {/* <SectionContent></SectionContent> */}
