@@ -1,2 +1,2 @@
-import SectionPage from "./SetionPage";
+import SectionPage from "./SectionPage";
 export default SectionPage;

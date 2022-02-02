@@ -2,7 +2,7 @@ import LandingPage from "../LandingPage";
 import About from "../About";
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { ThemeProvider } from "@mui/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";

@@ -72,6 +72,7 @@ const course = {
         {
           title: "Hello World",
           url: "hello-world",
+          contentUrl: "SolidityAdvanced.js",
         },
         {
           title: "...and more",
