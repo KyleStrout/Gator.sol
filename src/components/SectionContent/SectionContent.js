@@ -24,7 +24,6 @@ const ContentContainer = styled(Box)(() => ({
 
 export default function SectionContent(props) {
   const [content, setContent] = useState("");
-
   useEffect(() => {
     async function loadData() {
       if (!props.contentUrl) {
