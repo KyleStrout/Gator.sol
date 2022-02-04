@@ -47,28 +47,27 @@ export default function CodeEditor(props) {
 
   return (
     <Box
-      height="100%"
       sx={{
-        border: "1px solid red",
-        backgroundColor: theme === "vs-dark" ? "#1e1e1e" : "#f5f5f5",
+        border: `1rem solid ${theme === "vs-dark" ? "#1e1e1e" : "white"}`,
+        boxSizing: "border-box",
       }}
     >
       <Editor
+        height="40vh"
         defaultLanguage="sol"
         defaultValue={props.defaultCode}
         language="sol"
         saveViewState={true}
         theme={theme} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
-        lineHeight="19"
-        lineNumbers="on"
-        verticalScrollbarSize={12}
-        horizontalScrollbarSize={10}
-        vertical="auto"
-        horizontal="auto"
         editorDidMount={handleEditorDidMount}
         onMount={handleEditorDidMount}
         onChange={handleEditorChange}
         onValidate={handleEditorValidation}
+        options={{
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+          lineNumbers: "off",
+        }}
       />
       {/* This button is like run/compile and will send value to remix api*/}
       {/* Can edit the button however we want it ==== nothing here is final ====*/}
@@ -77,7 +76,7 @@ export default function CodeEditor(props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: "1rem",
+          backgroundColor: theme === "vs-dark" ? "#1e1e1e" : "white",
         }}
       >
         <ThemeSwitch

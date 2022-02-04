@@ -9,18 +9,19 @@ const SectionInteractionContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
+  height: "100%",
   margin: "0.5rem 0",
-  border: "2px solid red",
 }));
 
 function SectionInteractionContent(props) {
   if (props.hasCodeEditor) {
     return (
-      <Box>
+      <Box height="100%">
         <CodeEditor defaultCode={props.defaultCode} />
         <Box
           sx={{
-            border: "1px solid red",
+            height: "40vh",
+            backgroundColor: "white",
           }}
         >
           output goes here

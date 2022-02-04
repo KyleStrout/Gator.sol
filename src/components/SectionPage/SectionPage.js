@@ -1,5 +1,5 @@
 // Material Components
-import { Box } from "@mui/material";
+import { Box, Hidden } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 // Custom Components
@@ -10,6 +10,7 @@ const SectionPageContainer = styled(Box)(() => ({
   width: "100%",
   height: "100%",
   alignItems: "start",
+  overflow: "hidden",
 }));
 
 export default function SectionPage(props) {
