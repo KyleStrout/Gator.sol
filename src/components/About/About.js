@@ -1,8 +1,5 @@
 import React from "react";
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import SideNav from "../SideNav";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import CodeEditor from "../CodeEditor";
