@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 
 import ThemeSwitch from "./ThemeSwitch";
-
+import { editor } from "monaco-editor";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
@@ -32,7 +32,6 @@ export default function CodeEditor(props)
     function handleEditorValidation(markers) {
         markers.forEach(marker => console.log("onValidate:", marker.message))
     }
-
     const handleSwitchChange = (event) => {
         setChecked(event.target.checked);
     }
@@ -44,6 +43,20 @@ export default function CodeEditor(props)
             setTheme("vs-light");
         }
     }, [checked]);
+
+
+    async function compile() {
+        console.log(JSON.stringify({ "value": editorRef.current.getValue()}));
+        const response = await fetch('http://localhost:3001/compile', {
+            headers: {
+                "Content-Type": "application/json",
+              },
+            method: 'POST',
+            body: JSON.stringify({ "value": editorRef.current.getValue()}),
+        });
+        const data = await response.json();
+        console.log(data);
+    }
 
     // possible handleSave function? need to research more on what it does exactly
     // function handleSave()
@@ -76,6 +89,7 @@ export default function CodeEditor(props)
         <Button sx = {{marginTop: "-7px", marginLeft: "0em"}}
         onClick={() => {
             showValue();
+            compile();
           }} 
         color="secondary" variant="contained">
             <Typography>Show Value</Typography>
