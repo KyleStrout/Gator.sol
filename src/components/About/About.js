@@ -5,6 +5,7 @@ import SideNav from "../SideNav";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
+import CodeEditor from "../CodeEditor";
 
 const ContentContainer = styled(Box)(() => ({
   width: "100%-(12rem)",
@@ -18,6 +19,7 @@ function About() {
   return (
     <ContentContainer>
       <Typography>Test stuff here if u want</Typography>
+      <CodeEditor />
     </ContentContainer>
   );
 }
