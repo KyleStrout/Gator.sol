@@ -20,7 +20,7 @@ export default function SectionPage(props) {
   function EditorBox(props) {
     if (props.hasCodeEditor) {
       return (
-        <Box sx={{ paddingTop: "8px", marginLeft: "-40px" }}>
+        <Box sx={{ paddingTop: "8px", marginLeft: "0" }}>
           <CodeEditor defaultCode={defaultCode} />
         </Box>
       );

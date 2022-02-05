@@ -62,7 +62,7 @@ export default function CodeEditor(props)
     // function handleSave()
 
     return (
-        <Container>
+        <Container disableGutters>
         <Editor
             height="75.5vh"
             width="80vh"
