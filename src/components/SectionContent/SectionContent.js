@@ -19,7 +19,10 @@ const ContentContainer = styled(Box)(() => ({
   overflow: "scroll",
   border: "1px solid black",
   padding: "1rem",
-  margin: "0.5rem 1rem",
+  marginTop: "0.5rem",
+  marginBottom: "0.5rem",
+  marginRight: "0rem",
+  marginLeft: "1rem",
 }));
 
 export default function SectionContent(props) {
