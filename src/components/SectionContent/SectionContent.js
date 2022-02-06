@@ -12,14 +12,11 @@ const ContentContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  height: "85vh",
-  maxHeight: "calc(100% - 2rem)",
+  height: "calc(100vh - 4rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
   overflow: "scroll",
-  border: "1rem solid white",
   backgroundColor: "white",
-  margin: "0.5rem .25rem",
 }));
 
 export default function SectionContent(props) {
@@ -37,7 +34,7 @@ export default function SectionContent(props) {
   }, [props.contentUrl]);
 
   return (
-    <ContentContainer>
+    <ContentContainer id="content-container">
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
         id="markdown"

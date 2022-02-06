@@ -1,5 +1,5 @@
 // Material Components
-import { Box, Hidden } from "@mui/material";
+import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 // Custom Components
@@ -8,16 +8,21 @@ import SectionInteraction from "../SectionInteraction";
 const SectionPageContainer = styled(Box)(() => ({
   display: "flex",
   width: "100%",
-  height: "100%",
+  height: "calc(100vh - 4rem)",
+  justifyContent: "center",
   alignItems: "start",
   overflow: "hidden",
 }));
 
 export default function SectionPage(props) {
   return (
-    <SectionPageContainer>
-      <SectionContent contentUrl={props.contentUrl}></SectionContent>
+    <SectionPageContainer id="section-page-container">
+      <SectionContent
+        id="section-content"
+        contentUrl={props.contentUrl}
+      ></SectionContent>
       <SectionInteraction
+        id="section-interaction"
         hasCodeEditor={props.hasCodeEditor}
         defaultCode={props.defaultCode}
       ></SectionInteraction>

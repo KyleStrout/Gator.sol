@@ -46,14 +46,9 @@ export default function CodeEditor(props) {
   // function handleSave()
 
   return (
-    <Box
-      sx={{
-        border: `1rem solid ${theme === "vs-dark" ? "#1e1e1e" : "white"}`,
-        boxSizing: "border-box",
-      }}
-    >
+    <Box>
       <Editor
-        height="40vh"
+        height="calc(50vh - 4rem)"
         defaultLanguage="sol"
         defaultValue={props.defaultCode}
         language="sol"
@@ -77,6 +72,7 @@ export default function CodeEditor(props) {
           justifyContent: "space-between",
           alignItems: "center",
           backgroundColor: theme === "vs-dark" ? "#1e1e1e" : "white",
+          height: "2rem",
         }}
       >
         <ThemeSwitch

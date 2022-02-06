@@ -10,23 +10,23 @@ import SideNav from "../SideNav";
 const CourseHomeContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "row",
-  height: "calc(100% - 4rem)",
+  height: "calc(100vh - 4rem)",
   width: "100%",
 }));
 
 const ContentContainer = styled(Box)(() => ({
   width: "100%",
   marginLeft: "12rem",
-  height: "100%",
+  height: "calc(100vh - 4rem)",
   backgroundColor: "lightblue",
   flexDirection: "row",
 }));
 
 export default function CourseHome() {
   return (
-    <CourseHomeContainer>
-      <SideNav></SideNav>
-      <ContentContainer>
+    <CourseHomeContainer id="course-home-container">
+      <SideNav id="side-nav"></SideNav>
+      <ContentContainer id="content-container">
         <Outlet></Outlet>
       </ContentContainer>
     </CourseHomeContainer>
