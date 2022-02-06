@@ -4,37 +4,28 @@ import { styled } from "@mui/material/styles";
 
 // Custom Components
 import SectionContent from "../SectionContent";
-import CodeEditor from "../CodeEditor";
-
+import SectionInteraction from "../SectionInteraction";
 const SectionPageContainer = styled(Box)(() => ({
   display: "flex",
   width: "100%",
-  height: "100%",
+  height: "calc(100vh - 4rem)",
+  justifyContent: "center",
   alignItems: "start",
+  overflow: "hidden",
 }));
 
 export default function SectionPage(props) {
-  // async would be good here
-  const defaultCode = props.defaultCode;
-
-  function EditorBox(props) {
-    if (props.hasCodeEditor) {
-      return (
-        <Box sx={{ paddingTop: "8px", marginLeft: "0" }}>
-          <CodeEditor defaultCode={defaultCode} />
-        </Box>
-      );
-    } else {
-      return <Box></Box>;
-    }
-  }
-
   return (
-    <SectionPageContainer>
-      <SectionContent contentUrl={props.contentUrl}></SectionContent>
-      <EditorBox hasCodeEditor={props.hasCodeEditor}></EditorBox>
-
-      {/* <SectionContent></SectionContent> */}
+    <SectionPageContainer id="section-page-container">
+      <SectionContent
+        id="section-content"
+        contentUrl={props.contentUrl}
+      ></SectionContent>
+      <SectionInteraction
+        id="section-interaction"
+        hasCodeEditor={props.hasCodeEditor}
+        defaultCode={props.defaultCode}
+      ></SectionInteraction>
     </SectionPageContainer>
   );
 }

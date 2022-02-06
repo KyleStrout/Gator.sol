@@ -8,19 +8,18 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
 import SectionPage from "../SectionPage";
-import SectionContent from "../SectionContent";
 import course from "../../data/course.js";
 import theme from "../Theme";
 
 const AppContainer = styled(Box)(() => ({
-  height: `100%`,
+  height: "100vh",
   width: `100%`,
 }));
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <AppContainer>
+      <AppContainer id="app-container">
         <Navbar />
 
         <Routes>

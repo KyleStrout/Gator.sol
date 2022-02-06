@@ -12,17 +12,14 @@ const ContentContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  height: "fit-content",
-  maxHeight: "calc(100% - 2rem)",
+  height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
   overflow: "scroll",
-  border: "1px solid black",
-  padding: "1rem",
-  marginTop: "0.5rem",
-  marginBottom: "0.5rem",
-  marginRight: "0rem",
-  marginLeft: "1rem",
+  backgroundColor: "white",
+  padding: "0 .5rem",
+  border: "0.5rem solid #f0f0f0",
+  borderRight: "0",
 }));
 
 export default function SectionContent(props) {
@@ -40,12 +37,13 @@ export default function SectionContent(props) {
   }, [props.contentUrl]);
 
   return (
-    <ContentContainer>
+    <ContentContainer id="content-container">
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
         id="markdown"
         children={content}
       />
+      <Box sx={{ height: "1rem" }}></Box>
     </ContentContainer>
   );
 }
