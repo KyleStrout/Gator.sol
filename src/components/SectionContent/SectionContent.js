@@ -12,11 +12,14 @@ const ContentContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  height: "calc(100vh - 4rem)",
+  height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
   overflow: "scroll",
   backgroundColor: "white",
+  padding: "0 .5rem",
+  border: "0.5rem solid #f0f0f0",
+  borderRight: "0",
 }));
 
 export default function SectionContent(props) {
@@ -40,6 +43,7 @@ export default function SectionContent(props) {
         id="markdown"
         children={content}
       />
+      <Box sx={{ height: "1rem" }}></Box>
     </ContentContainer>
   );
 }

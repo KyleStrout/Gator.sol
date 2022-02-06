@@ -9,18 +9,29 @@ const SectionInteractionContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-  height: "calc(100vh - 4rem)",
+  height: "calc(100vh - 5rem)",
+  justifyContent: "flex-start",
+  alignItems: "flex-start",
+  backgroundColor: "white",
+  border: "0.5rem solid #f0f0f0",
 }));
 
 function SectionInteractionContent(props) {
   if (props.hasCodeEditor) {
     return (
-      <Box height="100%">
+      <Box
+        sx={{
+          height: "100%",
+          width: "100%",
+        }}
+      >
         <CodeEditor defaultCode={props.defaultCode} />
         <Box
           sx={{
-            height: "calc(50vh - 2rem)",
+            height: "calc(50vh - 3.5rem)",
+            width: "100%",
             backgroundColor: "white",
+            borderBottom: "0.5rem solid #f0f0f0",
           }}
         >
           output goes here
@@ -40,6 +51,7 @@ export default function SectionInteraction(props) {
   return (
     <SectionInteractionContainer id="section-interaction-conatainer">
       <SectionInteractionContent
+        id="section-interaction-content"
         hasCodeEditor={props.hasCodeEditor}
         defaultCode={props.defaultCode}
       ></SectionInteractionContent>
