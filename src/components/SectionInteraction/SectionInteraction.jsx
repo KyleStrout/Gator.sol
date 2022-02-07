@@ -4,6 +4,7 @@ import { styled } from "@mui/styles";
 
 // Custom Components
 import CodeEditor from "../CodeEditor";
+import OutputPanel from "../OutputPanel";
 
 const SectionInteractionContainer = styled(Box)(() => ({
   display: "flex",
@@ -34,7 +35,7 @@ function SectionInteractionContent(props) {
             borderBottom: "0.5rem solid #f0f0f0",
           }}
         >
-          output goes here
+          <OutputPanel></OutputPanel>
         </Box>
       </Box>
     );
