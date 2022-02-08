@@ -39,7 +39,7 @@ export default function CodeEditor(props) {
       body: JSON.stringify({ value: editorRef.current.getValue() }),
     });
     const data = await response.json();
-    console.log(data);
+    props.onCompile(data);
   }
 
   // possible handleSave function? need to research more on what it does exactly

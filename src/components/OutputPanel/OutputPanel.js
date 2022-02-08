@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
+import ReactJson from "react-json-view";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -16,11 +16,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -38,24 +34,50 @@ function a11yProps(index) {
   };
 }
 
-export default function OutputPanel() {
+export default function OutputPanel(props) {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange} aria-label="output panel">
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "40vw",
+        overflow: "scroll",
+        height: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          position: "sticky",
+          top: "0",
+          left: "0",
+          borderBottom: 1,
+          width: "100%",
+          backgroundColor: "white",
+          zIndex: "1",
+          borderColor: "divider",
+        }}
+      >
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="output panel"
+          sx={{
+            position: "sticky",
+            top: 0,
+          }}
+        >
           <Tab label="Output " {...a11yProps(0)} />
           <Tab label="Interact" {...a11yProps(1)} />
           <Tab label="History" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Output
+        <ReactJson src={props.output}></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
         Interactions
