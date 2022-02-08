@@ -1,3 +1,6 @@
+// react
+import { useState } from "react";
+
 // Material UI Components
 import { Box } from "@mui/material";
 import { styled } from "@mui/styles";
@@ -18,6 +21,8 @@ const SectionInteractionContainer = styled(Box)(() => ({
 }));
 
 function SectionInteractionContent(props) {
+  const [output, setOutput] = useState({});
+
   if (props.hasCodeEditor) {
     return (
       <Box
@@ -26,7 +31,7 @@ function SectionInteractionContent(props) {
           width: "100%",
         }}
       >
-        <CodeEditor defaultCode={props.defaultCode} />
+        <CodeEditor defaultCode={props.defaultCode} onCompile={setOutput} />
         <Box
           sx={{
             height: "calc(50vh - 3.5rem)",
@@ -35,7 +40,7 @@ function SectionInteractionContent(props) {
             borderBottom: "0.5rem solid #f0f0f0",
           }}
         >
-          <OutputPanel></OutputPanel>
+          <OutputPanel output={output}></OutputPanel>
         </Box>
       </Box>
     );
