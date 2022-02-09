@@ -12,8 +12,6 @@ export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
 
-  console.log(props.defaultCode)
-
   const [deployment, setDeployment] = useState(null);
 
   const editorRef = useRef(null);
@@ -31,11 +29,30 @@ export default function CodeEditor(props) {
     setChecked(event.target.checked);
   }
 
+  function checkError(data) {
+    let errorList = [];
+    let hasError = false;
+    data.errors.forEach((error, index) => {
+      if (data.errors[`${index}`].severity === "error" || data.errors[`${index}`].errorCode === "3420")
+      {
+        hasError = true;
+        var errorInfo = {
+          ERROR: `Compilation failed: ${data.errors[`${index}`].message} (type: ${data.errors[`${index}`].type}, code: ${data.errors[`${index}`].errorCode}).`
+        }
+        errorList.push(errorInfo);
+      }
+    })
+    if (hasError) {
+      return errorList;
+    }
+    return null;
+  }
+
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
   }, [checked]);
 
-  async function compile() {
+  async function compile(value, event) {
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
         "Content-Type": "application/json",
@@ -45,15 +62,18 @@ export default function CodeEditor(props) {
     });
 
     const data = await response.json();
+
+    const errorInfo = checkError(data);
+    if (errorInfo != null) {
+      props.onCompile(errorInfo)
+      return;
+    }
+    
     props.onCompile(data);
-
-
-    // this is terrible ill fix this later, but also we might have multiple contracts idk
     let contractName = "";
     for (var cName in data.contracts["test.sol"]) {
       contractName = cName;
     }
-
     setDeployment({
       ...deployment, 
       abi: data.contracts["test.sol"][contractName].abi, 
@@ -67,16 +87,13 @@ export default function CodeEditor(props) {
         "Content-Type": "application/json",
       },
       method: "POST",
-      // body: JSON.stringify({abi, bytecode}),
       body: JSON.stringify(deployment),
     });
       const data = await response.json();
+      console.log(data)
       // TODO: send data to interaction tab
       //props.onDeploy(data);
   }
-
-  // possible handleSave function? need to research more on what it does exactly
-  // function handleSave()
 
   return (
     <Box
@@ -90,12 +107,11 @@ export default function CodeEditor(props) {
         defaultLanguage="sol"
         defaultValue={props.defaultCode}
         language="sol"
-        saveViewState={true}
         theme={theme} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
-        editorDidMount={handleEditorDidMount}
         onMount={handleEditorDidMount}
         onChange={handleEditorChange}
         onValidate={handleEditorValidation}
+        keepCurrentModel={false}
         options={{
           minimap: { enabled: false },
           scrollBeyondLastLine: false,

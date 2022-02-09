@@ -32,14 +32,7 @@ app.post("/compile", (req, res, next) => {
 
   var output = JSON.parse(solc.compile(JSON.stringify(input)));
   res.send(output);
-  // `output` here contains the JSON output as specified in the documentation
-  /*for (var contractName in output.contracts["test.sol"]) {
-    console.log(
-      contractName +
-        ": " +
-        output.contracts["test.sol"][contractName].evm.bytecode.object
-    );
-  }*/
+  console.log(output);
 });
 
 app.post("/deploy", (req, res, next) => {
@@ -51,8 +44,7 @@ app.post("/deploy", (req, res, next) => {
   let contract = new web3.eth.Contract(abi);
   // contract has object with list of methods and events
 
-  //console.log(web3);
-  console.log(contract);
+  //console.log(contract);
   res.send(JSON.parse(JSON.stringify(contract)));
   // TODO: Figure out how to keep contract in application
   // Could use a state in a parent component, or use somehting like redux
