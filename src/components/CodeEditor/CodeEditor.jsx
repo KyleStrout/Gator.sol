@@ -12,6 +12,8 @@ export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
 
+  console.log(props.defaultCode)
+
   const [deployment, setDeployment] = useState(null);
 
   const editorRef = useRef(null);
