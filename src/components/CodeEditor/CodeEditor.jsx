@@ -5,6 +5,7 @@ import Editor from "@monaco-editor/react";
 import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
+import { abort } from "process";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
@@ -16,11 +17,15 @@ export default function CodeEditor(props) {
 
   const editorRef = useRef(null);
 
+  useEffect(() => {
+    checked ? setTheme("vs-dark") : setTheme("vs-light");
+  }, [checked]);
+
   function handleEditorDidMount(editor) {
     editorRef.current = editor;
   }
   function handleEditorChange(value, event) {
-    console.log("here is the current model value:\n", value);
+    //console.log("here is the current model value:\n", value);
   }
   function handleEditorValidation(markers) {
     markers.forEach((marker) => console.log("onValidate:", marker.message));
@@ -48,10 +53,6 @@ export default function CodeEditor(props) {
     return null;
   }
 
-  useEffect(() => {
-    checked ? setTheme("vs-dark") : setTheme("vs-light");
-  }, [checked]);
-
   async function compile(value, event) {
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
@@ -62,18 +63,24 @@ export default function CodeEditor(props) {
     });
 
     const data = await response.json();
-
+    console.log(data)
     const errorInfo = checkError(data);
     if (errorInfo != null) {
       props.onCompile(errorInfo)
       return;
     }
     
-    props.onCompile(data);
+    // pretty scuffed, but works for now
+    let abiOutput = {
+      abi: [],
+    };
     let contractName = "";
     for (var cName in data.contracts["test.sol"]) {
       contractName = cName;
+      abiOutput.abi.push(data.contracts["test.sol"][contractName].abi);
     }
+    props.onCompile(abiOutput);
+    
     setDeployment({
       ...deployment, 
       abi: data.contracts["test.sol"][contractName].abi, 
