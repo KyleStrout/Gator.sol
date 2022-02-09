@@ -1,5 +1,5 @@
 // react
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Material UI Components
 import { Box } from "@mui/material";
@@ -22,6 +22,12 @@ const SectionInteractionContainer = styled(Box)(() => ({
 
 function SectionInteractionContent(props) {
   const [output, setOutput] = useState({});
+
+  useEffect(() => {
+    // clear output
+    setOutput({});
+    // TODO: if contract was previously deployed, get the previous output ( might have to store things to a db for this)
+  }, [props.defaultCode]);
 
   if (props.hasCodeEditor) {
     return (
