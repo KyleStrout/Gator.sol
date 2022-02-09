@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // monaco editor
 import Editor from "@monaco-editor/react";
 // mui
@@ -9,8 +9,11 @@ import ThemeSwitch from "./ThemeSwitch";
 // Can have default code/imports/version here and can be dynamic for exercises
 
 export default function CodeEditor(props) {
-  const [checked, setChecked] = React.useState(false);
-  const [theme, setTheme] = React.useState("vs-light");
+  const [checked, setChecked] = useState(false);
+  const [theme, setTheme] = useState("vs-light");
+
+  const [deployment, setDeployment] = useState(null);
+
   const editorRef = useRef(null);
 
   function handleEditorDidMount(editor) {
@@ -38,8 +41,29 @@ export default function CodeEditor(props) {
       method: "POST",
       body: JSON.stringify({ value: editorRef.current.getValue() }),
     });
+
     const data = await response.json();
     props.onCompile(data);
+
+    setDeployment({
+      ...deployment, 
+      abi: data.contracts["test.sol"]["HelloWorld"].abi, 
+      bytecode: data.contracts["test.sol"]["HelloWorld"].evm.bytecode.object
+    })
+  }
+
+  async function deploy() {
+    const response = await fetch("http://localhost:3001/deploy", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      // body: JSON.stringify({abi, bytecode}),
+      body: JSON.stringify(deployment),
+    });
+      const data = await response.json();
+      // TODO: send data to interaction tab
+      //props.onDeploy(data);
   }
 
   // possible handleSave function? need to research more on what it does exactly
@@ -105,7 +129,8 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled
+            disabled={deployment === null} 
+            onClick={deploy}
           >
             Deploy
           </Button>
