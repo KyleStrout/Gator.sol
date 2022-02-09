@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/compile", (req, res, next) => {
   const content = req.body.value;
-  console.log(content);
+  //console.log(content);
 
   var input = {
     language: "Solidity",
@@ -33,13 +33,13 @@ app.post("/compile", (req, res, next) => {
   var output = JSON.parse(solc.compile(JSON.stringify(input)));
   res.send(output);
   // `output` here contains the JSON output as specified in the documentation
-  for (var contractName in output.contracts["test.sol"]) {
+  /*for (var contractName in output.contracts["test.sol"]) {
     console.log(
       contractName +
         ": " +
         output.contracts["test.sol"][contractName].evm.bytecode.object
     );
-  }
+  }*/
 });
 
 app.post("/deploy", (req, res, next) => {

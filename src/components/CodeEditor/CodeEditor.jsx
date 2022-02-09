@@ -45,10 +45,17 @@ export default function CodeEditor(props) {
     const data = await response.json();
     props.onCompile(data);
 
+
+    // this is terrible ill fix this later, but also we might have multiple contracts idk
+    let contractName = "";
+    for (var cName in data.contracts["test.sol"]) {
+      contractName = cName;
+    }
+
     setDeployment({
       ...deployment, 
-      abi: data.contracts["test.sol"]["HelloWorld"].abi, 
-      bytecode: data.contracts["test.sol"]["HelloWorld"].evm.bytecode.object
+      abi: data.contracts["test.sol"][contractName].abi, 
+      bytecode: data.contracts["test.sol"][contractName].evm.bytecode.object
     })
   }
 
