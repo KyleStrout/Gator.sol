@@ -30,6 +30,12 @@ export default function CodeEditor(props) {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
   }, [checked]);
 
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.setValue(props.defaultCode);
+    }
+  }, [props.defaultCode]);
+
   async function compile() {
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
