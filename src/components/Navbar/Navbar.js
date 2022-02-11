@@ -15,10 +15,29 @@ export default function Navbar() {
       typeof window !== "undefined" &&
       typeof window.ethereum !== "undefined"
     ) {
-      await window.ethereum.request({ method: "eth_requestAccounts" });
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
       web3 = new Web3(window.ethereum);
-    } else {
-      console.log("please install meta mask");
+      let account = accounts[0];
+      console.log(account);
+
+      //window.ethereum.on("chainChanged", () => window.location.reload());
+
+      window.ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length > 0) {
+          account = accounts[0];
+          console.log(`Using account ${account}`);
+        } else {
+          console.error("0 accounts.");
+        }
+      });
+      window.ethereum.on("connect", (info) => {
+        console.log(`Connected to network ${info}`);
+      });
+      window.ethereum.on("disconnect", (info) => {
+        console.log(`Disconnected from network ${info}`);
+      });
     }
   };
 

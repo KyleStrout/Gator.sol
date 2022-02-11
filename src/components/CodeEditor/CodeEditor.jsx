@@ -5,7 +5,7 @@ import Editor from "@monaco-editor/react";
 import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
-import { abort } from "process";
+var Web3 = require("web3");
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
@@ -13,7 +13,7 @@ export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
 
-  const [deployment, setDeployment] = useState(null);
+  const [compilerData, setCompilerData] = useState(null);
 
   const editorRef = useRef(null);
 
@@ -37,7 +37,7 @@ export default function CodeEditor(props) {
   function checkError(data) {
     let errorList = [];
     let hasError = false;
-    data.errors.forEach((error, index) => {
+    data.errors?.forEach((error, index) => {
       if (data.errors[`${index}`].severity === "error" || data.errors[`${index}`].errorCode === "3420")
       {
         hasError = true;
@@ -63,44 +63,60 @@ export default function CodeEditor(props) {
     });
 
     const data = await response.json();
-    console.log(data)
+    console.log("data: ", data);
     const errorInfo = checkError(data);
     if (errorInfo != null) {
       props.onCompile(errorInfo)
       return;
     }
     
-    // pretty scuffed, but works for now
-    let abiOutput = {
-      abi: [],
-    };
     let contractName = "";
-    for (var cName in data.contracts["test.sol"]) {
-      contractName = cName;
-      abiOutput.abi.push(data.contracts["test.sol"][contractName].abi);
-    }
-    props.onCompile(abiOutput);
+    const output = Object.keys(data.contracts["test.sol"]).map((key) => {
+      contractName = key;
+      return {
+        name: key,
+        abi: data.contracts["test.sol"][key].abi,
+        bytecode: data.contracts["test.sol"][key].evm.bytecode.object,
+      };
+    });
+    props.onCompile(output);
+    console.log("output: ", output)
     
-    setDeployment({
-      ...deployment, 
-      abi: data.contracts["test.sol"][contractName].abi, 
-      bytecode: data.contracts["test.sol"][contractName].evm.bytecode.object
-    })
+    setCompilerData(output)
   }
 
-  async function deploy() {
-    const response = await fetch("http://localhost:3001/deploy", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(deployment),
-    });
-      const data = await response.json();
-      console.log(data)
-      // TODO: send data to interaction tab
-      //props.onDeploy(data);
+  function deploy(compilerData) {
+    //console.log("address: ", address);
+    console.log("here")
+    console.log("data: ", compilerData);
+
+    var web3 = new Web3("http://localhost:3000");
+    console.log(web3)
+
+    let contractName = "";
+    let contracts = [];
+    for (var cName in compilerData.contracts["test.sol"]) {
+      contractName = cName;
+      contracts.push(compilerData.contracts["test.sol"][contractName]);
+    }
+
+    let deployContract = new web3.eth.Contract(abi);
+    console.log("contract: ", deployContract);
+
+    
+
+    //let contract = new web3.eth.Contract(abi);
+    //console.log(contract);
+    
+
+
+    //let contract = new web3.eth.Contract(abi);
+    //console.log(contract);
+    // TODO: send data to interaction tab
+    //props.onDeploy(data);
   }
+
+  
 
   return (
     <Box
@@ -161,8 +177,8 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled={deployment === null} 
-            onClick={deploy}
+            disabled={compilerData === null} 
+            onClick={() => deploy(compilerData)}
           >
             Deploy
           </Button>

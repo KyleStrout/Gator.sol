@@ -42,6 +42,7 @@ app.post("/deploy", (req, res, next) => {
 
   // abi, address (like a node to connect to?), options (bytecode, gasPrice, etc.)
   let contract = new web3.eth.Contract(abi);
+  console.log(contract);
   // contract has object with list of methods and events
 
   //console.log(contract);
