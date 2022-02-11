@@ -32,6 +32,8 @@ export default function Navbar() {
           console.error("0 accounts.");
         }
       });
+      // send account address to server?
+      // send account address to codeEditor.jsx?
       window.ethereum.on("connect", (info) => {
         console.log(`Connected to network ${info}`);
       });

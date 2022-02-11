@@ -80,28 +80,42 @@ export default function CodeEditor(props) {
       };
     });
     props.onCompile(output);
-    console.log("output: ", output)
+    //console.log("output: ", output)
     
     setCompilerData(output)
   }
 
-  function deploy(compilerData) {
-    //console.log("address: ", address);
-    console.log("here")
+  function deploy(compilerData, address) {
     console.log("data: ", compilerData);
 
     var web3 = new Web3("http://localhost:3000");
-    console.log(web3)
+    //console.log(web3)
 
-    let contractName = "";
+    /*let contractName = "";
     let contracts = [];
     for (var cName in compilerData.contracts["test.sol"]) {
       contractName = cName;
       contracts.push(compilerData.contracts["test.sol"][contractName]);
-    }
+    }*/
 
-    let deployContract = new web3.eth.Contract(abi);
-    console.log("contract: ", deployContract);
+    compilerData.forEach(contract => {
+      var contractABI = contract.abi;
+      var contractBytecode = contract.bytecode;
+      var contractInstance = new web3.eth.Contract(contractABI);
+      var contractAddress = contractInstance.deploy({
+        data: contractBytecode,
+        arguments: [1, 2, 3]
+      }).send({
+        from: address,
+        gas: "1000000"
+      }).then(function (newContractInstance) {
+        console.log("Contract deployed to: ", newContractInstance.options.address);
+      });
+    })
+
+
+    //let deployContract = new web3.eth.Contract(abi);
+    //console.log("contract: ", deployContract);
 
     
 
