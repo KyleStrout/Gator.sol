@@ -4,7 +4,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import Web3 from "web3";
 
 import AddressContext from "../AddressContext";
 
@@ -13,7 +12,6 @@ export default function Navbar() {
 
   const { address, setAddress } = React.useContext(AddressContext);
 
-  let web3;
   const connectToWallet = async () => {
     if (
       typeof window !== "undefined" &&
@@ -22,14 +20,11 @@ export default function Navbar() {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      web3 = new Web3(window.ethereum);
       let account = accounts[0];
-      console.log(account);
       setAddress(account);
 
-      //window.ethereum.on("chainChanged", () => window.location.reload());
-
       window.ethereum.on("accountsChanged", (accounts) => {
+        let account;
         if (accounts.length > 0) {
           account = accounts[0];
           console.log(`Using account ${account}`);
@@ -38,7 +33,6 @@ export default function Navbar() {
         }
         setAddress(account);
       });
-      // send account address to codeEditor.jsx?
       window.ethereum.on("connect", (info) => {
         console.log(`Connected to network ${info}`);
       });
@@ -47,6 +41,31 @@ export default function Navbar() {
       });
     }
   };
+
+  const WalletConnect = () => {
+    if (address) {
+      return (
+        <Typography variant="h6" color="inherit">
+          {address}
+        </Typography>
+      );
+    } else {
+      return (
+        <Button
+          color="inherit"
+          onClick={() => {
+            connectToWallet();
+          }}
+        >
+          Connect to Wallet
+        </Button>
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    connectToWallet();
+  });
 
   return (
     <AppBar position="sticky" sx={{ height: "4rem" }}>
@@ -62,14 +81,7 @@ export default function Navbar() {
             Blockchain Education
           </Button>
         </Typography>
-        <Button
-          color="inherit"
-          onClick={() => {
-            connectToWallet();
-          }}
-        >
-          Connect to Wallet
-        </Button>
+        <WalletConnect />
       </Toolbar>
     </AppBar>
   );

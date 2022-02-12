@@ -5,17 +5,14 @@ import Editor from "@monaco-editor/react";
 import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
-import AddressContext from "../AddressContext"; 
-
-var Web3 = require("web3");
+import AddressContext from "../AddressContext";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
-  const [theme, setTheme] = useState("vs-light");
-
   const [compilerData, setCompilerData] = useState(null);
+  const [theme, setTheme] = useState("vs-light");
 
   const editorRef = useRef(null);
 
@@ -40,24 +37,18 @@ export default function CodeEditor(props) {
 
   function checkError(data) {
     let errorList = [];
-    let hasError = false;
-    data.errors?.forEach((error, index) => {
-      if (data.errors[`${index}`].severity === "error" || data.errors[`${index}`].errorCode === "3420")
-      {
-        hasError = true;
+    data.errors?.forEach((error) => {
+      if (error.severity === "error" || error.errorCode === "3420") {
         var errorInfo = {
-          ERROR: `Compilation failed: ${data.errors[`${index}`].message} (type: ${data.errors[`${index}`].type}, code: ${data.errors[`${index}`].errorCode}).`
-        }
+          ERROR: `Compilation failed: ${error.message} (type: ${error.type}, code: ${error.errorCode}).`,
+        };
         errorList.push(errorInfo);
       }
-    })
-    if (hasError) {
-      return errorList;
-    }
-    return null;
+    });
+    return errorList;
   }
 
-  async function compile(value, event) {
+  async function compile() {
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
         "Content-Type": "application/json",
@@ -67,16 +58,13 @@ export default function CodeEditor(props) {
     });
 
     const data = await response.json();
-    console.log("data: ", data);
     const errorInfo = checkError(data);
-    if (errorInfo != null) {
-      props.onCompile(errorInfo)
+    if (errorInfo.length > 0) {
+      props.onCompile(errorInfo);
       return;
     }
-    
-    let contractName = "";
+
     const output = Object.keys(data.contracts["test.sol"]).map((key) => {
-      contractName = key;
       return {
         name: key,
         abi: data.contracts["test.sol"][key].abi,
@@ -84,43 +72,29 @@ export default function CodeEditor(props) {
       };
     });
     props.onCompile(output);
-    //console.log("output: ", output)
-    
-    setCompilerData(output)
+    setCompilerData(output);
   }
 
   async function deploy(compilerData) {
-    console.log("data: ", compilerData);
+    for (let i = 0; i < compilerData.length; i++) {
+      const { bytecode } = compilerData[i];
+      let transactionObject = {
+        data: "0x" + bytecode,
+        from: address,
+      };
+      const gas = await window.ethereum.request({
+        method: "eth_estimateGas",
+        params: [transactionObject],
+      });
+      transactionObject.gas = gas;
 
-    var web3 = new Web3(window.ethereum);
-
-    const response = await fetch("http://localhost:3001/deploy", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ value: compilerData,
-                             address: address, }),
-    });
-
-    const { deploy } = await response.json();
-    console.log("data: ", deploy);
-
-    let gas = 1000;
-    console.log(gas)
-    let gasPrice = 1000;
-    console.log(gasPrice)
-    console.log(address)
-    let transactionObject ={
-      gas: gas,
-      gasPrice: gasPrice,
-      data: deploy[0], // TODO: Make a loop
-      from: address
+      const res = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionObject],
+      });
+      console.log("res", res);
     }
-    web3.eth.sendTransaction(transactionObject)
   }
-
-  
 
   return (
     <Box
@@ -181,7 +155,7 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled={compilerData === null} 
+            disabled={compilerData === null}
             onClick={() => deploy(compilerData)}
           >
             Deploy

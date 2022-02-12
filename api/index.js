@@ -1,9 +1,8 @@
-var express = require("express");
-var app = express();
-var cors = require("cors");
+const express = require("express");
+const app = express();
+const cors = require("cors");
 const bodyParser = require("body-parser");
-var solc = require("solc");
-var Web3 = require("web3");
+const solc = require("solc");
 
 app.use(cors());
 
@@ -12,9 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/compile", (req, res, next) => {
   const content = req.body.value;
-  //console.log(content);
 
-  var input = {
+  const input = {
     language: "Solidity",
     sources: {
       "test.sol": {
@@ -30,57 +28,8 @@ app.post("/compile", (req, res, next) => {
     },
   };
 
-  var output = JSON.parse(solc.compile(JSON.stringify(input)));
+  const output = JSON.parse(solc.compile(JSON.stringify(input)));
   res.send(output);
-  console.log(output);
-});
-
-app.post("/deploy", async (req, res, next) => {
-  const compilerData = req.body.value;
-  console.log("compilerData: ", compilerData);
-
-  var web3 = new Web3(
-    "https://rinkeby.infura.io/v3/0c6e1fdd5857469c92b40636f1cdf73a"
-  );
-
-  const deployData = compilerData.map((contract) => {
-    let contractABI = contract.abi;
-    let contractBytecode = "0x" + contract.bytecode;
-    let contractInstance = new web3.eth.Contract(contractABI);
-
-    return contractInstance
-      .deploy({
-        data: contractBytecode,
-      })
-      .encodeABI();
-  });
-  console.log(deployData);
-
-  // .send({
-  //   from: req.body.address,
-  //   gas: "1000000",
-  // })
-  // .on("error", function (error) {
-  //   console.log("ERROR");
-  // })
-  // .then(function (newContractInstance) {
-  //   console.log(
-  //     "Contract deployed to: ",
-  //     newContractInstance.options.address
-  //   );
-  // });
-
-  // res.send(JSON.stringify(newContractInstance.options.address));
-  res.send({
-    deploy: deployData,
-  });
-
-  // res.send({
-  //   status: "success",
-  // });
-  // TODO: Figure out how to keep contract in application
-  // Could use a state in a parent component, or use somehting like redux
-  // https://redux.js.org/
 });
 
 app.listen(3001, () => {
