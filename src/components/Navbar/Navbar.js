@@ -6,8 +6,12 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 
+import AddressContext from "../AddressContext";
+
 export default function Navbar() {
   let navigate = useNavigate();
+
+  const { address, setAddress } = React.useContext(AddressContext);
 
   let web3;
   const connectToWallet = async () => {
@@ -21,6 +25,7 @@ export default function Navbar() {
       web3 = new Web3(window.ethereum);
       let account = accounts[0];
       console.log(account);
+      setAddress(account);
 
       //window.ethereum.on("chainChanged", () => window.location.reload());
 
@@ -31,8 +36,8 @@ export default function Navbar() {
         } else {
           console.error("0 accounts.");
         }
+        setAddress(account);
       });
-      // send account address to server?
       // send account address to codeEditor.jsx?
       window.ethereum.on("connect", (info) => {
         console.log(`Connected to network ${info}`);

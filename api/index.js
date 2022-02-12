@@ -36,17 +36,42 @@ app.post("/compile", (req, res, next) => {
 });
 
 app.post("/deploy", (req, res, next) => {
-  var web3 = new Web3("http://localhost:3001");
-  let abi = req.body.abi;
-  let bytecode = "0x" + req.body.bytecode;
+  const compilerData = req.body.value;
+  console.log("compilerData: ", compilerData);
 
-  // abi, address (like a node to connect to?), options (bytecode, gasPrice, etc.)
-  let contract = new web3.eth.Contract(abi);
-  console.log(contract);
-  // contract has object with list of methods and events
+  var web3 = new Web3(
+    "https://rinkeby.infura.io/v3/0c6e1fdd5857469c92b40636f1cdf73a"
+  );
 
-  //console.log(contract);
-  res.send(JSON.parse(JSON.stringify(contract)));
+  compilerData.forEach((contract) => {
+    let contractABI = contract.abi;
+    let contractBytecode = "0x" + contract.bytecode;
+    let contractInstance = new web3.eth.Contract(contractABI);
+    let contractAddress = contractInstance
+      // newContractInstance.options.address
+      .deploy({
+        data: contractBytecode,
+      })
+      .send({
+        from: req.body.address,
+        gas: "1000000",
+      })
+      .on("error", function (error) {
+        console.log("ERROR");
+      })
+      .then(function (newContractInstance) {
+        console.log(
+          "Contract deployed to: ",
+          newContractInstance.options.address
+        );
+      });
+  });
+
+  // res.send(JSON.stringify(newContractInstance.options.address));
+  res.send({
+    status: "ok",
+  });
+
   // TODO: Figure out how to keep contract in application
   // Could use a state in a parent component, or use somehting like redux
   // https://redux.js.org/

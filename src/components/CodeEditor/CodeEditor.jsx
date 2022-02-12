@@ -5,6 +5,8 @@ import Editor from "@monaco-editor/react";
 import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
+import AddressContext from "../AddressContext"; 
+
 var Web3 = require("web3");
 
 // Can have default code/imports/version here and can be dynamic for exercises
@@ -16,6 +18,8 @@ export default function CodeEditor(props) {
   const [compilerData, setCompilerData] = useState(null);
 
   const editorRef = useRef(null);
+
+  const { address } = React.useContext(AddressContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -85,49 +89,23 @@ export default function CodeEditor(props) {
     setCompilerData(output)
   }
 
-  function deploy(compilerData, address) {
+  async function deploy(compilerData) {
     console.log("data: ", compilerData);
 
-    var web3 = new Web3("http://localhost:3000");
-    //console.log(web3)
+    var web3 = new Web3(window.ethereum);
 
-    /*let contractName = "";
-    let contracts = [];
-    for (var cName in compilerData.contracts["test.sol"]) {
-      contractName = cName;
-      contracts.push(compilerData.contracts["test.sol"][contractName]);
-    }*/
+    const response = await fetch("http://localhost:3001/deploy", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ value: compilerData,
+                             address: address, }),
+    });
 
-    compilerData.forEach(contract => {
-      var contractABI = contract.abi;
-      var contractBytecode = contract.bytecode;
-      var contractInstance = new web3.eth.Contract(contractABI);
-      var contractAddress = contractInstance.deploy({
-        data: contractBytecode,
-        arguments: [1, 2, 3]
-      }).send({
-        from: address,
-        gas: "1000000"
-      }).then(function (newContractInstance) {
-        console.log("Contract deployed to: ", newContractInstance.options.address);
-      });
-    })
+    const data = await response.json();
+    console.log("data: ", data);
 
-
-    //let deployContract = new web3.eth.Contract(abi);
-    //console.log("contract: ", deployContract);
-
-    
-
-    //let contract = new web3.eth.Contract(abi);
-    //console.log(contract);
-    
-
-
-    //let contract = new web3.eth.Contract(abi);
-    //console.log(contract);
-    // TODO: send data to interaction tab
-    //props.onDeploy(data);
   }
 
   
