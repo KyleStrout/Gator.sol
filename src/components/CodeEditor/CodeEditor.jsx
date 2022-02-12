@@ -48,6 +48,12 @@ export default function CodeEditor(props) {
     return errorList;
   }
 
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.setValue(props.defaultCode);
+    }
+  }, [props.defaultCode]);
+
   async function compile() {
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
