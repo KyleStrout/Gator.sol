@@ -103,9 +103,21 @@ export default function CodeEditor(props) {
                              address: address, }),
     });
 
-    const data = await response.json();
-    console.log("data: ", data);
+    const { deploy } = await response.json();
+    console.log("data: ", deploy);
 
+    let gas = 1000;
+    console.log(gas)
+    let gasPrice = 1000;
+    console.log(gasPrice)
+    console.log(address)
+    let transactionObject ={
+      gas: gas,
+      gasPrice: gasPrice,
+      data: deploy[0], // TODO: Make a loop
+      from: address
+    }
+    web3.eth.sendTransaction(transactionObject)
   }
 
   
