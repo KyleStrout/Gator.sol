@@ -5,9 +5,7 @@ import Editor from "@monaco-editor/react";
 import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
-import AddressContext from "../AddressContext"; 
-
-var Web3 = require("web3");
+import AddressContext from "../AddressContext";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
@@ -42,15 +40,21 @@ export default function CodeEditor(props) {
     let errorList = [];
     let hasError = false;
     data.errors?.forEach((error, index) => {
-      if (data.errors[`${index}`].severity === "error" || data.errors[`${index}`].errorCode === "3420")
-      {
+      if (
+        data.errors[`${index}`].severity === "error" ||
+        data.errors[`${index}`].errorCode === "3420"
+      ) {
         hasError = true;
         var errorInfo = {
-          ERROR: `Compilation failed: ${data.errors[`${index}`].message} (type: ${data.errors[`${index}`].type}, code: ${data.errors[`${index}`].errorCode}).`
-        }
+          ERROR: `Compilation failed: ${
+            data.errors[`${index}`].message
+          } (type: ${data.errors[`${index}`].type}, code: ${
+            data.errors[`${index}`].errorCode
+          }).`,
+        };
         errorList.push(errorInfo);
       }
-    })
+    });
     if (hasError) {
       return errorList;
     }
@@ -70,13 +74,11 @@ export default function CodeEditor(props) {
     console.log("data: ", data);
     const errorInfo = checkError(data);
     if (errorInfo != null) {
-      props.onCompile(errorInfo)
+      props.onCompile(errorInfo);
       return;
     }
-    
-    let contractName = "";
+
     const output = Object.keys(data.contracts["test.sol"]).map((key) => {
-      contractName = key;
       return {
         name: key,
         abi: data.contracts["test.sol"][key].abi,
@@ -85,42 +87,29 @@ export default function CodeEditor(props) {
     });
     props.onCompile(output);
     //console.log("output: ", output)
-    
-    setCompilerData(output)
+
+    setCompilerData(output);
   }
 
   async function deploy(compilerData) {
     console.log("data: ", compilerData);
 
-    var web3 = new Web3(window.ethereum);
-
-    const response = await fetch("http://localhost:3001/deploy", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ value: compilerData,
-                             address: address, }),
+    let transactionObject = {
+      data: "0x" + compilerData[0].bytecode, // TODO: Make a loop
+      from: address,
+    };
+    const gas = await window.ethereum.request({
+      method: "eth_estimateGas",
+      params: [transactionObject],
     });
+    transactionObject.gas = gas;
 
-    const { deploy } = await response.json();
-    console.log("data: ", deploy);
-
-    let gas = 1000;
-    console.log(gas)
-    let gasPrice = 1000;
-    console.log(gasPrice)
-    console.log(address)
-    let transactionObject ={
-      gas: gas,
-      gasPrice: gasPrice,
-      data: deploy[0], // TODO: Make a loop
-      from: address
-    }
-    web3.eth.sendTransaction(transactionObject)
+    const res = await window.ethereum.request({
+      method: "eth_sendTransaction",
+      params: [transactionObject],
+    });
+    console.log("res", res);
   }
-
-  
 
   return (
     <Box
@@ -181,7 +170,7 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled={compilerData === null} 
+            disabled={compilerData === null}
             onClick={() => deploy(compilerData)}
           >
             Deploy

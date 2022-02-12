@@ -4,16 +4,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import Web3 from "web3";
 
 import AddressContext from "../AddressContext";
 
 export default function Navbar() {
   let navigate = useNavigate();
 
-  const { address, setAddress } = React.useContext(AddressContext);
+  const { setAddress } = React.useContext(AddressContext);
 
-  let web3;
   const connectToWallet = async () => {
     if (
       typeof window !== "undefined" &&
@@ -22,7 +20,6 @@ export default function Navbar() {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      web3 = new Web3(window.ethereum);
       let account = accounts[0];
       console.log(account);
       setAddress(account);
@@ -30,6 +27,7 @@ export default function Navbar() {
       //window.ethereum.on("chainChanged", () => window.location.reload());
 
       window.ethereum.on("accountsChanged", (accounts) => {
+        let account;
         if (accounts.length > 0) {
           account = accounts[0];
           console.log(`Using account ${account}`);
