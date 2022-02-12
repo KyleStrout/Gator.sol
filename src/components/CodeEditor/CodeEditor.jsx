@@ -11,9 +11,8 @@ import AddressContext from "../AddressContext";
 
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
-  const [theme, setTheme] = useState("vs-light");
-
   const [compilerData, setCompilerData] = useState(null);
+  const [theme, setTheme] = useState("vs-light");
 
   const editorRef = useRef(null);
 
@@ -38,30 +37,18 @@ export default function CodeEditor(props) {
 
   function checkError(data) {
     let errorList = [];
-    let hasError = false;
-    data.errors?.forEach((error, index) => {
-      if (
-        data.errors[`${index}`].severity === "error" ||
-        data.errors[`${index}`].errorCode === "3420"
-      ) {
-        hasError = true;
+    data.errors?.forEach((error) => {
+      if (error.severity === "error" || error.errorCode === "3420") {
         var errorInfo = {
-          ERROR: `Compilation failed: ${
-            data.errors[`${index}`].message
-          } (type: ${data.errors[`${index}`].type}, code: ${
-            data.errors[`${index}`].errorCode
-          }).`,
+          ERROR: `Compilation failed: ${error.message} (type: ${error.type}, code: ${error.errorCode}).`,
         };
         errorList.push(errorInfo);
       }
     });
-    if (hasError) {
-      return errorList;
-    }
-    return null;
+    return errorList;
   }
 
-  async function compile(value, event) {
+  async function compile() {
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
         "Content-Type": "application/json",
@@ -71,9 +58,8 @@ export default function CodeEditor(props) {
     });
 
     const data = await response.json();
-    console.log("data: ", data);
     const errorInfo = checkError(data);
-    if (errorInfo != null) {
+    if (errorInfo.length > 0) {
       props.onCompile(errorInfo);
       return;
     }
@@ -86,29 +72,28 @@ export default function CodeEditor(props) {
       };
     });
     props.onCompile(output);
-    //console.log("output: ", output)
-
     setCompilerData(output);
   }
 
   async function deploy(compilerData) {
-    console.log("data: ", compilerData);
+    for (let i = 0; i < compilerData.length; i++) {
+      const { bytecode } = compilerData[i];
+      let transactionObject = {
+        data: "0x" + bytecode,
+        from: address,
+      };
+      const gas = await window.ethereum.request({
+        method: "eth_estimateGas",
+        params: [transactionObject],
+      });
+      transactionObject.gas = gas;
 
-    let transactionObject = {
-      data: "0x" + compilerData[0].bytecode, // TODO: Make a loop
-      from: address,
-    };
-    const gas = await window.ethereum.request({
-      method: "eth_estimateGas",
-      params: [transactionObject],
-    });
-    transactionObject.gas = gas;
-
-    const res = await window.ethereum.request({
-      method: "eth_sendTransaction",
-      params: [transactionObject],
-    });
-    console.log("res", res);
+      const res = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionObject],
+      });
+      console.log("res", res);
+    }
   }
 
   return (

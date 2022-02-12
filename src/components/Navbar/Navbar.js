@@ -10,7 +10,7 @@ import AddressContext from "../AddressContext";
 export default function Navbar() {
   let navigate = useNavigate();
 
-  const { setAddress } = React.useContext(AddressContext);
+  const { address, setAddress } = React.useContext(AddressContext);
 
   const connectToWallet = async () => {
     if (
@@ -21,10 +21,7 @@ export default function Navbar() {
         method: "eth_requestAccounts",
       });
       let account = accounts[0];
-      console.log(account);
       setAddress(account);
-
-      //window.ethereum.on("chainChanged", () => window.location.reload());
 
       window.ethereum.on("accountsChanged", (accounts) => {
         let account;
@@ -36,7 +33,6 @@ export default function Navbar() {
         }
         setAddress(account);
       });
-      // send account address to codeEditor.jsx?
       window.ethereum.on("connect", (info) => {
         console.log(`Connected to network ${info}`);
       });
@@ -45,6 +41,31 @@ export default function Navbar() {
       });
     }
   };
+
+  const WalletConnect = () => {
+    if (address) {
+      return (
+        <Typography variant="h6" color="inherit">
+          {address}
+        </Typography>
+      );
+    } else {
+      return (
+        <Button
+          color="inherit"
+          onClick={() => {
+            connectToWallet();
+          }}
+        >
+          Connect to Wallet
+        </Button>
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    connectToWallet();
+  });
 
   return (
     <AppBar position="sticky" sx={{ height: "4rem" }}>
@@ -60,14 +81,7 @@ export default function Navbar() {
             Blockchain Education
           </Button>
         </Typography>
-        <Button
-          color="inherit"
-          onClick={() => {
-            connectToWallet();
-          }}
-        >
-          Connect to Wallet
-        </Button>
+        <WalletConnect />
       </Toolbar>
     </AppBar>
   );
