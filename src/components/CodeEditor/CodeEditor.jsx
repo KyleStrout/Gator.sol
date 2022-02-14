@@ -105,7 +105,6 @@ export default function CodeEditor(props) {
       let intervalId;
       intervalId = setInterval(async function() {
         let rec = await window.ethereum.request({
-
           method: "eth_getTransactionReceipt",
           params: [res],
         });
@@ -114,7 +113,6 @@ export default function CodeEditor(props) {
           setReceipt(rec);
           clearInterval(intervalId);
         }
-        
       }, 1000, res, intervalId)
     }
   }
