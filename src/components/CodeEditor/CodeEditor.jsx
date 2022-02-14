@@ -18,6 +18,8 @@ export default function CodeEditor(props) {
 
   const { address } = React.useContext(AddressContext);
 
+  const [receipt, setReceipt] = useState(null);
+
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
   }, [checked]);
@@ -99,6 +101,21 @@ export default function CodeEditor(props) {
         params: [transactionObject],
       });
       console.log("res", res);
+
+      let intervalId;
+      intervalId = setInterval(async function() {
+        let rec = await window.ethereum.request({
+
+          method: "eth_getTransactionReceipt",
+          params: [res],
+        });
+        if (rec) {
+          console.log("Receipt:", rec);
+          setReceipt(rec);
+          clearInterval(intervalId);
+        }
+        
+      }, 1000, res, intervalId)
     }
   }
 
