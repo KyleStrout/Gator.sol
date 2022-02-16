@@ -83,7 +83,8 @@ export default function OutputPanel(props) {
         Interactions
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Transaction History
+        {/* TODO: get data from json object, put in text like markdown */}
+        <ReactJson src={props.history}></ReactJson>
       </TabPanel>
     </Box>
   );
