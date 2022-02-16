@@ -50,7 +50,7 @@ const TransactionHistory = (props) => {
             logs: ${item.logs.length}`;
 
         return (
-          <Accordion>
+          <Accordion key={index}>
             <AccordionSummary
               expandIcon={<Icons.ExpandMore />}
               aria-controls="panel1a-content"
@@ -65,7 +65,7 @@ const TransactionHistory = (props) => {
                   let valueToDisplay = value;
                   if (value !== null && value.length > 20) {
                     // Truncate long strings
-                    valueToDisplay = value.substring(value.length - 20) + "...";
+                    valueToDisplay = value.substring(0, 20) + "...";
                   }
                   return (
                     <Box

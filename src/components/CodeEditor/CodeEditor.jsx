@@ -115,7 +115,7 @@ export default function CodeEditor(props) {
         if (rec) {
           console.log("Receipt:", rec);
           setReceipt(rec);
-          setTransactions([...transactions, rec]);
+          setTransactions(transactions => [...transactions, rec]);
           
           clearInterval(intervalId);
         }
