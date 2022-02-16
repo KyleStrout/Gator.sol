@@ -13,6 +13,18 @@ import IconButton from "@mui/material/IconButton";
 
 const TransactionHistory = (props) => {
   const [copyText, setCopyText] = useState("Copy");
+  const [open, setOpen] = useState(false);
+  
+  const handleTooltipClose = () => {
+    setTimeout(() => {
+      setOpen(false);
+      setCopyText("Copy");
+    }, 200);
+  }
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  }
 
   return (
     <React.Fragment>
@@ -67,7 +79,7 @@ const TransactionHistory = (props) => {
                     >
                       <Typography component={'span'} variant="caption">
                         <b>{key}</b> : {valueToDisplay}
-                        <Tooltip title={copyText}>
+                        <Tooltip arrow title={copyText} onClose={handleTooltipClose}>
                           <IconButton
                             size="small"
                             onClick={() => {
