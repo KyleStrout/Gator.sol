@@ -20,9 +20,9 @@ export default function CodeEditor(props) {
 
   const [receipt, setReceipt] = useState(null);
   const [transactions, setTransactions] = useState([]);
-  useEffect(()=>{
+  useEffect(() => {
     props.onDeploy(transactions);
-  }, [transactions])
+  }, [transactions]);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -104,22 +104,25 @@ export default function CodeEditor(props) {
         method: "eth_sendTransaction",
         params: [transactionObject],
       });
-      console.log("res", res);
 
       let intervalId;
-      intervalId = setInterval(async function() {
-        let rec = await window.ethereum.request({
-          method: "eth_getTransactionReceipt",
-          params: [res],
-        });
-        if (rec) {
-          console.log("Receipt:", rec);
-          setReceipt(rec);
-          setTransactions(transactions => [...transactions, rec]);
-          
-          clearInterval(intervalId);
-        }
-      }, 1000, res, intervalId)
+      intervalId = setInterval(
+        async function () {
+          let rec = await window.ethereum.request({
+            method: "eth_getTransactionReceipt",
+            params: [res],
+          });
+          if (rec) {
+            console.log("Receipt:", rec);
+            setReceipt(rec);
+            setTransactions((transactions) => [...transactions, rec]);
+            clearInterval(intervalId);
+          }
+        },
+        1000,
+        res,
+        intervalId
+      );
     }
   }
 

@@ -2,19 +2,10 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ReactJson from "react-json-view";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Tooltip,
-} from "@mui/material";
-import * as Icons from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
 import TransactionHistory from "../../TransactionHistory";
-
+import InteractionPanel from "../InteractionPanel";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -90,7 +81,10 @@ export default function OutputPanel(props) {
         <ReactJson src={props.output}></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Interactions
+        <InteractionPanel
+          src={props.output}
+          deployed={props.deployed}
+        ></InteractionPanel>
       </TabPanel>
       <TabPanel value={value} index={2}>
         {/* TODO: get data from json object, put in text like markdown */}
