@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ReactJson from "react-json-view";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import * as Icons from "@mui/icons-material";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -84,7 +86,55 @@ export default function OutputPanel(props) {
       </TabPanel>
       <TabPanel value={value} index={2}>
         {/* TODO: get data from json object, put in text like markdown */}
-        <ReactJson src={props.history}></ReactJson>
+
+        {props.history &&
+          props.history.map((item, index) => {
+            const accordionTitle = `
+            [block:${item.blockNumber} txIndex:
+              ${parseInt(
+                item.transactionIndex,
+                16
+              )}] from: ${item.from.substring(0, 5)}...${item.from.substring(
+              item.from.length - 5,
+              item.from.length
+            )} to:${" "}
+              ${item.to}
+              logs: ${item.logs.length}`;
+
+            return (
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<Icons.ExpandMore />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography variant="caption">{accordionTitle}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    {Object.entries(item).map(([key, value]) => {
+                      /* TODO: conditionally select stuff with if */
+                      return (
+                        <Box
+                          key={key}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          <Typography variant="caption">
+                            <b>{key}</b> : {value}
+                          </Typography>
+                        </Box>
+                      );
+                    })}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
       </TabPanel>
     </Box>
   );

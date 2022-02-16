@@ -22,7 +22,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
 
 function SectionInteractionContent(props) {
   const [output, setOutput] = useState({});
-  const [history, setHistory] = useState("Deploy the contract to see the history");
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     // clear output
