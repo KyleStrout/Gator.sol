@@ -27,6 +27,7 @@ function SectionInteractionContent(props) {
   useEffect(() => {
     // clear output
     setOutput({});
+    setHistory([]);
     // TODO: if contract was previously deployed, get the previous output ( might have to store things to a db for this)
   }, [props.defaultCode]);
 
@@ -38,7 +39,11 @@ function SectionInteractionContent(props) {
           width: "100%",
         }}
       >
-        <CodeEditor defaultCode={props.defaultCode} onCompile={setOutput} onDeploy={setHistory} />
+        <CodeEditor
+          defaultCode={props.defaultCode}
+          onCompile={setOutput}
+          onDeploy={setHistory}
+        />
         <Box
           sx={{
             height: "calc(50vh - 3.5rem)",
