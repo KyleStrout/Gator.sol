@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -12,6 +12,8 @@ import * as Icons from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 
 const TransactionHistory = (props) => {
+  const [copyText, setCopyText] = useState("Copy");
+
   return (
     <React.Fragment>
     {props.history.length === 0 && (
@@ -65,11 +67,12 @@ const TransactionHistory = (props) => {
                     >
                       <Typography component={'span'} variant="caption">
                         <b>{key}</b> : {valueToDisplay}
-                        <Tooltip title="Copy">
+                        <Tooltip title={copyText}>
                           <IconButton
                             size="small"
                             onClick={() => {
                               navigator.clipboard.writeText(value);
+                              setCopyText("Copied")
                             }}
                           >
                             <Icons.ContentPaste size="sm" />
