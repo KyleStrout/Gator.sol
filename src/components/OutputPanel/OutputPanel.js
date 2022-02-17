@@ -5,6 +5,16 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ReactJson from "react-json-view";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Tooltip,
+} from "@mui/material";
+import * as Icons from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import TransactionHistory from "../../TransactionHistory";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -83,7 +93,8 @@ export default function OutputPanel(props) {
         Interactions
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Transaction History
+        {/* TODO: get data from json object, put in text like markdown */}
+        <TransactionHistory history={props.history} />
       </TabPanel>
     </Box>
   );

@@ -19,6 +19,10 @@ export default function CodeEditor(props) {
   const { address } = React.useContext(AddressContext);
 
   const [receipt, setReceipt] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  useEffect(()=>{
+    props.onDeploy(transactions);
+  }, [transactions])
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -111,6 +115,8 @@ export default function CodeEditor(props) {
         if (rec) {
           console.log("Receipt:", rec);
           setReceipt(rec);
+          setTransactions(transactions => [...transactions, rec]);
+          
           clearInterval(intervalId);
         }
       }, 1000, res, intervalId)

@@ -22,6 +22,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
 
 function SectionInteractionContent(props) {
   const [output, setOutput] = useState({});
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     // clear output
@@ -37,7 +38,7 @@ function SectionInteractionContent(props) {
           width: "100%",
         }}
       >
-        <CodeEditor defaultCode={props.defaultCode} onCompile={setOutput} />
+        <CodeEditor defaultCode={props.defaultCode} onCompile={setOutput} onDeploy={setHistory} />
         <Box
           sx={{
             height: "calc(50vh - 3.5rem)",
@@ -46,7 +47,7 @@ function SectionInteractionContent(props) {
             borderBottom: "0.5rem solid #f0f0f0",
           }}
         >
-          <OutputPanel output={output}></OutputPanel>
+          <OutputPanel output={output} history={history}></OutputPanel>
         </Box>
       </Box>
     );
