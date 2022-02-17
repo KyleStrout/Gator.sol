@@ -1,8 +1,11 @@
 import AddressContext from "../AddressContext";
 import { useContext } from "react";
+import ContractContext from "../ContractContext";
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
+  const { setContractData } = useContext(ContractContext);
+
   const interact = async (contractAddress, method, ...args) => {
     let transactionObject = {
       from: address,
@@ -27,18 +30,32 @@ export default function InteractionPanel(props) {
     });
     transactionObject.gas = gas;
 
+    const url = window.location.href.split("/").pop();
+
     if (method.stateMutability === "view") {
       const res = await window.ethereum.request({
         method: "eth_call",
         params: [transactionObject, "latest"],
       });
-      console.log("View: ", res);
+      setContractData((prevState) => ({
+        ...prevState,
+        [url]: {
+          ...prevState[url],
+          transactionHistory: [
+            ...prevState[url].transactionHistory,
+            {
+              method,
+              args,
+              result: res,
+            },
+          ],
+        },
+      }));
     } else {
       const res = await window.ethereum.request({
         method: "eth_sendTransaction",
         params: [transactionObject],
       });
-      console.log("Transaction: ", res);
       let intervalId;
       intervalId = setInterval(
         async function () {
@@ -48,6 +65,21 @@ export default function InteractionPanel(props) {
           });
           if (rec) {
             console.log("Receipt:", rec);
+            const url = window.location.href.split("/").pop();
+            setContractData((prevState) => ({
+              ...prevState,
+              [url]: {
+                ...prevState[url],
+                transactionHistory: [
+                  ...prevState[url].transactionHistory,
+                  {
+                    method,
+                    args,
+                    result: rec,
+                  },
+                ],
+              },
+            }));
             clearInterval(intervalId);
           }
         },
@@ -66,7 +98,6 @@ export default function InteractionPanel(props) {
     });
   };
 
-  // // for contract in src
   if (props.deployed) {
     return props.src.map((contract, index) => {
       return (
