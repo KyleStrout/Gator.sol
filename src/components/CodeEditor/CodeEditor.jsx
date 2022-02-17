@@ -18,11 +18,14 @@ export default function CodeEditor(props) {
 
   const { address } = React.useContext(AddressContext);
 
-  const [receipt, setReceipt] = useState(null);
+  const [, setReceipt] = useState(null);
   const [transactions, setTransactions] = useState([]);
-  useEffect(() => {
-    props.onDeploy(transactions);
-  }, [transactions]);
+  useEffect(
+    (props) => {
+      props.onDeploy(transactions);
+    },
+    [transactions]
+  );
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -80,6 +83,7 @@ export default function CodeEditor(props) {
       return {
         name: key,
         abi: data.contracts["test.sol"][key].abi,
+        address: "",
         bytecode: data.contracts["test.sol"][key].evm.bytecode.object,
       };
     });
@@ -116,6 +120,15 @@ export default function CodeEditor(props) {
             console.log("Receipt:", rec);
             setReceipt(rec);
             setTransactions((transactions) => [...transactions, rec]);
+            console.log("compilerData: ", compilerData);
+            const outputWithAddress = compilerData.map((contract) => {
+              return {
+                ...contract,
+                address: rec.contractAddress,
+              };
+            });
+            setCompilerData(outputWithAddress);
+            props.onCompile(outputWithAddress);
             clearInterval(intervalId);
           }
         },
