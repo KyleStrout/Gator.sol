@@ -61,7 +61,6 @@ export default function InteractionPanel(props) {
           });
           if (rec) {
             console.log("Receipt:", rec);
-            // setReceipt(rec);
             clearInterval(intervalId);
           }
         },

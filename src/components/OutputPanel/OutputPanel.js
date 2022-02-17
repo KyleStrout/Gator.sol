@@ -83,7 +83,7 @@ export default function OutputPanel(props) {
       <TabPanel value={value} index={1}>
         <InteractionPanel
           src={props.output}
-          deployed={props.deployed}
+          deployed={props.history.length > 0}
         ></InteractionPanel>
       </TabPanel>
       <TabPanel value={value} index={2}>
