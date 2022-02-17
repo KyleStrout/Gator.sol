@@ -1,9 +1,10 @@
-import * as React from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import OnboardButton from "../OnboardButton/";
 
 import MetaMaskOnboarding from "@metamask/onboarding";
 
@@ -12,20 +13,20 @@ import AddressContext from "../AddressContext";
 export default function Navbar() {
   let navigate = useNavigate();
 
-  const { address, setAddress } = React.useContext(AddressContext);
-  const [buttonText, setButtonText] = React.useState("Install MetaMask");
-  const [isDisabled, setIsDisabled] = React.useState(false);
-  const [accounts, setAccounts] = React.useState([]);
-  const onboarding = React.useRef();
+  const { address, setAddress } = useContext(AddressContext);
+  const [buttonText, setButtonText] = useState("Install MetaMask");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [accounts, setAccounts] = useState([]);
+  const onboarding = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!onboarding.current) {
       onboarding.current = new MetaMaskOnboarding();
     }
   }, []);
   // window.ethereum.off is a breaking function where saving any change in the the file will cause the app to crash
   // documentation: https://docs.metamask.io/guide/onboarding-library.html#examples
-  React.useEffect(() => {
+  useEffect(() => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       if (accounts.length > 0) {
         console.log("MetaMask is installed with profile logged in");
@@ -37,23 +38,30 @@ export default function Navbar() {
         console.log("MetaMask is installed and ready to connect");
         setButtonText("Connect to Wallet");
         setIsDisabled(false);
-        console.log("here");
-        //window.location.reload();
+        console.log("here dude");
+        if (!window.ethereum.chainId) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 10000);
+        }
       }
     }
   }, [accounts]);
   // test yo
-  React.useEffect(() => {
+  useEffect(() => {
     function handleNewAccounts(newAccounts) {
       setAccounts(newAccounts);
       //setAddress(accounts[0]);
-      console.log("yo");
+      // console.log("yo");
     }
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      console.log("yooooooooooooo");
-      const acc = window.ethereum.request({ method: "eth_requestAccounts" });
-      console.log(acc);
-      handleNewAccounts(acc);
+      // console.log("yooooooooooooo");
+      const acc = window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then((newAccount) => {
+          handleNewAccounts(newAccount);
+        });
+      // console.log(acc);
       window.ethereum.on("accountsChanged", handleNewAccounts);
       return () => {
         console.log("returning");
