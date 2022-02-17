@@ -6,26 +6,18 @@ import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
+import ContractContext from "../ContractContext";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
-  const [compilerData, setCompilerData] = useState(null);
   const [theme, setTheme] = useState("vs-light");
 
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
-
-  const [compilerError, setCompilerError] = useState(null);
-  const [receipt, setReceipt] = useState(null);
-  const [transactions, setTransactions] = useState([]);
-
-  const { onDeploy } = props;
-  useEffect(() => {
-    onDeploy(transactions);
-  }, [onDeploy, transactions]);
+  const { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -74,12 +66,17 @@ export default function CodeEditor(props) {
 
     const data = await response.json();
     const errorInfo = checkError(data);
-    if (errorInfo.length > 0) {
-      props.onCompile(errorInfo);
-      setCompilerError(true);
+    const url = window.location.href.split("/").pop();
+    if (errorInfo?.length > 0) {
+      setContractData((prevState) => ({
+        ...prevState,
+        [url]: {
+          ...prevState[url],
+          compilerData: errorInfo,
+        },
+      }));
       return;
     }
-    setCompilerError(false);
 
     const output = Object.keys(data.contracts["test.sol"]).map((key) => {
       return {
@@ -89,11 +86,21 @@ export default function CodeEditor(props) {
         bytecode: data.contracts["test.sol"][key].evm.bytecode.object,
       };
     });
-    props.onCompile(output);
-    setCompilerData(output);
+
+    setContractData({
+      ...contractData,
+      [url]: {
+        compilerData: output,
+      },
+    });
+
+    console.log(contractData[url]);
   }
 
-  async function deploy(compilerData) {
+  async function deploy() {
+    const compilerData =
+      contractData[window.location.href.split("/").pop()].compilerData;
+
     for (let i = 0; i < compilerData.length; i++) {
       const { bytecode } = compilerData[i];
       let transactionObject = {
@@ -119,18 +126,29 @@ export default function CodeEditor(props) {
             params: [res],
           });
           if (rec) {
-            console.log("Receipt:", rec);
-            setReceipt(rec);
-            setTransactions((transactions) => [...transactions, rec]);
-            console.log("compilerData: ", compilerData);
             const outputWithAddress = compilerData.map((contract) => {
               return {
                 ...contract,
                 address: rec.contractAddress,
               };
             });
-            setCompilerData(outputWithAddress);
-            props.onCompile(outputWithAddress);
+            const url = window.location.href.split("/").pop();
+            let newTransactions;
+            if (contractData[url]?.transactions) {
+              newTransactions = [...contractData[url].transactions, rec];
+            } else {
+              newTransactions = [rec];
+            }
+            setContractData((prevState) => ({
+              ...prevState,
+              [url]: {
+                compilerData: outputWithAddress,
+                transactions: newTransactions,
+              },
+            }));
+
+            console.log(contractData[url].transactions);
+
             clearInterval(intervalId);
           }
         },
@@ -140,6 +158,15 @@ export default function CodeEditor(props) {
       );
     }
   }
+
+  const canDeploy = () => {
+    // can deploy if the compiler data has at least one abi for this url
+    const url = window.location.href.split("/").pop();
+    return (
+      contractData[url] &&
+      contractData[url].compilerData.some((contract) => contract.abi)
+    );
+  };
 
   return (
     <Box
@@ -200,8 +227,8 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled={compilerError || compilerData === null}
-            onClick={() => deploy(compilerData)}
+            disabled={!canDeploy()}
+            onClick={deploy}
           >
             Deploy
           </Button>

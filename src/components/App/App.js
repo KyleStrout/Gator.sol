@@ -11,45 +11,50 @@ import SectionPage from "../SectionPage";
 import course from "../../data/course.js";
 import theme from "../Theme";
 import { AddressProvider } from "../AddressContext";
+import { ContractProvider } from "../ContractContext";
 
 const AppContainer = styled(Box)(() => ({
   height: "100vh",
   width: `100%`,
 }));
 
-const AddressContext = React.createContext("");
-
 function App() {
   const [address, setAddress] = React.useState("");
   const value = { address, setAddress };
+
+  const [contractData, setContractData] = React.useState({});
+  const contractValue = { contractData, setContractData };
+
   return (
     <ThemeProvider theme={theme}>
       <AddressProvider value={value}>
-        <AppContainer id="app-container">
-          <Navbar />
+        <ContractProvider value={contractValue}>
+          <AppContainer id="app-container">
+            <Navbar />
 
-          <Routes>
-            <Route exact path="/" element={<LandingPage />}></Route>
-            <Route path="/about" element={<About />}></Route>
-            <Route path="/home" element={<LandingPage />}></Route>
-            <Route path="/course/*" element={<CourseHome />}>
-              {course.chapters.map((chapter) =>
-                chapter.sections.map((section) => (
-                  <Route
-                    path={`${chapter.url}/${section.url}`}
-                    element={
-                      <SectionPage
-                        contentUrl={section.contentUrl}
-                        hasCodeEditor={section.hasCodeEditor}
-                        defaultCode={section.defaultCode}
-                      />
-                    }
-                  />
-                ))
-              )}
-            </Route>
-          </Routes>
-        </AppContainer>
+            <Routes>
+              <Route exact path="/" element={<LandingPage />}></Route>
+              <Route path="/about" element={<About />}></Route>
+              <Route path="/home" element={<LandingPage />}></Route>
+              <Route path="/course/*" element={<CourseHome />}>
+                {course.chapters.map((chapter) =>
+                  chapter.sections.map((section) => (
+                    <Route
+                      path={`${chapter.url}/${section.url}`}
+                      element={
+                        <SectionPage
+                          contentUrl={section.contentUrl}
+                          hasCodeEditor={section.hasCodeEditor}
+                          defaultCode={section.defaultCode}
+                        />
+                      }
+                    />
+                  ))
+                )}
+              </Route>
+            </Routes>
+          </AppContainer>
+        </ContractProvider>
       </AddressProvider>
     </ThemeProvider>
   );

@@ -4,8 +4,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import ReactJson from "react-json-view";
-import TransactionHistory from "../../TransactionHistory";
+import TransactionHistory from "../TransactionHistory";
 import InteractionPanel from "../InteractionPanel";
+import ContractContext from "../ContractContext";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -36,6 +37,19 @@ function a11yProps(index) {
 }
 
 export default function OutputPanel(props) {
+  const { contractData } = React.useContext(ContractContext);
+  const compilerData = React.useRef([]);
+  const transactionHistory = React.useRef([]);
+
+  React.useEffect(() => {
+    const url = window.location.href.split("/").pop();
+    const section = contractData[url];
+    if (section) {
+      compilerData.current = section.compilerData;
+      transactionHistory.current = section.transactionHistory;
+    }
+  }, [contractData]);
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (_, newValue) => {
@@ -78,17 +92,17 @@ export default function OutputPanel(props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ReactJson src={props.output}></ReactJson>
+        <ReactJson src={compilerData.current}></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <InteractionPanel
-          src={props.output}
-          deployed={props.history.length > 0}
+          src={compilerData.current}
+          deployed={transactionHistory.current?.length > 0}
         ></InteractionPanel>
       </TabPanel>
       <TabPanel value={value} index={2}>
         {/* TODO: get data from json object, put in text like markdown */}
-        <TransactionHistory history={props.history} />
+        <TransactionHistory history={transactionHistory.current} />
       </TabPanel>
     </Box>
   );

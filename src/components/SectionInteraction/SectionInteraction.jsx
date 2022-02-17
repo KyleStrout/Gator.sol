@@ -21,16 +21,6 @@ const SectionInteractionContainer = styled(Box)(() => ({
 }));
 
 function SectionInteractionContent(props) {
-  const [output, setOutput] = useState({});
-  const [history, setHistory] = useState([]);
-
-  useEffect(() => {
-    // clear output
-    setOutput({});
-    setHistory([]);
-    // TODO: if contract was previously deployed, get the previous output ( might have to store things to a db for this)
-  }, [props.defaultCode]);
-
   if (props.hasCodeEditor) {
     return (
       <Box
@@ -39,11 +29,7 @@ function SectionInteractionContent(props) {
           width: "100%",
         }}
       >
-        <CodeEditor
-          defaultCode={props.defaultCode}
-          onCompile={setOutput}
-          onDeploy={setHistory}
-        />
+        <CodeEditor defaultCode={props.defaultCode} />
         <Box
           sx={{
             height: "calc(50vh - 3.5rem)",
@@ -52,7 +38,7 @@ function SectionInteractionContent(props) {
             borderBottom: "0.5rem solid #f0f0f0",
           }}
         >
-          <OutputPanel output={output} history={history}></OutputPanel>
+          <OutputPanel></OutputPanel>
         </Box>
       </Box>
     );
