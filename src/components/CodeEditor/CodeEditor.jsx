@@ -18,7 +18,6 @@ export default function CodeEditor(props) {
 
   const { address } = React.useContext(AddressContext);
 
-
   const [compilerError, setCompilerError] = useState(null);
   const [receipt, setReceipt] = useState(null);
   const [transactions, setTransactions] = useState([]);

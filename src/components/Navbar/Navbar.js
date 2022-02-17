@@ -5,67 +5,82 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
+import MetaMaskOnboarding from "@metamask/onboarding";
+
 import AddressContext from "../AddressContext";
 
 export default function Navbar() {
   let navigate = useNavigate();
 
   const { address, setAddress } = React.useContext(AddressContext);
-
-  const connectToWallet = async () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof window.ethereum !== "undefined"
-    ) {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      let account = accounts[0];
-      setAddress(account);
-
-      window.ethereum.on("accountsChanged", (accounts) => {
-        let account;
-        if (accounts.length > 0) {
-          account = accounts[0];
-          console.log(`Using account ${account}`);
-        } else {
-          console.error("0 accounts.");
-        }
-        setAddress(account);
-      });
-      window.ethereum.on("connect", (info) => {
-        console.log(`Connected to network ${info}`);
-      });
-      window.ethereum.on("disconnect", (info) => {
-        console.log(`Disconnected from network ${info}`);
-      });
-    }
-  };
-
-  const WalletConnect = () => {
-    if (address) {
-      return (
-        <Typography variant="h6" color="inherit">
-          {address}
-        </Typography>
-      );
-    } else {
-      return (
-        <Button
-          color="inherit"
-          onClick={() => {
-            connectToWallet();
-          }}
-        >
-          Connect to Wallet
-        </Button>
-      );
-    }
-  };
+  const [buttonText, setButtonText] = React.useState("Install MetaMask");
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [accounts, setAccounts] = React.useState([]);
+  const onboarding = React.useRef();
 
   React.useEffect(() => {
-    connectToWallet();
-  });
+    if (!onboarding.current) {
+      onboarding.current = new MetaMaskOnboarding();
+    }
+  }, []);
+  // window.ethereum.off is a breaking function where saving any change in the the file will cause the app to crash
+  // documentation: https://docs.metamask.io/guide/onboarding-library.html#examples
+  React.useEffect(() => {
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      if (accounts.length > 0) {
+        console.log("MetaMask is installed with profile logged in");
+        setButtonText(accounts[0]);
+        setIsDisabled(true);
+        setAddress(accounts[0]);
+        onboarding.current.stopOnboarding();
+      } else {
+        console.log("MetaMask is installed and ready to connect");
+        setButtonText("Connect to Wallet");
+        setIsDisabled(false);
+        console.log("here");
+        //window.location.reload();
+      }
+    }
+  }, [accounts]);
+  // test yo
+  React.useEffect(() => {
+    function handleNewAccounts(newAccounts) {
+      setAccounts(newAccounts);
+      //setAddress(accounts[0]);
+      console.log("yo");
+    }
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      console.log("yooooooooooooo");
+      const acc = window.ethereum.request({ method: "eth_requestAccounts" });
+      console.log(acc);
+      handleNewAccounts(acc);
+      window.ethereum.on("accountsChanged", handleNewAccounts);
+      return () => {
+        console.log("returning");
+        window.ethereum.removeListener("accountsChanged", handleNewAccounts);
+      };
+    }
+  }, []);
+
+  const WalletConnect = () => {
+    return (
+      <Button
+        color="inherit"
+        onClick={() => {
+          if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+            window.ethereum
+              .request({ method: "eth_requestAccounts" })
+              .then((newAccounts) => setAccounts(newAccounts));
+          } else {
+            onboarding.current.startOnboarding();
+          }
+        }}
+        disabled={isDisabled}
+      >
+        {buttonText}
+      </Button>
+    );
+  };
 
   return (
     <AppBar position="sticky" sx={{ height: "4rem" }}>

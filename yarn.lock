@@ -1602,6 +1602,13 @@
     "@types/yargs" "^16.0.0"
     "chalk" "^4.0.0"
 
+"@metamask/onboarding@^1.0.1":
+  "integrity" "sha512-FqHhAsCI+Vacx2qa5mAFcWNSrTcVGMNjzxVgaX8ECSny/BJ9/vgXP9V7WF/8vb9DltPeQkxr+Fnfmm6GHfmdTQ=="
+  "resolved" "https://registry.npmjs.org/@metamask/onboarding/-/onboarding-1.0.1.tgz"
+  "version" "1.0.1"
+  dependencies:
+    "bowser" "^2.9.0"
+
 "@monaco-editor/loader@^1.2.0":
   "integrity" "sha512-cJVCG/T/KxXgzYnjKqyAgsKDbH9mGLjcXxN6AmwumBwa2rVFkwvGcUj1RJtD0ko4XqLqJxwqsN/Z/KURB5f1OQ=="
   "resolved" "https://registry.npmjs.org/@monaco-editor/loader/-/loader-1.2.0.tgz"
@@ -3320,6 +3327,11 @@
   "integrity" "sha1-aN/1++YMUes3cl6p4+0xDcwed24="
   "resolved" "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
   "version" "1.0.0"
+
+"bowser@^2.9.0":
+  "integrity" "sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA=="
+  "resolved" "https://registry.npmjs.org/bowser/-/bowser-2.11.0.tgz"
+  "version" "2.11.0"
 
 "boxen@^5.0.0":
   "integrity" "sha512-9gYgQKXx+1nP8mP7CzFyaUARhg7D3n1dF/FnErWmu9l6JvGpNUN278h0aSb+QjoiKSWG+iZ3uHrcqk0qrY9RQQ=="
