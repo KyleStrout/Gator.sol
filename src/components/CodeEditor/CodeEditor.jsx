@@ -21,9 +21,11 @@ export default function CodeEditor(props) {
   const [compilerError, setCompilerError] = useState(null);
   const [receipt, setReceipt] = useState(null);
   const [transactions, setTransactions] = useState([]);
+
+  const { onDeploy } = props;
   useEffect(() => {
-    props.onDeploy(transactions);
-  }, [transactions]);
+    onDeploy(transactions);
+  }, [onDeploy, transactions]);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");

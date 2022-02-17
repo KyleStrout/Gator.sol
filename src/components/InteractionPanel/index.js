@@ -3,20 +3,13 @@ import { useContext } from "react";
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
-  // const { contractData, setContractData } = useContext(ContractDataContext); TODO: create this context
   const interact = async (contractAddress, method, ...args) => {
-    // get the data to pass to the transaction - data is the encoded method signature
-    // from: your address
-    // to: contracts address
-    // data: encoded method signature in the contract
-    // args ?
     let transactionObject = {
       from: address,
       to: contractAddress,
       data: "",
       gas: "",
     };
-    console.log("args", args);
 
     const response = await fetch("http://localhost:3001/getMethodData", {
       headers: {
@@ -25,20 +18,14 @@ export default function InteractionPanel(props) {
       method: "POST",
       body: JSON.stringify({ method, inputs: args }),
     });
-    console.log("response", response);
     const { encodedFunc } = await response.json();
-    console.log("encodedFunc", encodedFunc);
     // send the transaction
     transactionObject.data = encodedFunc;
-    console.log(transactionObject);
     const gas = await window.ethereum.request({
       method: "eth_estimateGas",
       params: [transactionObject],
     });
-    console.log("hello");
-    // console.log("gas", gas);
     transactionObject.gas = gas;
-    // if view only, then use eth_call
 
     if (method.stateMutability === "view") {
       const res = await window.ethereum.request({
@@ -91,9 +78,7 @@ export default function InteractionPanel(props) {
               <div key={index}>
                 <h2>{method.name}</h2>
                 <form
-                  // onSubmit={(e) => this.interact(contract.address, method, args)}
                   onSubmit={(e) => {
-                    console.log(method);
                     const parameters = onSubmit(e);
                     interact(contract.address, method, ...parameters);
                   }}
