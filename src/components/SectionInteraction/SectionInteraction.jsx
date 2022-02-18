@@ -16,7 +16,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
   height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
-  backgroundColor: "white",
+  backgroundColor: "gray",
   border: "0.5rem solid #f0f0f0",
 }));
 
@@ -36,8 +36,9 @@ function SectionInteractionContent(props) {
           sx={{
             height: "calc(50vh - 3.5rem)",
             width: "100%",
-            backgroundColor: "white",
+            backgroundColor: "gray",
             borderBottom: "0.5rem solid #f0f0f0",
+            textDecorationColor: 'whitesmoke',
           }}
         >
           <OutputPanel output={output}></OutputPanel>

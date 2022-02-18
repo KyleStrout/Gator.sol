@@ -1,13 +1,22 @@
 import { createTheme } from "@mui/material/styles";
-import { orange, blue } from "@mui/material/colors";
+//import { ThemeProvider } from "@mui/material/core";
+import { deepOrange, blue, grey } from "@mui/material/colors";
 
 const Theme = createTheme({
+  root: {
+    color: grey[500],
+  },
   palette: {
+    background: {
+      default: grey[500],
+      paper: grey[500],
+    },
     primary: {
-      main: blue[500],
+      light: grey[400],
+      main: blue[900],
     },
     secondary: {
-      main: orange[400],
+      main: deepOrange[600],
     },
   },
 });

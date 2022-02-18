@@ -48,6 +48,7 @@ export default function OutputPanel(props) {
         maxWidth: "40vw",
         overflow: "scroll",
         height: "100%",
+  
       }}
     >
       <Box
@@ -57,7 +58,7 @@ export default function OutputPanel(props) {
           left: "0",
           borderBottom: 1,
           width: "100%",
-          backgroundColor: "white",
+          backgroundColor: "gray",
           zIndex: "1",
           borderColor: "divider",
         }}
@@ -69,9 +70,10 @@ export default function OutputPanel(props) {
           sx={{
             position: "sticky",
             top: 0,
+            backgroundColor: "gray",
           }}
         >
-          <Tab label="Output " {...a11yProps(0)} />
+          <Tab label="Output " background {...a11yProps(0)} />
           <Tab label="Interact" {...a11yProps(1)} />
           <Tab label="History" {...a11yProps(2)} />
         </Tabs>

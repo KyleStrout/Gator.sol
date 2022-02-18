@@ -12,6 +12,7 @@ const SectionPageContainer = styled(Box)(() => ({
   justifyContent: "center",
   alignItems: "start",
   overflow: "hidden",
+  backgroundColor: "background.default",
 }));
 
 export default function SectionPage(props) {

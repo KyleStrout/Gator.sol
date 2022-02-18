@@ -16,7 +16,7 @@ const ContentContainer = styled(Box)(() => ({
   justifyContent: "flex-start",
   alignItems: "flex-start",
   overflow: "scroll",
-  backgroundColor: "white",
+  backgroundColor: "gray",
   padding: "0 .5rem",
   border: "0.5rem solid #f0f0f0",
   borderRight: "0",

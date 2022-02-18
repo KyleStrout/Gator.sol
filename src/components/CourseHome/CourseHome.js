@@ -12,13 +12,15 @@ const CourseHomeContainer = styled(Box)(() => ({
   flexDirection: "row",
   height: "calc(100vh - 4rem)",
   width: "100%",
+  //set background color to grey
+  backgroundColor: "gray"
 }));
 
 const ContentContainer = styled(Box)(() => ({
   width: "100%",
   marginLeft: "12rem",
   height: "calc(100vh - 4rem)",
-  backgroundColor: "lightblue",
+  backgroundColor: "gray",
   flexDirection: "row",
 }));
 
