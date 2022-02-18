@@ -38,15 +38,16 @@ function a11yProps(index) {
 
 export default function OutputPanel(props) {
   const { contractData } = React.useContext(ContractContext);
-  const compilerData = React.useRef([]);
-  const transactionHistory = React.useRef([]);
+  const [compilerData, setCompilerData] = React.useState([]);
+  const [transactions, setTransactions] = React.useState([]);
 
   React.useEffect(() => {
+    console.log("contractData", contractData);
     const url = window.location.href.split("/").pop();
     const section = contractData[url];
     if (section) {
-      compilerData.current = section.compilerData;
-      transactionHistory.current = section.transactionHistory;
+      setCompilerData(section.compilerData);
+      setTransactions(section.transactions);
     }
   }, [contractData]);
 
@@ -92,17 +93,17 @@ export default function OutputPanel(props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ReactJson src={compilerData.current}></ReactJson>
+        <ReactJson src={compilerData}></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <InteractionPanel
-          src={compilerData.current}
-          deployed={transactionHistory.current?.length > 0}
+          src={compilerData}
+          deployed={transactions?.length > 0}
         ></InteractionPanel>
       </TabPanel>
       <TabPanel value={value} index={2}>
         {/* TODO: get data from json object, put in text like markdown */}
-        <TransactionHistory history={transactionHistory.current} />
+        <TransactionHistory history={transactions} />
       </TabPanel>
     </Box>
   );
