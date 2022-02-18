@@ -93,8 +93,6 @@ export default function CodeEditor(props) {
         compilerData: output,
       },
     });
-
-    console.log(contractData[url]);
   }
 
   async function deploy() {

@@ -4,7 +4,7 @@ import ContractContext from "../ContractContext";
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
-  const { setContractData } = useContext(ContractContext);
+  const { contractData, setContractData } = useContext(ContractContext);
 
   const interact = async (contractAddress, method, ...args) => {
     let transactionObject = {
@@ -37,18 +37,39 @@ export default function InteractionPanel(props) {
         method: "eth_call",
         params: [transactionObject, "latest"],
       });
+
+      let newTransactions;
+      if (contractData[url].transactions) {
+        newTransactions = [
+          ...contractData[url].transactions,
+          {
+            method: method.name,
+            from: address,
+            to: contractAddress,
+            inputs: args,
+            result: res,
+            logs: [],
+            transactionIndex: contractData[url].transactions.length,
+          },
+        ];
+      } else {
+        newTransactions = [
+          {
+            method: method.name,
+            from: address,
+            to: contractAddress,
+            inputs: args,
+            result: res,
+            logs: [],
+            transactionIndex: 0,
+          },
+        ];
+      }
       setContractData((prevState) => ({
         ...prevState,
         [url]: {
           ...prevState[url],
-          transactionHistory: [
-            ...prevState[url].transactionHistory,
-            {
-              method,
-              args,
-              result: res,
-            },
-          ],
+          transactions: newTransactions,
         },
       }));
     } else {
@@ -66,18 +87,17 @@ export default function InteractionPanel(props) {
           if (rec) {
             console.log("Receipt:", rec);
             const url = window.location.href.split("/").pop();
+            let newTransactions;
+            if (contractData[url].transactions) {
+              newTransactions = [...contractData[url].transactions, rec];
+            } else {
+              newTransactions = [rec];
+            }
             setContractData((prevState) => ({
               ...prevState,
               [url]: {
                 ...prevState[url],
-                transactionHistory: [
-                  ...prevState[url].transactionHistory,
-                  {
-                    method,
-                    args,
-                    result: rec,
-                  },
-                ],
+                transactions: newTransactions,
               },
             }));
             clearInterval(intervalId);
@@ -97,6 +117,8 @@ export default function InteractionPanel(props) {
       return i.value;
     });
   };
+
+  console.log(props.deployed);
 
   if (props.deployed) {
     return props.src.map((contract, index) => {
