@@ -18,6 +18,8 @@ export default function CodeEditor(props) {
 
   const { address } = React.useContext(AddressContext);
 
+
+  const [compilerError, setCompilerError] = useState(null);
   const [receipt, setReceipt] = useState(null);
   const [transactions, setTransactions] = useState([]);
   useEffect(()=>{
@@ -73,8 +75,10 @@ export default function CodeEditor(props) {
     const errorInfo = checkError(data);
     if (errorInfo.length > 0) {
       props.onCompile(errorInfo);
+      setCompilerError(true);
       return;
     }
+    setCompilerError(false);
 
     const output = Object.keys(data.contracts["test.sol"]).map((key) => {
       return {
@@ -182,7 +186,7 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled={compilerData === null}
+            disabled={compilerError || compilerData === null}
             onClick={() => deploy(compilerData)}
           >
             Deploy
