@@ -13,6 +13,20 @@ import ContractContext from "../ContractContext";
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
+  const [newTransactions, setNewTransactions] = useState([]);
+  useEffect(() => {
+    const url = window.location.href.split("/").pop();
+    setContractData({
+      ...contractData,
+      [url]: {
+        compilerData: outputWithAddress,
+        transactions: newTransactions,
+      },
+    });
+  }, [newTransactions])
+
+
+  const [outputWithAddress, setOutputWithAddress] = useState([]);
 
   const editorRef = useRef(null);
 
@@ -124,28 +138,15 @@ export default function CodeEditor(props) {
             params: [res],
           });
           if (rec) {
-            const outputWithAddress = compilerData.map((contract) => {
+            const out = compilerData.map((contract) => {
               return {
                 ...contract,
                 address: rec.contractAddress,
               };
             });
-            const url = window.location.href.split("/").pop();
-            let newTransactions;
-            if (contractData[url]?.transactions) {
-              newTransactions = [...contractData[url].transactions, rec];
-            } else {
-              newTransactions = [rec];
-            }
-            setContractData((prevState) => ({
-              ...prevState,
-              [url]: {
-                compilerData: outputWithAddress,
-                transactions: newTransactions,
-              },
-            }));
-
-            console.log(contractData[url].transactions);
+            setOutputWithAddress(out);
+            setNewTransactions(newTransactions => [...newTransactions, rec]);
+            console.log("newTransactions: ", newTransactions);
 
             clearInterval(intervalId);
           }
