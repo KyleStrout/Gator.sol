@@ -4,8 +4,11 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const solc = require("solc");
 const Web3 = require("web3");
+const ganache = require("ganache-core");
 
-const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+const web3 = new Web3(
+  Web3.givenProvider || ganache.provider() || "ws://localhost:8545"
+);
 app.use(cors());
 
 app.use(bodyParser.json());

@@ -29,7 +29,7 @@ export default function CodeEditor(props) {
       },
     });
   }, [newTransactions]);
-  
+
   useEffect(() => {
     const url = window.location.href.split("/").pop();
     setContractData({
@@ -41,23 +41,22 @@ export default function CodeEditor(props) {
     });
   }, [outputWithAddress]);
 
-
-  const location = useLocation()
+  const location = useLocation();
 
   React.useEffect(() => {
     const url = location.pathname.split("/").pop();
     const section = contractData[url];
     if (section) {
       setNewTransactions(section.transactions);
-    }
-    else {
+    } else {
       setNewTransactions([]);
     }
-  }, [location])
+  }, [location]);
 
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
+  let { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -177,8 +176,11 @@ export default function CodeEditor(props) {
               contractName: compilerData[i].name,
               //mutability: "pure",
               ...rec,
-            }
-            setNewTransactions(newTransactions => [...newTransactions, transaction]);
+            };
+            setNewTransactions((newTransactions) => [
+              ...newTransactions,
+              transaction,
+            ]);
 
             clearInterval(intervalId);
           }
