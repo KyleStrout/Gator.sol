@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
+import { useTheme } from "@mui/material/styles";
+
 import AddressContext from "../AddressContext";
 
 export default function Navbar() {

@@ -6,25 +6,32 @@ import { Button, Box } from "@mui/material";
 
 import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
+import ContractContext from "../ContractContext";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
-  const [compilerData, setCompilerData] = useState(null);
   const [theme, setTheme] = useState("vs-light");
+  const [newTransactions, setNewTransactions] = useState([]);
+  useEffect(() => {
+    const url = window.location.href.split("/").pop();
+    setContractData({
+      ...contractData,
+      [url]: {
+        compilerData: outputWithAddress,
+        transactions: newTransactions,
+      },
+    });
+  }, [newTransactions])
+
+
+  const [outputWithAddress, setOutputWithAddress] = useState([]);
 
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
-
-
-  const [compilerError, setCompilerError] = useState(null);
-  const [receipt, setReceipt] = useState(null);
-  const [transactions, setTransactions] = useState([]);
-  useEffect(()=>{
-    props.onDeploy(transactions);
-  }, [transactions])
+  const { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -73,25 +80,39 @@ export default function CodeEditor(props) {
 
     const data = await response.json();
     const errorInfo = checkError(data);
-    if (errorInfo.length > 0) {
-      props.onCompile(errorInfo);
-      setCompilerError(true);
+    const url = window.location.href.split("/").pop();
+    if (errorInfo?.length > 0) {
+      setContractData((prevState) => ({
+        ...prevState,
+        [url]: {
+          ...prevState[url],
+          compilerData: errorInfo,
+        },
+      }));
       return;
     }
-    setCompilerError(false);
 
     const output = Object.keys(data.contracts["test.sol"]).map((key) => {
       return {
         name: key,
         abi: data.contracts["test.sol"][key].abi,
+        address: "",
         bytecode: data.contracts["test.sol"][key].evm.bytecode.object,
       };
     });
-    props.onCompile(output);
-    setCompilerData(output);
+
+    setContractData({
+      ...contractData,
+      [url]: {
+        compilerData: output,
+      },
+    });
   }
 
-  async function deploy(compilerData) {
+  async function deploy() {
+    const compilerData =
+      contractData[window.location.href.split("/").pop()].compilerData;
+
     for (let i = 0; i < compilerData.length; i++) {
       const { bytecode } = compilerData[i];
       let transactionObject = {
@@ -108,24 +129,43 @@ export default function CodeEditor(props) {
         method: "eth_sendTransaction",
         params: [transactionObject],
       });
-      console.log("res", res);
 
       let intervalId;
-      intervalId = setInterval(async function() {
-        let rec = await window.ethereum.request({
-          method: "eth_getTransactionReceipt",
-          params: [res],
-        });
-        if (rec) {
-          console.log("Receipt:", rec);
-          setReceipt(rec);
-          setTransactions(transactions => [...transactions, rec]);
-          
-          clearInterval(intervalId);
-        }
-      }, 1000, res, intervalId)
+      intervalId = setInterval(
+        async function () {
+          let rec = await window.ethereum.request({
+            method: "eth_getTransactionReceipt",
+            params: [res],
+          });
+          if (rec) {
+            const out = compilerData.map((contract) => {
+              return {
+                ...contract,
+                address: rec.contractAddress,
+              };
+            });
+            setOutputWithAddress(out);
+            setNewTransactions(newTransactions => [...newTransactions, rec]);
+            console.log("newTransactions: ", newTransactions);
+
+            clearInterval(intervalId);
+          }
+        },
+        1000,
+        res,
+        intervalId
+      );
     }
   }
+
+  const canDeploy = () => {
+    // can deploy if the compiler data has at least one abi for this url
+    const url = window.location.href.split("/").pop();
+    return (
+      contractData[url] &&
+      contractData[url].compilerData.some((contract) => contract.abi)
+    );
+  };
 
   return (
     <Box
@@ -186,8 +226,8 @@ export default function CodeEditor(props) {
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
-            disabled={compilerError || compilerData === null}
-            onClick={() => deploy(compilerData)}
+            disabled={!canDeploy()}
+            onClick={deploy}
           >
             Deploy
           </Button>

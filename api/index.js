@@ -3,7 +3,9 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const solc = require("solc");
+const Web3 = require("web3");
 
+const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -30,6 +32,19 @@ app.post("/compile", (req, res, next) => {
 
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
   res.send(output);
+});
+
+app.post("/getMethodData", (req, res) => {
+  const method = req.body.method;
+  const inputs = req.body.inputs;
+  console.log("inputs: ", inputs);
+  console.log(method, inputs);
+
+  const encodedFunc = web3.eth.abi.encodeFunctionCall(method, inputs);
+
+  console.log(encodedFunc);
+
+  res.send({ encodedFunc });
 });
 
 app.listen(3001, () => {
