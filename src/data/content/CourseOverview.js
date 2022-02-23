@@ -1,4 +1,4 @@
-const content = `## Course Introduction
+export const content = `## Course Introduction
 ### Course overview
 
 Welcome to the best blockchain development course on the entire internet! After taking this course, you will understand everything from how a blockchain works to how to make decentralized applications using smart contracts. 
@@ -22,5 +22,3 @@ To enhance your learning, you might throw some questions into the content. Donâ€
 More complicated sections may include a code editor on the right for you to type code and compile in real time. Other sections may include pre-deployed smart contracts that you can interact with through a javascript console or HTML inputs and button. Weâ€™ll keep it as simple as possible. 
 
 Enjoy and happy learning!`;
-
-export default content;

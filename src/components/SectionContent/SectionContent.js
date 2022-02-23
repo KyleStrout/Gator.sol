@@ -30,7 +30,11 @@ export default function SectionContent(props) {
         setContent("");
       } else {
         const data = await import(`../../data/content/${props.contentUrl}`);
-        setContent(data?.default);
+        setContent(data?.content);
+        const setupFn = data?.setupFn;
+        if (setupFn) {
+          setupFn();
+        }
       }
     }
     loadData();

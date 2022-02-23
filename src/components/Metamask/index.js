@@ -58,7 +58,7 @@ export default function OnboardingButton() {
         .then((newAccounts) => setAddress(newAccounts[0]));
     } else {
       console.log("MetaMask is not installed");
-      onboarding.current.startOnboarding();
+      window.location.href = "/course/course-introduction/wallet-setup";
     }
   };
   return (

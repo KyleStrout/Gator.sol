@@ -21,11 +21,13 @@ export default function SectionPage(props) {
         id="section-content"
         contentUrl={props.contentUrl}
       ></SectionContent>
-      <SectionInteraction
-        id="section-interaction"
-        hasCodeEditor={props.hasCodeEditor}
-        defaultCode={props.defaultCode}
-      ></SectionInteraction>
+      {props.hasCodeEditor && (
+        <SectionInteraction
+          id="section-interaction"
+          hasCodeEditor={props.hasCodeEditor}
+          defaultCode={props.defaultCode}
+        ></SectionInteraction>
+      )}
     </SectionPageContainer>
   );
 }
