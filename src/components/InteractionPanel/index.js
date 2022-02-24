@@ -37,6 +37,8 @@ export default function InteractionPanel(props) {
         method: "eth_call",
         params: [transactionObject, "latest"],
       });
+      console.log("res: ", parseInt(res, 16));
+
 
       let newTransactions;
       if (contractData[url].transactions) {
@@ -46,10 +48,7 @@ export default function InteractionPanel(props) {
             method: method.name,
             from: address,
             to: contractAddress,
-            inputs: args,
-            result: res,
-            logs: [],
-            transactionIndex: contractData[url].transactions.length,
+            result: parseInt(res, 16),
           },
         ];
       } else {
@@ -58,10 +57,7 @@ export default function InteractionPanel(props) {
             method: method.name,
             from: address,
             to: contractAddress,
-            inputs: args,
-            result: res,
-            logs: [],
-            transactionIndex: 0,
+            result: parseInt(res, 16),
           },
         ];
       }
@@ -88,10 +84,14 @@ export default function InteractionPanel(props) {
             console.log("Receipt:", rec);
             const url = window.location.href.split("/").pop();
             let newTransactions;
+            let transaction = {
+              method: method.name,
+              ...rec,
+            }
             if (contractData[url].transactions) {
-              newTransactions = [...contractData[url].transactions, rec];
+              newTransactions = [...contractData[url].transactions, transaction];
             } else {
-              newTransactions = [rec];
+              newTransactions = [transaction];
             }
             setContractData((prevState) => ({
               ...prevState,

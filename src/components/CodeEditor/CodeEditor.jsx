@@ -145,7 +145,11 @@ export default function CodeEditor(props) {
               };
             });
             setOutputWithAddress(out);
-            setNewTransactions(newTransactions => [...newTransactions, rec]);
+            let transaction = {
+              method: "constructor",
+              ...rec,
+            }
+            setNewTransactions(newTransactions => [...newTransactions, transaction]);
             console.log("newTransactions: ", newTransactions);
 
             clearInterval(intervalId);

@@ -37,7 +37,10 @@ const TransactionHistory = (props) => {
       )}
       {props.history.length > 0 &&
         props.history.map((item, index) => {
-          const accordionTitle = `
+          const accordionTitle = `${item.method}`
+
+
+          /*`
           [block:${item.blockNumber} txIndex:
             ${parseInt(item.transactionIndex, 16)}] from: ${item.from.substring(
             0,
@@ -48,6 +51,7 @@ const TransactionHistory = (props) => {
           )} to:${" "}
             ${item.to}
             logs: ${item.logs.length}`;
+          */
 
           return (
             <Accordion key={index}>
