@@ -4,16 +4,28 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-
-import { useTheme } from "@mui/material/styles";
-
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch.js" 
 import AddressContext from "../AddressContext";
+import {ThemeContext, themes} from '../ThemeContext';
+
 
 export default function Navbar() {
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const [checked, setChecked] = React.useState(false);
   let navigate = useNavigate();
 
   const { address, setAddress } = React.useContext(AddressContext);
 
+
+  React.useEffect(() => {
+    const mode = checked ? themes.dark : themes.light
+    setCustomTheme(mode)
+    console.log(customTheme)
+  }, [checked])
+
+  function handleSwitchChange(event) {
+    setChecked(event.target.checked);
+  }
   const connectToWallet = async () => {
     if (
       typeof window !== "undefined" &&
@@ -83,6 +95,11 @@ export default function Navbar() {
             Blockchain Education
           </Button>
         </Typography>
+          <ThemeSwitch
+            checked={checked}
+            onChange={handleSwitchChange}
+            inputProps={{ "aria-label": "controlled" }}
+          />
         <WalletConnect />
       </Toolbar>
     </AppBar>

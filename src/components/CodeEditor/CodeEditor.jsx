@@ -3,17 +3,17 @@ import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 // mui
 import { Button, Box } from "@mui/material";
-
-import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
+import {ThemeContext, themes} from '../ThemeContext';
+
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
 export default function CodeEditor(props) {
-  const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
   const [newTransactions, setNewTransactions] = useState([]);
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   useEffect(() => {
     const url = window.location.href.split("/").pop();
     setContractData({
@@ -24,6 +24,8 @@ export default function CodeEditor(props) {
       },
     });
   }, [newTransactions])
+  
+
 
 
   const [outputWithAddress, setOutputWithAddress] = useState([]);
@@ -32,10 +34,9 @@ export default function CodeEditor(props) {
 
   const { address } = React.useContext(AddressContext);
   const { contractData, setContractData } = React.useContext(ContractContext);
+  //const [currentTheme, setCustomTheme] = React.useContext(ThemeContext);
 
-  useEffect(() => {
-    checked ? setTheme("vs-dark") : setTheme("vs-light");
-  }, [checked]);
+
 
   function handleEditorDidMount(editor) {
     editorRef.current = editor;
@@ -46,9 +47,7 @@ export default function CodeEditor(props) {
   function handleEditorValidation(markers) {
     markers.forEach((marker) => console.log("onValidate:", marker.message));
   }
-  function handleSwitchChange(event) {
-    setChecked(event.target.checked);
-  }
+
 
   function checkError(data) {
     let errorList = [];
@@ -179,7 +178,7 @@ export default function CodeEditor(props) {
         defaultLanguage="sol"
         defaultValue={props.defaultCode}
         language="sol"
-        theme={theme} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
+        theme={customTheme.codeEditor} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
         onMount={handleEditorDidMount}
         onChange={handleEditorChange}
         onValidate={handleEditorValidation}
@@ -201,11 +200,6 @@ export default function CodeEditor(props) {
           height: "4rem",
         }}
       >
-        <ThemeSwitch
-          checked={checked}
-          onChange={handleSwitchChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
         <Box
           sx={{
             display: "flex",
