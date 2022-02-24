@@ -22,13 +22,20 @@ If you don't see it open, please check your extensions tab for the metamask exte
 
 #### Getting test ether.
 
-TBD
+First, switch your network to the Rinkeby test network in your metamask extension.
+
+Then, click the "Get Test Ether" button below.
+
+<button id="get-test-ether">Get Test Ether</button>
+** THIS DOESN'T WORK YET **
+
+Finally, you should see a transaction in your metamask extension adding 0.5 ETH in a moment. This should be enough ether to complete the course.
 
 #### Verifying that you are connected to the blockchain
 
 Now you should be connected and you have aquired some test ether, you should see your public key in the top nav bar. If you don't, please try refreshing the page or restarting your browser. 
 
-To make sure that you are connected to the blockchain, click the "Deploy" button on the right. This will deploy a contract on the blockchain.
+To make sure that you are connected to the blockchain, click the "Compile" and then the "Deploy" button on the right. This will deploy a contract on the blockchain.
 
 If the contract deploys, you are connected! If not, please try following the instructions above again, or restarting your browser.
 
