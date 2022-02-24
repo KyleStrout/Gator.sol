@@ -147,6 +147,7 @@ export default function CodeEditor(props) {
             setOutputWithAddress(out);
             let transaction = {
               method: "constructor",
+              //mutability: "pure",
               ...rec,
             }
             setNewTransactions(newTransactions => [...newTransactions, transaction]);

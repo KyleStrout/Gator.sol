@@ -31,6 +31,7 @@ export default function InteractionPanel(props) {
     transactionObject.gas = gas;
 
     const url = window.location.href.split("/").pop();
+    console.log(method.stateMutability)
 
     if (method.stateMutability === "view") {
       const res = await window.ethereum.request({
@@ -46,6 +47,7 @@ export default function InteractionPanel(props) {
           ...contractData[url].transactions,
           {
             method: method.name,
+            //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
             result: parseInt(res, 16),
@@ -55,6 +57,7 @@ export default function InteractionPanel(props) {
         newTransactions = [
           {
             method: method.name,
+            //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
             result: parseInt(res, 16),
@@ -86,6 +89,7 @@ export default function InteractionPanel(props) {
             let newTransactions;
             let transaction = {
               method: method.name,
+              //mutability: method.stateMutability,
               ...rec,
             }
             if (contractData[url].transactions) {
