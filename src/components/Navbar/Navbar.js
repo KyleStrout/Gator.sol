@@ -9,65 +9,46 @@ import { useTheme } from "@mui/material/styles";
 
 import AddressContext from "../AddressContext";
 
+import OnboardingButton from "../Metamask";
+
 export default function Navbar() {
   let navigate = useNavigate();
 
-  const { address, setAddress } = React.useContext(AddressContext);
-
-  const connectToWallet = async () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof window.ethereum !== "undefined"
-    ) {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      let account = accounts[0];
-      setAddress(account);
-
-      window.ethereum.on("accountsChanged", (accounts) => {
-        let account;
-        if (accounts.length > 0) {
-          account = accounts[0];
-          console.log(`Using account ${account}`);
-        } else {
-          console.error("0 accounts.");
-        }
-        setAddress(account);
-      });
-      window.ethereum.on("connect", (info) => {
-        console.log(`Connected to network ${info}`);
-      });
-      window.ethereum.on("disconnect", (info) => {
-        console.log(`Disconnected from network ${info}`);
-      });
-    }
-  };
-
-  const WalletConnect = () => {
-    if (address) {
-      return (
-        <Typography variant="h6" color="inherit">
-          {address}
-        </Typography>
-      );
-    } else {
-      return (
-        <Button
-          color="inherit"
-          onClick={() => {
-            connectToWallet();
-          }}
-        >
-          Connect to Wallet
-        </Button>
-      );
-    }
-  };
-
-  React.useEffect(() => {
-    connectToWallet();
-  });
+  // const WalletConnect = () => {
+  //   if (address) {
+  //     return (
+  //       <Typography variant="h6" color="inherit">
+  //         {address}
+  //       </Typography>
+  //     );
+  //   } else if (
+  //     typeof window !== "undefined" &&
+  //     typeof window.ethereum !== "undefined"
+  //   ) {
+  //     return (
+  //       <Button
+  //         color="inherit"
+  //         onClick={() => {
+  //           connectToWallet();
+  //         }}
+  //       >
+  //         Connect to Wallet
+  //       </Button>
+  //     );
+  //   } else {
+  //     const onboarding = new MetaMaskOnboarding();
+  //     return (
+  //       <Button
+  //         color="inherit"
+  //         onClick={() => {
+  //           onboarding.startOnboarding();
+  //         }}
+  //       >
+  //         Install Metamask
+  //       </Button>
+  //     );
+  //   }
+  // };
 
   return (
     <AppBar position="sticky" sx={{ height: "4rem" }}>
@@ -83,7 +64,7 @@ export default function Navbar() {
             Blockchain Education
           </Button>
         </Typography>
-        <WalletConnect />
+        <OnboardingButton />
       </Toolbar>
     </AppBar>
   );

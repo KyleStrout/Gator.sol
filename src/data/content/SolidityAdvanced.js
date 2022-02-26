@@ -1,3 +1,1 @@
-const content = `## Solidity Advanced`;
-
-export default content;
+export const content = `## Solidity Advanced`;

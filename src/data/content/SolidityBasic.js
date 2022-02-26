@@ -1,3 +1,1 @@
-const content = `## Solidity Basic`;
-
-export default content;
+export const content = `## Solidity Basic`;
