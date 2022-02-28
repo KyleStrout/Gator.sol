@@ -5,7 +5,6 @@ import { styled } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
-import Navbar from "../Navbar";
 import CourseHome from "../CourseHome";
 import SectionPage from "../SectionPage";
 import course from "../../data/course.js";
@@ -13,6 +12,7 @@ import theme from "../Theme";
 import { AddressProvider } from "../AddressContext";
 import { ContractProvider } from "../ContractContext";
 
+import DesktopApp from "../DesktopApp/";
 const AppContainer = styled(Box)(() => ({
   height: "100vh",
   width: `100%`,
@@ -30,12 +30,10 @@ function App() {
       <AddressProvider value={value}>
         <ContractProvider value={contractValue}>
           <AppContainer id="app-container">
-            <Navbar />
-
             <Routes>
               <Route exact path="/" element={<LandingPage />}></Route>
               <Route path="/about" element={<About />}></Route>
-              <Route path="/home" element={<LandingPage />}></Route>
+              <Route path="/home" element={<DesktopApp />}></Route>
               <Route path="/course/*" element={<CourseHome />}>
                 {course.chapters.map((chapter) =>
                   chapter.sections.map((section) => (
