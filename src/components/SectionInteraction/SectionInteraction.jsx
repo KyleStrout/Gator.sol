@@ -1,6 +1,4 @@
 // react
-import { useEffect, useState } from "react";
-
 // Material UI Components
 import { Box } from "@mui/material";
 import { styled } from "@mui/styles";

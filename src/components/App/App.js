@@ -1,4 +1,3 @@
-import LandingPage from "../LandingPage";
 import About from "../About";
 import React from "react";
 import { styled } from "@mui/material/styles";

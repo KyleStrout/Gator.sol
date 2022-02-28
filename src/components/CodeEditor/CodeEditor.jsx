@@ -14,6 +14,9 @@ export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
   const [newTransactions, setNewTransactions] = useState([]);
+  const [outputWithAddress, setOutputWithAddress] = useState([]);
+  const { contractData, setContractData } = React.useContext(ContractContext);
+
   useEffect(() => {
     const url = window.location.href.split("/").pop();
     setContractData({
@@ -23,15 +26,11 @@ export default function CodeEditor(props) {
         transactions: newTransactions,
       },
     });
-  }, [newTransactions])
-
-
-  const [outputWithAddress, setOutputWithAddress] = useState([]);
+  }, [contractData, setContractData, outputWithAddress, newTransactions]);
 
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
-  const { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -145,7 +144,7 @@ export default function CodeEditor(props) {
               };
             });
             setOutputWithAddress(out);
-            setNewTransactions(newTransactions => [...newTransactions, rec]);
+            setNewTransactions((newTransactions) => [...newTransactions, rec]);
             console.log("newTransactions: ", newTransactions);
 
             clearInterval(intervalId);
