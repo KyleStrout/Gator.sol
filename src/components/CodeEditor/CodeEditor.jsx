@@ -147,9 +147,11 @@ export default function CodeEditor(props) {
             setOutputWithAddress(out);
             let transaction = {
               method: "constructor",
+              contractName: compilerData[i].name,
               //mutability: "pure",
               ...rec,
             }
+            console.log("dploy trans", transaction);
             setNewTransactions(newTransactions => [...newTransactions, transaction]);
             console.log("newTransactions: ", newTransactions);
 

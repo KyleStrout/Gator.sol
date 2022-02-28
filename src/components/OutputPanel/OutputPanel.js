@@ -40,9 +40,10 @@ export default function OutputPanel(props) {
   const { contractData } = React.useContext(ContractContext);
   const [compilerData, setCompilerData] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
+  
 
   React.useEffect(() => {
-    console.log("contractData", contractData);
+    //console.log("contractData", contractData);
     const url = window.location.href.split("/").pop();
     const section = contractData[url];
     if (section) {

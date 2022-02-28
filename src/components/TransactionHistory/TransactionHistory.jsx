@@ -15,6 +15,8 @@ const TransactionHistory = (props) => {
   const [copyText, setCopyText] = useState("Copy");
   const [open, setOpen] = useState(false);
 
+  //console.log("compiler data: ", props.compilerData[0].name);
+
   const handleTooltipClose = () => {
     setTimeout(() => {
       setOpen(false);
@@ -37,7 +39,7 @@ const TransactionHistory = (props) => {
       )}
       {props.history.length > 0 &&
         props.history.map((item, index) => {
-          const accordionTitle = `${item.method}`
+          const accordionTitle = `${item.contractName}.(${item.method})`
           return (
             <Accordion key={index}>
               <AccordionSummary
@@ -55,7 +57,7 @@ const TransactionHistory = (props) => {
                     /* TODO: order keys based on state mutability
                     DOCS: https://pub.dev/documentation/celodart/latest/contracts/StateMutability.html
                     */
-                    let keysToSkip = ['logs', 'transactionIndex', 'blocknumber', 'transactionIndex', 'logsBloom', 'type', 'blockNumber', 'blockHash'];
+                    let keysToSkip = ['logs', 'transactionIndex', 'blocknumber', 'transactionIndex', 'logsBloom', 'type', 'blockNumber', 'blockHash', 'contractName'];
                     let keyToDisplay = setKeyDisplay(key);
                     let valueToDisplay = value;
                     if (!keysToSkip.includes(key)) {

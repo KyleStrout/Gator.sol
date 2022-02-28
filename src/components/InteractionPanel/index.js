@@ -6,7 +6,7 @@ export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
 
-  const interact = async (contractAddress, method, ...args) => {
+  const interact = async (contractAddress, method, contractName, ...args) => {
     let transactionObject = {
       from: address,
       to: contractAddress,
@@ -31,22 +31,19 @@ export default function InteractionPanel(props) {
     transactionObject.gas = gas;
 
     const url = window.location.href.split("/").pop();
-    console.log(method.stateMutability)
 
     if (method.stateMutability === "view") {
       const res = await window.ethereum.request({
         method: "eth_call",
         params: [transactionObject, "latest"],
       });
-      console.log("res: ", parseInt(res, 16));
-
-
       let newTransactions;
       if (contractData[url].transactions) {
         newTransactions = [
           ...contractData[url].transactions,
           {
             method: method.name,
+            contractName: contractName,
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
@@ -57,6 +54,7 @@ export default function InteractionPanel(props) {
         newTransactions = [
           {
             method: method.name,
+            contractName: contractName,
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
@@ -84,11 +82,12 @@ export default function InteractionPanel(props) {
             params: [res],
           });
           if (rec) {
-            console.log("Receipt:", rec);
+            //console.log("Receipt:", rec);
             const url = window.location.href.split("/").pop();
             let newTransactions;
             let transaction = {
               method: method.name,
+              contractName: contractName, 
               //mutability: method.stateMutability,
               ...rec,
             }
@@ -122,8 +121,6 @@ export default function InteractionPanel(props) {
     });
   };
 
-  console.log(props.deployed);
-
   if (props.deployed) {
     return props.src.map((contract, index) => {
       return (
@@ -137,7 +134,7 @@ export default function InteractionPanel(props) {
                 <form
                   onSubmit={(e) => {
                     const parameters = onSubmit(e);
-                    interact(contract.address, method, ...parameters);
+                    interact(contract.address, method, contract.name, ...parameters);
                   }}
                 >
                   <button type="submit">{method.name}</button>
