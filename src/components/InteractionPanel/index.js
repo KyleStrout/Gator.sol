@@ -31,6 +31,7 @@ export default function InteractionPanel(props) {
     transactionObject.gas = gas;
 
     const url = window.location.href.split("/").pop();
+    console.log("url", url);
 
     if (method.stateMutability === "view") {
       const res = await window.ethereum.request({
