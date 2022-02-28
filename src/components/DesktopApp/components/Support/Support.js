@@ -103,7 +103,7 @@ const Contact = (props) => {
           item
           container
           alignItems="center"
-          justify="center"
+          justifyContent="space-around"
           xs={12}
           data-aos="fade-up"
         >

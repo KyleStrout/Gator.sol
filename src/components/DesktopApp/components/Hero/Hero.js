@@ -65,7 +65,14 @@ const Hero = (props) => {
               >
                 Start now
               </Button>,
-              <Button variant="outlined" color="primary" size="large">
+              <Button
+                variant="outlined"
+                color="primary"
+                size="large"
+                onClick={() => {
+                  navigate("/about");
+                }}
+              >
                 Learn more
               </Button>,
             ]}

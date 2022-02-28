@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   placementGrid: {
     display: "flex",
+    justifyContent: "space-between",
   },
   placementGridItemMiddle: {
     margin: `0 ${theme.spacing(3)}px`,
@@ -37,7 +38,7 @@ const Features = (props) => {
         <Grid
           item
           container
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="center"
           xs={12}
           md={6}
@@ -55,7 +56,7 @@ const Features = (props) => {
         <Grid
           item
           container
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           xs={12}
           md={6}

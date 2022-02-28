@@ -2,20 +2,10 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { colors, Divider } from "@mui/material";
 import Section from "./components/Section";
-import SectionAlternate from "./components/SectionAlternate";
 
-import {
-  Customization,
-  Download,
-  Hero,
-  Hub,
-  Partners,
-  Pricings,
-  Reviews,
-  Support,
-} from "./components";
+import { Hero, Hub, Support } from "./components";
 
-import { reviews, support, integrations } from "./data";
+import { support } from "./data";
 
 const useStyles = makeStyles((theme) => ({
   pagePaddingTop: {

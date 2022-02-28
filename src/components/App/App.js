@@ -34,7 +34,7 @@ function App() {
             <Navbar />
 
             <Routes>
-              <Route exact path="/" element={<LandingPage />}></Route>
+              <Route exact path="/" element={<DesktopApp />}></Route>
               <Route path="/about" element={<About />}></Route>
               <Route path="/home" element={<DesktopApp />}></Route>
               <Route path="/course/*" element={<CourseHome />}>
