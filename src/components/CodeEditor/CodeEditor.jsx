@@ -56,7 +56,6 @@ export default function CodeEditor(props) {
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
-  let { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");
@@ -136,6 +135,15 @@ export default function CodeEditor(props) {
   }
 
   async function deploy() {
+    // IF USER DOESN'T HAVE METAMASK, USE LOCAL CHAIN
+    // const response = await fetch("http://localhost:3001/deploy", {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   method: "POST",
+    //   body: JSON.stringify(compilerData),
+    // });
+    // console.log(response);
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 

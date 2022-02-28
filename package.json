@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "ganache-cli": "^6.12.2",
+    "ganache-core": "^2.13.2",
     "monaco-editor": "^0.31.1",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
