@@ -2,7 +2,6 @@
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import Navbar from "../Navbar";
 // Custom Components
 import SectionContent from "../SectionContent";
 import SectionInteraction from "../SectionInteraction";
@@ -18,8 +17,6 @@ const SectionPageContainer = styled(Box)(() => ({
 export default function SectionPage(props) {
   return (
     <>
-      <Navbar />
-
       <SectionPageContainer id="section-page-container">
         <SectionContent
           id="section-content"

@@ -11,6 +11,7 @@ import course from "../../data/course.js";
 import theme from "../Theme";
 import { AddressProvider } from "../AddressContext";
 import { ContractProvider } from "../ContractContext";
+import Navbar from "../Navbar";
 
 import DesktopApp from "../DesktopApp/";
 const AppContainer = styled(Box)(() => ({
@@ -30,6 +31,8 @@ function App() {
       <AddressProvider value={value}>
         <ContractProvider value={contractValue}>
           <AppContainer id="app-container">
+            <Navbar />
+
             <Routes>
               <Route exact path="/" element={<LandingPage />}></Route>
               <Route path="/about" element={<About />}></Route>

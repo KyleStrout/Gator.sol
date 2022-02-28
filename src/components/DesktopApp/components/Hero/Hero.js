@@ -4,6 +4,7 @@ import { makeStyles, useTheme } from "@mui/styles";
 import { useMediaQuery, Grid, Button, Typography } from "@mui/material";
 import Image from "../Image";
 import SectionHeader from "../SectionHeader";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Hero = (props) => {
+  const navigate = useNavigate();
   const { className, ...rest } = props;
   const classes = useStyles();
 
@@ -44,16 +46,23 @@ const Hero = (props) => {
           <SectionHeader
             title={
               <span>
-                Beautiful data representation
+                Learn Blockchain and Solidity
                 <br />
                 <Typography component="span" variant="inherit" color="primary">
-                  built with theFront.
+                  the right way.
                 </Typography>
               </span>
             }
-            subtitle="World developers use our theFront theme to build their internal tools and client admin applications. Save yourself time and money."
+            subtitle="Learn, compile and deploy smart contracts with this interactive tutorial. Get started with the basics of blockchain and solidity today."
             ctaGroup={[
-              <Button variant="contained" color="primary" size="large">
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => {
+                  navigate("/course/course-introduction/course-overview");
+                }}
+              >
                 Start now
               </Button>,
               <Button variant="outlined" color="primary" size="large">

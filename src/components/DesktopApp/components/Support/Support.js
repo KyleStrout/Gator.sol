@@ -61,19 +61,19 @@ const Contact = (props) => {
             title={
               <>
                 <span>
-                  Our friendly support team
+                  Our development team
                   <Typography
                     color="secondary"
                     variant="inherit"
                     component="span"
                   >
                     {" "}
-                    will help you with anything.
+                    will help you along the way.
                   </Typography>
                 </span>
               </>
             }
-            subtitle="We aim to take care of you. Need help with installation, find a bug, or just need a clarifiction about our documentation? We'll be there to lend a helping hand."
+            subtitle="We want to see you succeeed. If you have an issue with a lesson, suggestion for improvement, or request for a feature, please contact us."
             align="center"
             disableGutter
           />

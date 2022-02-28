@@ -66,18 +66,18 @@ const Features = (props) => {
               <SectionHeader
                 title={
                   <span>
-                    Use flexible components.
+                    Custom code editor
                     <br />
                     <Typography
                       component="span"
                       variant="inherit"
                       color="primary"
                     >
-                      to build an app quickly.
+                      to deploy any smart contracts.
                     </Typography>
                   </span>
                 }
-                subtitle="TheFront styles and extends Material-UI components, but also included brand new landing page focused components."
+                subtitle="Our interactive tutorial will take from blockchain zero to blockchain hero."
                 align="left"
                 fadeUp
                 disableGutter
