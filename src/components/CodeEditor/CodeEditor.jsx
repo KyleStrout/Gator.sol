@@ -26,7 +26,7 @@ export default function CodeEditor(props) {
         transactions: newTransactions,
       },
     });
-  }, [contractData, setContractData, outputWithAddress, newTransactions]);
+  }, [newTransactions]);
 
   const editorRef = useRef(null);
 
