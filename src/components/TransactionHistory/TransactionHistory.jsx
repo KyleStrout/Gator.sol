@@ -75,6 +75,19 @@ const TransactionHistory = (props) => {
                           valueToDisplay = "Failure";
                         }
                       }
+                      if (key === "result") {
+                        console.log("result: ", value);
+                        const initialValue = "";
+                        valueToDisplay = Object.entries(value).reduce(
+                          (previousValue, currentValue) => {
+                            if (currentValue[0] === "__length__") {
+                              return previousValue;
+                            }
+                            return previousValue + currentValue[1] + ", "
+                          },
+                          initialValue
+                        );
+                      }
                       if (value !== null && valueToDisplay != null && valueToDisplay.length > 50) {
                         // Truncate long strings
                         valueToDisplay = valueToDisplay.substring(0, 50) + "...";

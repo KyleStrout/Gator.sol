@@ -1,6 +1,9 @@
 import AddressContext from "../AddressContext";
 import { useContext } from "react";
 import ContractContext from "../ContractContext";
+const Web3 = require("web3");
+
+const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
@@ -31,7 +34,6 @@ export default function InteractionPanel(props) {
     transactionObject.gas = gas;
 
     const url = window.location.href.split("/").pop();
-    console.log("url", url);
 
     if (method.stateMutability === "view") {
       const res = await window.ethereum.request({
@@ -48,7 +50,10 @@ export default function InteractionPanel(props) {
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            result: parseInt(res, 16),
+            result: web3.eth.abi.decodeParameters(
+              method.outputs.map((output) => output.type),
+              res
+            ),
           },
         ];
       } else {
@@ -59,7 +64,10 @@ export default function InteractionPanel(props) {
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            result: parseInt(res, 16),
+            result: web3.eth.abi.decodeParameters(
+              method.outputs.map((output) => output.type),
+              res
+            ),
           },
         ];
       }
