@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 
 const TransactionHistory = (props) => {
   const [copyText, setCopyText] = useState("Copy");
-  const [open, setOpen] = useState(false);
+  const [, setOpen] = useState(false);
 
   //console.log("compiler data: ", props.compilerData[0].name);
 
@@ -22,10 +22,6 @@ const TransactionHistory = (props) => {
       setOpen(false);
       setCopyText("Copy");
     }, 200);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
   };
 
   return (

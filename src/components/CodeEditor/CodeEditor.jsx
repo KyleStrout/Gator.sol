@@ -17,6 +17,7 @@ export default function CodeEditor(props) {
   const [theme, setTheme] = useState("vs-light");
   const [newTransactions, setNewTransactions] = useState([]);
   const [outputWithAddress, setOutputWithAddress] = useState([]);
+  const { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -28,7 +29,7 @@ export default function CodeEditor(props) {
       },
     });
   }, [newTransactions]);
-
+  
   useEffect(() => {
     const url = window.location.href.split("/").pop();
     setContractData({
@@ -54,12 +55,9 @@ export default function CodeEditor(props) {
     }
   }, [location])
 
-
-
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
-  const { contractData, setContractData } = React.useContext(ContractContext);
 
   useEffect(() => {
     checked ? setTheme("vs-dark") : setTheme("vs-light");

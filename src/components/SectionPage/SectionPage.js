@@ -16,18 +16,20 @@ const SectionPageContainer = styled(Box)(() => ({
 
 export default function SectionPage(props) {
   return (
-    <SectionPageContainer id="section-page-container">
-      <SectionContent
-        id="section-content"
-        contentUrl={props.contentUrl}
-      ></SectionContent>
-      {props.hasCodeEditor && (
-        <SectionInteraction
-          id="section-interaction"
-          hasCodeEditor={props.hasCodeEditor}
-          defaultCode={props.defaultCode}
-        ></SectionInteraction>
-      )}
-    </SectionPageContainer>
+    <>
+      <SectionPageContainer id="section-page-container">
+        <SectionContent
+          id="section-content"
+          contentUrl={props.contentUrl}
+        ></SectionContent>
+        {props.hasCodeEditor && (
+          <SectionInteraction
+            id="section-interaction"
+            hasCodeEditor={props.hasCodeEditor}
+            defaultCode={props.defaultCode}
+          ></SectionInteraction>
+        )}
+      </SectionPageContainer>
+    </>
   );
 }
