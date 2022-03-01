@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -46,11 +47,31 @@ export default function OutputPanel(props) {
     //console.log("contractData", contractData);
     const url = window.location.href.split("/").pop();
     const section = contractData[url];
+    // console.log("Current transactions: ", section.transactions)
     if (section) {
       setCompilerData(section.compilerData);
       setTransactions(section.transactions);
     }
+    else {
+      setCompilerData([]);
+      setTransactions([]);
+    }
   }, [contractData]);
+
+  const location = useLocation()
+
+  React.useEffect(() => {
+      const url = location.pathname.split("/").pop();
+      const section = contractData[url];
+      if (section) {
+        setCompilerData(section.compilerData);
+        setTransactions(section.transactions);
+      }
+      else {
+        setCompilerData([]);
+        setTransactions([]);
+      }
+  },[location])
 
   const [value, setValue] = React.useState(0);
 
