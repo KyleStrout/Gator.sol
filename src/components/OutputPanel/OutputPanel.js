@@ -7,6 +7,8 @@ import ReactJson from "react-json-view";
 import TransactionHistory from "../TransactionHistory";
 import InteractionPanel from "../InteractionPanel";
 import ContractContext from "../ContractContext";
+import {ThemeContext, themes} from '../ThemeContext';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -37,6 +39,7 @@ function a11yProps(index) {
 }
 
 export default function OutputPanel(props) {
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   const { contractData } = React.useContext(ContractContext);
   const [compilerData, setCompilerData] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
@@ -73,7 +76,7 @@ export default function OutputPanel(props) {
           left: "0",
           borderBottom: 1,
           width: "100%",
-          backgroundColor: "white",
+          backgroundColor: customTheme.backgroundColor,
           zIndex: "1",
           borderColor: "divider",
         }}

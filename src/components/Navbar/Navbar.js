@@ -9,6 +9,7 @@ import AddressContext from "../AddressContext";
 import {ThemeContext, themes} from '../ThemeContext';
 
 
+
 export default function Navbar() {
   const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   const [checked, setChecked] = React.useState(false);
@@ -57,6 +58,7 @@ export default function Navbar() {
   };
 
   const WalletConnect = () => {
+
     if (address) {
       return (
         <Typography variant="h6" color="inherit">
@@ -82,7 +84,7 @@ export default function Navbar() {
   });
 
   return (
-    <AppBar position="sticky" sx={{ height: "4rem" }}>
+    <AppBar position="sticky" sx={{ height: "4rem",  backgroundColor: customTheme.topBar}}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           <Button

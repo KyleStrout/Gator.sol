@@ -1,10 +1,11 @@
-import React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-
+import React, { useRef, useState, useEffect } from "react";
+//Custom Theme
+import {ThemeContext, themes} from '../ThemeContext';
 const LandingContainer = styled((props) => (
   <Box
     sx={{
@@ -19,9 +20,13 @@ const LandingContainer = styled((props) => (
 ))(() => {});
 
 function LandingPage() {
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   let navigate = useNavigate();
   return (
-    <LandingContainer>
+    <LandingContainer
+    sx = {{
+      backgroundColor: customTheme.backgroundColor
+    }}>
       <Box
         sx={{
           display: "flex",
@@ -51,7 +56,7 @@ function LandingPage() {
           width: "40rem",
           height: "30rem",
           borderRadius: "2.5rem",
-          backgroundColor: "gray",
+          backgroundColor: customTheme.landingPageBigBox,
         }}
       ></Box>
     </LandingContainer>

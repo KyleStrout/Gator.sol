@@ -1,5 +1,5 @@
 // react
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Material UI Components
 import { Box } from "@mui/material";
@@ -8,6 +8,8 @@ import { styled } from "@mui/styles";
 // Custom Components
 import CodeEditor from "../CodeEditor";
 import OutputPanel from "../OutputPanel";
+
+import {ThemeContext, themes} from '../ThemeContext';
 
 const SectionInteractionContainer = styled(Box)(() => ({
   display: "flex",
@@ -21,6 +23,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
 }));
 
 function SectionInteractionContent(props) {
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   if (props.hasCodeEditor) {
     return (
       <Box
@@ -34,7 +37,7 @@ function SectionInteractionContent(props) {
           sx={{
             height: "calc(50vh - 3.5rem)",
             width: "100%",
-            backgroundColor: "white",
+            backgroundColor: customTheme.backgroundColor,
             borderBottom: "0.5rem solid #f0f0f0",
           }}
         >

@@ -196,7 +196,7 @@ export default function CodeEditor(props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: theme === "vs-dark" ? "#1e1e1e" : "white",
+          backgroundColor: customTheme.buttonsbackground,
           height: "4rem",
         }}
       >
@@ -205,20 +205,21 @@ export default function CodeEditor(props) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            backgroundColor: "transparent"
           }}
         >
           <Button
-            sx={{ margin: "0 0.5rem" }}
+            sx={{ margin: "0 0.5rem", backgroundColor: customTheme.compileButton}}
             onClick={compile}
-            color="secondary"
+            //color= {customTheme.backgroundColor}
             variant="contained"
           >
             Compile
           </Button>
 
           <Button
-            sx={{ margin: "0 0.5rem" }}
-            color="secondary"
+            sx={{ margin: "0 0.5rem", backgroundColor: customTheme.deployButton}}
+            //color="secondary"
             variant="contained"
             disabled={!canDeploy()}
             onClick={deploy}
