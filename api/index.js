@@ -42,7 +42,7 @@ app.post("/getMethodData", (req, res) => {
 
   const encodedFunc = web3.eth.abi.encodeFunctionCall(method, inputs);
 
-  console.log(encodedFunc);
+  console.log("encoded function: ", encodedFunc);
 
   res.send({ encodedFunc });
 });
