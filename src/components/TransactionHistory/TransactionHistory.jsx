@@ -15,6 +15,8 @@ const TransactionHistory = (props) => {
   const [copyText, setCopyText] = useState("Copy");
   const [, setOpen] = useState(false);
 
+  //console.log("compiler data: ", props.compilerData[0].name);
+
   const handleTooltipClose = () => {
     setTimeout(() => {
       setOpen(false);
@@ -33,18 +35,7 @@ const TransactionHistory = (props) => {
       )}
       {props.history.length > 0 &&
         props.history.map((item, index) => {
-          const accordionTitle = `
-          [block:${item.blockNumber} txIndex:
-            ${parseInt(item.transactionIndex, 16)}] from: ${item.from.substring(
-            0,
-            5
-          )}...${item.from.substring(
-            item.from.length - 5,
-            item.from.length
-          )} to:${" "}
-            ${item.to}
-            logs: ${item.logs.length}`;
-
+          const accordionTitle = `${item.contractName}.(${item.method})`
           return (
             <Accordion key={index}>
               <AccordionSummary
@@ -59,42 +50,75 @@ const TransactionHistory = (props) => {
               <AccordionDetails>
                 <Typography component={"span"}>
                   {Object.entries(item).map(([key, value]) => {
-                    /* TODO: conditionally select stuff with if */
+                    /* TODO: order keys based on state mutability
+                    DOCS: https://pub.dev/documentation/celodart/latest/contracts/StateMutability.html
+                    */
+                    let keysToSkip = ['logs', 'transactionIndex', 'blocknumber', 'transactionIndex', 'logsBloom', 'type', 'blockNumber', 'blockHash', 'contractName'];
+                    let keyToDisplay = setKeyDisplay(key);
                     let valueToDisplay = value;
-                    if (value !== null && value.length > 20) {
-                      // Truncate long strings
-                      valueToDisplay = value.substring(0, 20) + "...";
-                    }
-                    return (
-                      <Box
-                        key={key}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        <Typography component={"span"} variant="caption">
-                          <b>{key}</b> : {valueToDisplay}
-                          <Tooltip
-                            arrow
-                            title={copyText}
-                            onClose={handleTooltipClose}
-                          >
-                            <IconButton
-                              size="small"
-                              onClick={() => {
-                                navigator.clipboard.writeText(value);
-                                setCopyText("Copied");
-                              }}
+                    if (!keysToSkip.includes(key)) {
+                      if (key === "cumulativeGasUsed" || key === "gasUsed") {
+                        valueToDisplay = `${parseInt(value, 16)}`;
+                      }
+                      if (key === "effectiveGasPrice") {
+                        valueToDisplay = `${value} (${parseInt(value, 16)} Wei)`;
+                      }
+                      if (key === "status") {
+                        if (value === "0x1") {
+                          valueToDisplay = "Success";
+                        }
+                        else {
+                          valueToDisplay = "Failure";
+                        }
+                      }
+                      if (key === "result") {
+                        console.log("result: ", value);
+                        const initialValue = "";
+                        valueToDisplay = Object.entries(value).reduce(
+                          (previousValue, currentValue) => {
+                            if (currentValue[0] === "__length__") {
+                              return previousValue;
+                            }
+                            return previousValue + currentValue[1] + ", "
+                          },
+                          initialValue
+                        );
+                      }
+                      if (value !== null && valueToDisplay != null && valueToDisplay.length > 50) {
+                        // Truncate long strings
+                        valueToDisplay = valueToDisplay.substring(0, 50) + "...";
+                      }
+                      return (
+                        <Box
+                          key={key}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          <Typography component={"span"} variant="caption">
+                            <b>{keyToDisplay}</b> : {valueToDisplay}
+                            <Tooltip
+                              arrow
+                              title={copyText}
+                              onClose={handleTooltipClose}
                             >
-                              <Icons.ContentPaste size="sm" />
-                            </IconButton>
-                          </Tooltip>
-                        </Typography>
-                      </Box>
-                    );
+                              <IconButton
+                                size="small"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(value);
+                                  setCopyText("Copied");
+                                }}
+                              >
+                                <Icons.ContentPaste size="sm" />
+                              </IconButton>
+                            </Tooltip>
+                          </Typography>
+                        </Box>
+                      );
+                    }
                   })}
                 </Typography>
               </AccordionDetails>
@@ -104,6 +128,26 @@ const TransactionHistory = (props) => {
     </React.Fragment>
   );
 };
+
+function setKeyDisplay(key) {
+  let keyToDisplay = key;
+  if (key === "cumulativeGasUsed") {
+    keyToDisplay = "cumulative gas used";
+  }
+  else if (key === "gasUsed") {
+    keyToDisplay = "gas used";
+  }
+  else if (key === "transactionHash") {
+    keyToDisplay = "transaction hash";
+  }
+  else if (key === "effectiveGasPrice") {
+    keyToDisplay = "gas price";
+  }
+  else if (key === "contractAddress") {
+    keyToDisplay = "contract address";
+  }
+  return keyToDisplay;
+}
 
 TransactionHistory.propTypes = {
   history: PropTypes.array.isRequired,

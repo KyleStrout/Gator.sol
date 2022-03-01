@@ -4,6 +4,8 @@ import Editor from "@monaco-editor/react";
 // mui
 import { Button, Box } from "@mui/material";
 
+import { useLocation } from "react-router-dom";
+
 import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
@@ -22,11 +24,36 @@ export default function CodeEditor(props) {
     setContractData({
       ...contractData,
       [url]: {
-        compilerData: outputWithAddress,
+        ...contractData[url],
         transactions: newTransactions,
       },
     });
   }, [newTransactions]);
+  
+  useEffect(() => {
+    const url = window.location.href.split("/").pop();
+    setContractData({
+      ...contractData,
+      [url]: {
+        ...contractData[url],
+        compilerData: outputWithAddress ? outputWithAddress : [],
+      },
+    });
+  }, [outputWithAddress]);
+
+
+  const location = useLocation()
+
+  React.useEffect(() => {
+    const url = location.pathname.split("/").pop();
+    const section = contractData[url];
+    if (section) {
+      setNewTransactions(section.transactions);
+    }
+    else {
+      setNewTransactions([]);
+    }
+  }, [location])
 
   const editorRef = useRef(null);
 
@@ -103,6 +130,7 @@ export default function CodeEditor(props) {
     setContractData({
       ...contractData,
       [url]: {
+        ...contractData[url],
         compilerData: output,
       },
     });
@@ -144,8 +172,13 @@ export default function CodeEditor(props) {
               };
             });
             setOutputWithAddress(out);
-            setNewTransactions((newTransactions) => [...newTransactions, rec]);
-            console.log("newTransactions: ", newTransactions);
+            let transaction = {
+              method: "constructor",
+              contractName: compilerData[i].name,
+              //mutability: "pure",
+              ...rec,
+            }
+            setNewTransactions(newTransactions => [...newTransactions, transaction]);
 
             clearInterval(intervalId);
           }
@@ -162,7 +195,7 @@ export default function CodeEditor(props) {
     const url = window.location.href.split("/").pop();
     return (
       contractData[url] &&
-      contractData[url].compilerData.some((contract) => contract.abi)
+      contractData[url].compilerData?.some((contract) => contract.abi)
     );
   };
 
