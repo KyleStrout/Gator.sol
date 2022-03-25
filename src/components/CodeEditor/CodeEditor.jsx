@@ -94,7 +94,7 @@ export default function CodeEditor(props) {
   }, [props.defaultCode]);
 
   async function compile() {
-    const response = await fetch("http://localhost:3001/compile", {
+    const response = await fetch("http://178.128.155.103:3001/compile", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -136,7 +136,7 @@ export default function CodeEditor(props) {
 
   async function deploy() {
     // IF USER DOESN'T HAVE METAMASK, USE LOCAL CHAIN
-    // const response = await fetch("http://localhost:3001/deploy", {
+    // const response = await fetch("http://178.128.155.103:3001/deploy", {
     //   headers: {
     //     "Content-Type": "application/json",
     //   },

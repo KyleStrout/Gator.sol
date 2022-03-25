@@ -3,7 +3,7 @@ import { useContext } from "react";
 import ContractContext from "../ContractContext";
 const Web3 = require("web3");
 
-const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
+const web3 = new Web3(Web3.givenProvider || "ws://178.128.155.103:3000");
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
@@ -17,7 +17,7 @@ export default function InteractionPanel(props) {
       gas: "",
     };
 
-    const response = await fetch("http://localhost:3001/getMethodData", {
+    const response = await fetch("http://178.128.155.103:3001/getMethodData", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -96,12 +96,15 @@ export default function InteractionPanel(props) {
             let newTransactions;
             let transaction = {
               method: method.name,
-              contractName: contractName, 
+              contractName: contractName,
               //mutability: method.stateMutability,
               ...rec,
-            }
+            };
             if (contractData[url].transactions) {
-              newTransactions = [...contractData[url].transactions, transaction];
+              newTransactions = [
+                ...contractData[url].transactions,
+                transaction,
+              ];
             } else {
               newTransactions = [transaction];
             }
@@ -143,7 +146,12 @@ export default function InteractionPanel(props) {
                 <form
                   onSubmit={(e) => {
                     const parameters = onSubmit(e);
-                    interact(contract.address, method, contract.name, ...parameters);
+                    interact(
+                      contract.address,
+                      method,
+                      contract.name,
+                      ...parameters
+                    );
                   }}
                 >
                   <button type="submit">{method.name}</button>

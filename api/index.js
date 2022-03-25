@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const solc = require("solc");
 const Web3 = require("web3");
 
-const web3 = new Web3("ws://localhost:8545");
+const web3 = new Web3("ws://178.128.155.103:8545");
 app.use(cors());
 
 app.use(bodyParser.json());
