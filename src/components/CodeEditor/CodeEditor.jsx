@@ -13,8 +13,6 @@ import ContractContext from "../ContractContext";
 
 import { Formik, Field, Form } from "formik";
 
-// Can have default code/imports/version here and can be dynamic for exercises
-
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
   const [theme, setTheme] = useState("vs-light");
