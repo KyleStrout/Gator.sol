@@ -29,7 +29,7 @@ export default function CodeEditor(props) {
       },
     });
   }, [newTransactions]);
-  
+
   useEffect(() => {
     const url = window.location.href.split("/").pop();
     setContractData({
@@ -41,19 +41,17 @@ export default function CodeEditor(props) {
     });
   }, [outputWithAddress]);
 
-
-  const location = useLocation()
+  const location = useLocation();
 
   React.useEffect(() => {
     const url = location.pathname.split("/").pop();
     const section = contractData[url];
     if (section) {
       setNewTransactions(section.transactions);
-    }
-    else {
+    } else {
       setNewTransactions([]);
     }
-  }, [location])
+  }, [location]);
 
   const editorRef = useRef(null);
 
@@ -96,7 +94,7 @@ export default function CodeEditor(props) {
   }, [props.defaultCode]);
 
   async function compile() {
-    const response = await fetch("http://localhost:3001/compile", {
+    const response = await fetch("http://178.128.155.103:3001/compile", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -137,6 +135,15 @@ export default function CodeEditor(props) {
   }
 
   async function deploy() {
+    // IF USER DOESN'T HAVE METAMASK, USE LOCAL CHAIN
+    // const response = await fetch("http://178.128.155.103:3001/deploy", {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   method: "POST",
+    //   body: JSON.stringify(compilerData),
+    // });
+    // console.log(response);
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 
@@ -177,8 +184,11 @@ export default function CodeEditor(props) {
               contractName: compilerData[i].name,
               //mutability: "pure",
               ...rec,
-            }
-            setNewTransactions(newTransactions => [...newTransactions, transaction]);
+            };
+            setNewTransactions((newTransactions) => [
+              ...newTransactions,
+              transaction,
+            ]);
 
             clearInterval(intervalId);
           }
