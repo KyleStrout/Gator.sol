@@ -3,12 +3,15 @@ import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 // mui
 import { Button, Box } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 import { useLocation } from "react-router-dom";
 
 import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
+
+import { Formik, Field, Form } from "formik";
 
 // Can have default code/imports/version here and can be dynamic for exercises
 
@@ -18,6 +21,8 @@ export default function CodeEditor(props) {
   const [newTransactions, setNewTransactions] = useState([]);
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
+  const [hasArguments, setHasArguments] = useState(false);
+  const [placeHolderText, setPlaceHolderText] = useState("");
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -89,6 +94,34 @@ export default function CodeEditor(props) {
     return errorList;
   }
 
+  function getArguments(contractData) {
+    let argumentList = [];
+    contractData.forEach(contract => {
+      if (contract.abi.find((abi) => abi.type === "constructor")) {
+        argumentList.push({
+          name: contract.name,
+          arguments: contract.abi.find((abi) => abi.type === "constructor").inputs, 
+        });
+      }
+    });
+    if (argumentList.length > 0) {
+      setHasArguments(true);
+    }
+    else {
+      setHasArguments(false);
+    }
+    return argumentList;
+  }
+
+  const initialValues = {
+    arguments: "",
+  }
+
+  const onSubmit = (values) => {
+    console.log("submitted")
+    // parse the text and deploy with the arguments
+  }
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.setValue(props.defaultCode);
@@ -127,13 +160,28 @@ export default function CodeEditor(props) {
       };
     });
 
+    const argumentList = getArguments(output);
+
     setContractData({
       ...contractData,
       [url]: {
         ...contractData[url],
         compilerData: output,
+        arguments: argumentList,
       },
     });
+
+    if (argumentList.length > 0) {
+      let tempText = "";
+      argumentList.forEach((contract) => {
+        contract.arguments.forEach((argument) => {
+          tempText += `${argument.type} ${argument.name}, `;
+        })
+      })
+      setPlaceHolderText(tempText);
+    }
+    
+
   }
 
   async function deploy() {
@@ -253,16 +301,31 @@ export default function CodeEditor(props) {
           >
             Compile
           </Button>
-
-          <Button
+          {!hasArguments && 
+            <Button
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
             disabled={!canDeploy()}
             onClick={deploy}
-          >
-            Deploy
-          </Button>
+            >
+              Deploy
+            </Button>
+          }
+          {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
+          {hasArguments && 
+            <Formik initialValues={initialValues} onSubmit={onSubmit} sx={{ style: "inherit" }}>
+            {(props) => (
+              <Form>
+                <Button type="submit" sx={{ margin: "0 0.5rem", padding: "" }} color="secondary" variant="contained" disabled={!canDeploy()}>
+                  Deploy
+                </Button>
+                <Field as={TextField} inputProps={{ style: {fontSize: 12}}} label="arguments" name="arguments" placeholder={placeHolderText} variant="standard" required/>
+              </Form>
+            )}
+          </Formik>
+          }
+          
         </Box>
       </Box>
     </Box>
