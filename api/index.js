@@ -70,6 +70,7 @@ app.post("/deployWithArguments", async (req, res) => {
 
       for (let i = 0; i < currentArgs.arguments.length; i++) {
         const argType = currentArgs.arguments[i].type;
+        console.log("argType: ", argType);
         const argValue = currentArgValues[i];
 
         //console.log("argType", argType);
@@ -84,6 +85,20 @@ app.post("/deployWithArguments", async (req, res) => {
           });
           currentArgValues[i] = typedArgValueArray;
         }
+        if (argType === "bytes32") {
+          const hex = web3.utils.asciiToHex(argValue);
+          currentArgValues[i] = web3.utils.padRight(hex, 64, "0");
+        }
+        if (argType === "uint256") {
+          currentArgValues[i] = parseInt(argValue);
+          console.log("currentArgValues[i]", currentArgValues[i]);
+        }
+        if (argType === "int256") {
+          currentArgValues[i] = parseInt(argValue);
+          console.log("currentArgValues[i]", currentArgValues[i]);
+        } else {
+          currentArgValues[i] = argValue;
+        }
       }
 
       // TODO: Type current args if needed
@@ -94,7 +109,7 @@ app.post("/deployWithArguments", async (req, res) => {
           arguments: currentArgValues,
         })
         .encodeABI();
-      console.log(encodedAbi);
+      //console.log(encodedAbi);
       encodedAbis.push(encodedAbi);
     }
     res.send(encodedAbis);
