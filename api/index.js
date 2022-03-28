@@ -89,13 +89,8 @@ app.post("/deployWithArguments", async (req, res) => {
           const hex = web3.utils.asciiToHex(argValue);
           currentArgValues[i] = web3.utils.padRight(hex, 64, "0");
         }
-        if (argType === "uint256") {
+        if (argType === "uint256" || argType === "int256") {
           currentArgValues[i] = parseInt(argValue);
-          console.log("currentArgValues[i]", currentArgValues[i]);
-        }
-        if (argType === "int256") {
-          currentArgValues[i] = parseInt(argValue);
-          console.log("currentArgValues[i]", currentArgValues[i]);
         } else {
           currentArgValues[i] = argValue;
         }
