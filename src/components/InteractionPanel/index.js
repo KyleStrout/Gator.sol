@@ -157,15 +157,16 @@ export default function InteractionPanel(props) {
                   {typeof method.name !== "undefined" && (
                     <button type="submit">{method.name}</button>
                   )}
-                  {method.inputs.map((input, index) => {
-                    return (
-                      <div key={index}>
-                        <h3>{input.name}</h3>
-                        <p>{input.type}</p>
-                        <input name={`${input.name}-${input.type}`}></input>
-                      </div>
-                    );
-                  })}
+                  {method.type !== "constructor" &&
+                    method.inputs.map((input, index) => {
+                      return (
+                        <div key={index}>
+                          <h3>{input.name}</h3>
+                          <p>{input.type}</p>
+                          <input name={`${input.name}-${input.type}`}></input>
+                        </div>
+                      );
+                    })}
                 </form>
               </div>
             );
