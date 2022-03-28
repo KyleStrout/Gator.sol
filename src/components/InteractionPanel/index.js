@@ -96,12 +96,15 @@ export default function InteractionPanel(props) {
             let newTransactions;
             let transaction = {
               method: method.name,
-              contractName: contractName, 
+              contractName: contractName,
               //mutability: method.stateMutability,
               ...rec,
-            }
+            };
             if (contractData[url].transactions) {
-              newTransactions = [...contractData[url].transactions, transaction];
+              newTransactions = [
+                ...contractData[url].transactions,
+                transaction,
+              ];
             } else {
               newTransactions = [transaction];
             }
@@ -143,10 +146,17 @@ export default function InteractionPanel(props) {
                 <form
                   onSubmit={(e) => {
                     const parameters = onSubmit(e);
-                    interact(contract.address, method, contract.name, ...parameters);
+                    interact(
+                      contract.address,
+                      method,
+                      contract.name,
+                      ...parameters
+                    );
                   }}
                 >
-                  <button type="submit">{method.name}</button>
+                  {typeof method.name !== "undefined" && (
+                    <button type="submit">{method.name}</button>
+                  )}
                   {method.inputs.map((input, index) => {
                     return (
                       <div key={index}>

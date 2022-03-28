@@ -49,12 +49,11 @@ app.post("/getMethodData", (req, res) => {
 
 app.post("/deployWithArguments", async (req, res) => {
   try {
-    console.log(req.body.compilerData);
-    console.log(JSON.stringify(req.body.args, "", 4));
+    //console.log(req.body.compilerData);
+    //console.log(JSON.stringify(req.body.args, "", 4));
     const compilerData = req.body.compilerData;
     const args = req.body.args;
     const argValues = req.body.argValues;
-    console.log("argValues: ", argValues);
 
     const encodedAbis = [];
     let lastIndex = 0;
@@ -73,9 +72,9 @@ app.post("/deployWithArguments", async (req, res) => {
         const argType = currentArgs.arguments[i].type;
         const argValue = currentArgValues[i];
 
-        console.log("argType", argType);
+        //console.log("argType", argType);
         if (argType === "bytes32[]") {
-          console.log(argValue);
+          //console.log(argValue);
           // make string into array
           const argValueArray = argValue.slice(1, -1).split(",");
           // const newArray = JSON.parse(argValue.replace("'", '"'));
