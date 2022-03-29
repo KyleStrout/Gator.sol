@@ -20,7 +20,9 @@ const SideNavDrawer = styled(Drawer)(() => ({
 export default function SideNav() {
   const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   return (
-    <SideNavDrawer variant="permanent" anchor="left" PaperProps={{ sx: {backgroundColor: customTheme.backgroundColor}}}>
+    <SideNavDrawer variant="permanent" anchor="left" PaperProps={{ sx: 
+    {color:customTheme.textColor, 
+    backgroundColor: customTheme.backgroundColor}}}>
       <SideNavAccordion />
     </SideNavDrawer>
   );

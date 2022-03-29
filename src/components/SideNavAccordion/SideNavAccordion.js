@@ -66,7 +66,7 @@ export default function SideNavAccordion() {
             aria-controls={`${chapter.title}-content`}
             id={`${chapter.title}-header`}
           >
-            <Typography fontSize={"0.75rem"}>{chapter.title}</Typography>
+            <Typography style={{color: customTheme.textColor}} fontSize={"0.75rem"}>{chapter.title}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <SectionList

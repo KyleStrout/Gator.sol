@@ -169,7 +169,7 @@ export default function CodeEditor(props) {
   return (
     <Box
       sx={{
-        borderBottom: "0.5rem solid #f0f0f0",
+        borderBottom: customTheme.border,
       }}
     >
       <Editor

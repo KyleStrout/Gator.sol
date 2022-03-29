@@ -36,10 +36,13 @@ function LandingPage() {
           justifyContent: "center",
         }}
       >
-        <Typography mb={3}>
+        <Typography mb={3} color={customTheme.textColor}>
           Welcome to our project. The goal is to learn about the blockchain!
         </Typography>
         <Button
+        sx = {{
+          color: "white"
+        }}
           onClick={() => {
             // navigate to the course home page
             navigate("/course");

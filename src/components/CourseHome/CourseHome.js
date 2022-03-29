@@ -27,7 +27,10 @@ export default function CourseHome() {
   return (
     <CourseHomeContainer id="course-home-container" backgroundColor = {customTheme.backgroundColor}>
       <SideNav id="side-nav"></SideNav>
-      <ContentContainer id="content-container">
+      <ContentContainer id="content-container"
+                sx={{
+                  backgroundColor: customTheme.textColor
+                }}>
         <Outlet></Outlet>
       </ContentContainer>
     </CourseHomeContainer>

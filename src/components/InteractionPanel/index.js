@@ -1,10 +1,13 @@
+import React, { useRef, useState, useEffect } from "react";
 import AddressContext from "../AddressContext";
 import { useContext } from "react";
 import ContractContext from "../ContractContext";
+import {ThemeContext, themes} from '../ThemeContext';
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
 
   const interact = async (contractAddress, method, ...args) => {
     let transactionObject = {

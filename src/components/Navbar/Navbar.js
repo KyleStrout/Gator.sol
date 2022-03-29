@@ -68,7 +68,9 @@ export default function Navbar() {
     } else {
       return (
         <Button
-          color="inherit"
+             sx = {{
+               color: customTheme.textColor
+             }}
           onClick={() => {
             connectToWallet();
           }}
@@ -86,13 +88,15 @@ export default function Navbar() {
   return (
     <AppBar position="sticky" sx={{ height: "4rem",  backgroundColor: customTheme.topBar}}>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography color={customTheme.textColor} variant="h6" component="div" sx={{ flexGrow: 1 }}>
           <Button
+            sx = {{
+              color: customTheme.textColor
+            }}
             onClick={() => {
               navigate("/home");
             }}
             variant="text"
-            color="inherit"
           >
             Blockchain Education
           </Button>

@@ -63,14 +63,17 @@ export default function OutputPanel(props) {
   return (
     <Box
       sx={{
+        color: customTheme.textColor,
+        border: customTheme.border,
         width: "100%",
         maxWidth: "40vw",
-        overflow: "scroll",
+        overflow: "overlay",
         height: "100%",
       }}
     >
       <Box
         sx={{
+          color: customTheme.textColor,
           position: "sticky",
           top: "0",
           left: "0",
@@ -85,6 +88,7 @@ export default function OutputPanel(props) {
           value={value}
           onChange={handleChange}
           aria-label="output panel"
+          textColor= {customTheme.textColor}
           sx={{
             position: "sticky",
             top: 0,
@@ -95,7 +99,7 @@ export default function OutputPanel(props) {
           <Tab label="History" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel  value={value} index={0}>
         <ReactJson src={compilerData}></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>

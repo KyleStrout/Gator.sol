@@ -17,6 +17,7 @@ const ContentContainer = styled(Box)(() => ({
   height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
+  overflow: "overlay",
   backgroundColor: "white",
   padding: "0 .5rem",
   border: "0.5rem solid #f0f0f0",
@@ -39,13 +40,17 @@ export default function SectionContent(props) {
   }, [props.contentUrl]);
 
   return (
-    <ContentContainer id="content-container" sx={{backgroundColor: customTheme.backgroundColor}}>
+    <ContentContainer
+     id="content-container"
+      sx={{backgroundColor: customTheme.backgroundColor, 
+      color: customTheme.textColor,
+      border: customTheme.border}}
+      >
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
         id="markdown"
         children={content}
       />
-      <Box sx={{ height: "1rem" }}></Box>
     </ContentContainer>
   );
 }
