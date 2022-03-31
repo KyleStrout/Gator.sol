@@ -6,10 +6,8 @@ import { Grid, Typography } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.up("md")]: {
-      marginBottom: theme.spacing(4),
-    },
+    marginBottom: 16,
+    
   },
   disableGutter: {
     marginBottom: 0,
@@ -18,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
   },
   cta: {
-    marginLeft: theme.spacing(1),
+    marginLeft: 8,
     "&:first-child": {
-      marginLeft: theme.spacing(0),
+      marginLeft: 0,
     },
   },
 }));

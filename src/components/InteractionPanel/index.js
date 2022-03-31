@@ -1,6 +1,8 @@
+import React, { useRef, useState, useEffect } from "react";
 import AddressContext from "../AddressContext";
 import { useContext } from "react";
 import ContractContext from "../ContractContext";
+import { ThemeContext, themes } from "../ThemeContext";
 const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
@@ -8,6 +10,7 @@ const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
 
   const interact = async (contractAddress, method, contractName, ...args) => {
     let transactionObject = {

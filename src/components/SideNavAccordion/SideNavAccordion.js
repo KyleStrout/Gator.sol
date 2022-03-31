@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 
 import SectionList from "../SectionList";
 import course from "../../data/course.js";
+//Custom Theme
+import {ThemeContext, themes} from '../ThemeContext';
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(() => ({}));
@@ -37,6 +39,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function SideNavAccordion() {
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   const [expanded, setExpanded] = React.useState("panel1");
 
   const handleChange = (panel) => (_, newExpanded) => {
@@ -55,12 +58,15 @@ export default function SideNavAccordion() {
           expanded={expanded === chapter.url}
           onChange={handleChange(chapter.url)}
           key={index}
+          sx={{
+            backgroundColor: customTheme.sideNavAccordion
+          }}
         >
           <AccordionSummary
             aria-controls={`${chapter.title}-content`}
             id={`${chapter.title}-header`}
           >
-            <Typography fontSize={"0.75rem"}>{chapter.title}</Typography>
+            <Typography style={{color: customTheme.textColor}} fontSize={"0.75rem"}>{chapter.title}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <SectionList

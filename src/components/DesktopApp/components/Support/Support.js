@@ -18,26 +18,17 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 28,
   },
   listItem: {
-    [theme.breakpoints.up("sm")]: {
       justifyContent: "center",
-    },
   },
   galleryMedia: {
     width: 80,
     height: 80,
-    marginLeft: theme.spacing(-2),
-    border: `3px solid ${theme.palette.background.paper}`,
+    marginLeft: -16,
+    border: `3px solid $#fff`,//theme.palette.background.paper
     "&:first-child": {
       marginLeft: 0,
     },
-    [theme.breakpoints.up("sm")]: {
-      width: 100,
-      height: 100,
-    },
-    [theme.breakpoints.up("md")]: {
-      width: 140,
-      height: 140,
-    },
+
   },
 }));
 
@@ -48,13 +39,11 @@ const Contact = (props) => {
   const { items, team } = data;
 
   const theme = useTheme();
-  const isMd = useMediaQuery(theme.breakpoints.up("md"), {
-    defaultMatches: true,
-  });
+
 
   return (
     <div className={className} {...rest}>
-      <Grid container spacing={isMd ? 4 : 2}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <SectionHeader
             label="support team"

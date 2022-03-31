@@ -8,6 +8,8 @@ import { styled } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
+import {ThemeContext, themes} from '../ThemeContext';
+
 const ContentContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
@@ -15,7 +17,7 @@ const ContentContainer = styled(Box)(() => ({
   height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
-  overflow: "scroll",
+  overflow: "overlay",
   backgroundColor: "white",
   padding: "0 .5rem",
   border: "0.5rem solid #f0f0f0",
@@ -24,6 +26,7 @@ const ContentContainer = styled(Box)(() => ({
 
 export default function SectionContent(props) {
   const [content, setContent] = useState("");
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   useEffect(() => {
     async function loadData() {
       if (!props.contentUrl) {
@@ -41,13 +44,17 @@ export default function SectionContent(props) {
   }, [props.contentUrl]);
 
   return (
-    <ContentContainer id="content-container">
+    <ContentContainer
+     id="content-container"
+      sx={{backgroundColor: customTheme.backgroundColor, 
+      color: customTheme.textColor,
+      border: customTheme.border}}
+      >
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
         id="markdown"
         children={content}
       />
-      <Box sx={{ height: "1rem" }}></Box>
     </ContentContainer>
   );
 }

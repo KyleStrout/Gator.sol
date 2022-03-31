@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState, useEffect } from "react";
 // monaco editor
 import Editor from "@monaco-editor/react";
@@ -7,20 +8,17 @@ import TextField from "@mui/material/TextField";
 
 import { useLocation } from "react-router-dom";
 
-import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
+import { ThemeContext } from "../ThemeContext";
 
 import { Formik, Field, Form } from "formik";
 
 import web3 from "web3";
 
-
-
 export default function CodeEditor(props) {
-  const [checked, setChecked] = useState(false);
-  const [theme, setTheme] = useState("vs-light");
   const [newTransactions, setNewTransactions] = useState([]);
+  const { customTheme } = React.useContext(ThemeContext);
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
   const [hasArguments, setHasArguments] = useState(false);
@@ -36,7 +34,7 @@ export default function CodeEditor(props) {
       },
     });
   }, [newTransactions]);
-  
+
   useEffect(() => {
     const url = window.location.href.split("/").pop();
     setContractData({
@@ -48,27 +46,22 @@ export default function CodeEditor(props) {
     });
   }, [outputWithAddress]);
 
-
-  const location = useLocation()
+  const location = useLocation();
 
   React.useEffect(() => {
     const url = location.pathname.split("/").pop();
     const section = contractData[url];
     if (section) {
       setNewTransactions(section.transactions ?? []);
-    }
-    else {
+    } else {
       setNewTransactions([]);
     }
-  }, [location])
+  }, [location]);
 
   const editorRef = useRef(null);
 
   const { address } = React.useContext(AddressContext);
-
-  useEffect(() => {
-    checked ? setTheme("vs-dark") : setTheme("vs-light");
-  }, [checked]);
+  //const [currentTheme, setCustomTheme] = React.useContext(ThemeContext);
 
   function handleEditorDidMount(editor) {
     editorRef.current = editor;
@@ -78,9 +71,6 @@ export default function CodeEditor(props) {
   }
   function handleEditorValidation(markers) {
     markers.forEach((marker) => console.log("onValidate:", marker.message));
-  }
-  function handleSwitchChange(event) {
-    setChecked(event.target.checked);
   }
 
   function checkError(data) {
@@ -98,17 +88,17 @@ export default function CodeEditor(props) {
 
   function getArguments(contractData) {
     let argumentList = {};
-    contractData.forEach(contract => {
+    contractData.forEach((contract) => {
       if (contract.abi.find((abi) => abi.type === "constructor")) {
         argumentList[contract.name] = {
-          arguments: contract.abi.find((abi) => abi.type === "constructor").inputs, 
+          arguments: contract.abi.find((abi) => abi.type === "constructor")
+            .inputs,
         };
       }
     });
     if (Object.values(argumentList).length > 0) {
       setHasArguments(true);
-    }
-    else {
+    } else {
       setHasArguments(false);
     }
     return argumentList;
@@ -116,30 +106,29 @@ export default function CodeEditor(props) {
 
   const initialValues = {
     arguments: "",
-  }
+  };
 
   const onSubmit = async (values) => {
-    console.log("submitted")
-    console.log(values.arguments)
+    console.log("submitted");
+    console.log(values.arguments);
     const data = values.arguments;
 
-  
     const parsedData = [];
     // parse a comma seperated list of arguments
     data.split(",").forEach((arg) => {
       parsedData.push(arg.trim());
-    })
-    console.log(parsedData)
-    console.log(contractData)
+    });
+    console.log(parsedData);
+    console.log(contractData);
     const encodedParsedData = [];
     // encode the arguments
     parsedData.forEach((arg) => {
       encodedParsedData.push(web3.utils.asciiToHex(arg));
-    })
-    console.log(encodedParsedData)
+    });
+    console.log(encodedParsedData);
 
     const compilerData =
-    contractData[window.location.href.split("/").pop()].compilerData;
+      contractData[window.location.href.split("/").pop()].compilerData;
 
     const args = contractData[window.location.href.split("/").pop()].arguments;
 
@@ -166,12 +155,12 @@ export default function CodeEditor(props) {
         params: [transactionObject],
       });
       transactionObject.gas = gas;
-  
+
       const res = await window.ethereum.request({
         method: "eth_sendTransaction",
         params: [transactionObject],
       });
-  
+
       console.log(res);
       let intervalId;
       intervalId = setInterval(
@@ -193,8 +182,11 @@ export default function CodeEditor(props) {
               method: "constructor",
               contractName: compilerData[i].name,
               ...rec,
-            }
-            setNewTransactions(newTransactions => [...newTransactions, transaction]);
+            };
+            setNewTransactions((newTransactions) => [
+              ...newTransactions,
+              transaction,
+            ]);
 
             clearInterval(intervalId);
           }
@@ -204,11 +196,7 @@ export default function CodeEditor(props) {
         intervalId
       );
     }
-   
-    
-    
-
-  }
+  };
 
   useEffect(() => {
     if (editorRef.current) {
@@ -264,8 +252,8 @@ export default function CodeEditor(props) {
       Object.values(argumentList).forEach((contract) => {
         contract.arguments.forEach((argument) => {
           tempText += `${argument.type} ${argument.name}, `;
-        })
-      })
+        });
+      });
       setPlaceHolderText(tempText);
     }
   }
@@ -311,8 +299,11 @@ export default function CodeEditor(props) {
               contractName: compilerData[i].name,
               //mutability: "pure",
               ...rec,
-            }
-            setNewTransactions(newTransactions => [...newTransactions, transaction]);
+            };
+            setNewTransactions((newTransactions) => [
+              ...newTransactions,
+              transaction,
+            ]);
 
             clearInterval(intervalId);
           }
@@ -336,7 +327,7 @@ export default function CodeEditor(props) {
   return (
     <Box
       sx={{
-        borderBottom: "0.5rem solid #f0f0f0",
+        borderBottom: customTheme.border,
       }}
     >
       <Editor
@@ -345,7 +336,7 @@ export default function CodeEditor(props) {
         defaultLanguage="sol"
         defaultValue={props.defaultCode}
         language="sol"
-        theme={theme} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
+        theme={customTheme.codeEditor} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
         onMount={handleEditorDidMount}
         onChange={handleEditorChange}
         onValidate={handleEditorValidation}
@@ -363,55 +354,71 @@ export default function CodeEditor(props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: theme === "vs-dark" ? "#1e1e1e" : "white",
+          backgroundColor: customTheme.buttonsbackground,
           height: "4rem",
         }}
       >
-        <ThemeSwitch
-          checked={checked}
-          onChange={handleSwitchChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            backgroundColor: "transparent",
           }}
         >
           <Button
-            sx={{ margin: "0 0.5rem" }}
+            sx={{
+              margin: "0 0.5rem",
+              backgroundColor: customTheme.compileButton,
+            }}
             onClick={compile}
-            color="secondary"
+            //color= {customTheme.backgroundColor}
             variant="contained"
           >
             Compile
           </Button>
-          {!hasArguments && 
+          {!hasArguments && (
             <Button
-            sx={{ margin: "0 0.5rem" }}
-            color="secondary"
-            variant="contained"
-            disabled={!canDeploy()}
-            onClick={deploy}
+              sx={{ margin: "0 0.5rem" }}
+              color="secondary"
+              variant="contained"
+              disabled={!canDeploy()}
+              onClick={deploy}
             >
               Deploy
             </Button>
-          }
+          )}
           {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
-          {hasArguments && 
-            <Formik initialValues={initialValues} onSubmit={onSubmit} sx={{ style: "inherit" }}>
-            {(props) => (
-              <Form>
-                <Button type="submit" sx={{ margin: "0 0.5rem", padding: "" }} color="secondary" variant="contained" disabled={!canDeploy()}>
-                  Deploy
-                </Button>
-                <Field as={TextField} inputProps={{ style: {fontSize: 12}}} label="arguments" name="arguments" placeholder={placeHolderText} variant="standard" required/>
-              </Form>
-            )}
-          </Formik>
-          }
-          
+          {hasArguments && (
+            <Formik
+              initialValues={initialValues}
+              onSubmit={onSubmit}
+              sx={{ style: "inherit" }}
+            >
+              {(props) => (
+                <Form>
+                  <Button
+                    type="submit"
+                    sx={{ margin: "0 0.5rem", padding: "" }}
+                    color="secondary"
+                    variant="contained"
+                    disabled={!canDeploy()}
+                  >
+                    Deploy
+                  </Button>
+                  <Field
+                    as={TextField}
+                    inputProps={{ style: { fontSize: 12 } }}
+                    label="arguments"
+                    name="arguments"
+                    placeholder={placeHolderText}
+                    variant="standard"
+                    required
+                  />
+                </Form>
+              )}
+            </Formik>
+          )}
         </Box>
       </Box>
     </Box>

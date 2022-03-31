@@ -1,15 +1,14 @@
 import About from "../About";
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
 import CourseHome from "../CourseHome";
 import SectionPage from "../SectionPage";
 import course from "../../data/course.js";
-import theme from "../Theme";
 import { AddressProvider } from "../AddressContext";
 import { ContractProvider } from "../ContractContext";
+import { ThemeContext } from "../ThemeContext";
 import Navbar from "../Navbar";
 
 import DesktopApp from "../DesktopApp/";
@@ -25,8 +24,11 @@ function App() {
   const [contractData, setContractData] = React.useState({});
   const contractValue = { contractData, setContractData };
 
+  const [customTheme, setCustomTheme] = React.useState("light");
+  const themeValue = { customTheme, setCustomTheme };
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeContext.Provider value={themeValue}>
       <AddressProvider value={value}>
         <ContractProvider value={contractValue}>
           <AppContainer id="app-container">
@@ -56,7 +58,7 @@ function App() {
           </AppContainer>
         </ContractProvider>
       </AddressProvider>
-    </ThemeProvider>
+    </ThemeContext.Provider>
   );
 }
 
