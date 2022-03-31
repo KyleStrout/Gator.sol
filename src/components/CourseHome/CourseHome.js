@@ -25,11 +25,11 @@ const ContentContainer = styled(Box)(() => ({
 export default function CourseHome() {
   const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
   return (
-    <CourseHomeContainer id="course-home-container" backgroundColor = {customTheme.backgroundColor}>
+    <CourseHomeContainer id="course-home-container" >
       <SideNav id="side-nav"></SideNav>
       <ContentContainer id="content-container"
                 sx={{
-                  backgroundColor: customTheme.textColor
+                  backgroundColor: customTheme.backgroundColor
                 }}>
         <Outlet></Outlet>
       </ContentContainer>
