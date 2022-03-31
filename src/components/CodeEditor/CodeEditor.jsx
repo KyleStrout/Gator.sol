@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 // mui
 import { Button, Box } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 import { useLocation } from "react-router-dom";
 
@@ -10,7 +11,11 @@ import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
 
-// Can have default code/imports/version here and can be dynamic for exercises
+import { Formik, Field, Form } from "formik";
+
+import web3 from "web3";
+
+
 
 export default function CodeEditor(props) {
   const [checked, setChecked] = useState(false);
@@ -18,6 +23,8 @@ export default function CodeEditor(props) {
   const [newTransactions, setNewTransactions] = useState([]);
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
+  const [hasArguments, setHasArguments] = useState(false);
+  const [placeHolderText, setPlaceHolderText] = useState("");
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -48,7 +55,7 @@ export default function CodeEditor(props) {
     const url = location.pathname.split("/").pop();
     const section = contractData[url];
     if (section) {
-      setNewTransactions(section.transactions);
+      setNewTransactions(section.transactions ?? []);
     }
     else {
       setNewTransactions([]);
@@ -89,6 +96,120 @@ export default function CodeEditor(props) {
     return errorList;
   }
 
+  function getArguments(contractData) {
+    let argumentList = {};
+    contractData.forEach(contract => {
+      if (contract.abi.find((abi) => abi.type === "constructor")) {
+        argumentList[contract.name] = {
+          arguments: contract.abi.find((abi) => abi.type === "constructor").inputs, 
+        };
+      }
+    });
+    if (Object.values(argumentList).length > 0) {
+      setHasArguments(true);
+    }
+    else {
+      setHasArguments(false);
+    }
+    return argumentList;
+  }
+
+  const initialValues = {
+    arguments: "",
+  }
+
+  const onSubmit = async (values) => {
+    console.log("submitted")
+    console.log(values.arguments)
+    const data = values.arguments;
+
+  
+    const parsedData = [];
+    // parse a comma seperated list of arguments
+    data.split(",").forEach((arg) => {
+      parsedData.push(arg.trim());
+    })
+    console.log(parsedData)
+    console.log(contractData)
+    const encodedParsedData = [];
+    // encode the arguments
+    parsedData.forEach((arg) => {
+      encodedParsedData.push(web3.utils.asciiToHex(arg));
+    })
+    console.log(encodedParsedData)
+
+    const compilerData =
+    contractData[window.location.href.split("/").pop()].compilerData;
+
+    const args = contractData[window.location.href.split("/").pop()].arguments;
+
+    const response = await fetch("http://localhost:3001/deployWithArguments", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        compilerData,
+        args,
+        argValues: parsedData,
+      }),
+    });
+
+    const encodedData = await response.json();
+    for (let i = 0; i < encodedData.length; i++) {
+      let transactionObject = {
+        data: encodedData[0],
+        from: address,
+      };
+      const gas = await window.ethereum.request({
+        method: "eth_estimateGas",
+        params: [transactionObject],
+      });
+      transactionObject.gas = gas;
+  
+      const res = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionObject],
+      });
+  
+      console.log(res);
+      let intervalId;
+      intervalId = setInterval(
+        async function () {
+          let rec = await window.ethereum.request({
+            method: "eth_getTransactionReceipt",
+            params: [res],
+          });
+          if (rec) {
+            const out = compilerData.map((contract) => {
+              return {
+                ...contract,
+                address: rec.contractAddress,
+              };
+            });
+            setOutputWithAddress(out);
+            console.log("RECEIPT", rec);
+            let transaction = {
+              method: "constructor",
+              contractName: compilerData[i].name,
+              ...rec,
+            }
+            setNewTransactions(newTransactions => [...newTransactions, transaction]);
+
+            clearInterval(intervalId);
+          }
+        },
+        1000,
+        res,
+        intervalId
+      );
+    }
+   
+    
+    
+
+  }
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.setValue(props.defaultCode);
@@ -127,13 +248,26 @@ export default function CodeEditor(props) {
       };
     });
 
+    const argumentList = getArguments(output);
+
     setContractData({
       ...contractData,
       [url]: {
         ...contractData[url],
         compilerData: output,
+        arguments: argumentList,
       },
     });
+
+    if (Object.values(argumentList).length > 0) {
+      let tempText = "";
+      Object.values(argumentList).forEach((contract) => {
+        contract.arguments.forEach((argument) => {
+          tempText += `${argument.type} ${argument.name}, `;
+        })
+      })
+      setPlaceHolderText(tempText);
+    }
   }
 
   async function deploy() {
@@ -253,16 +387,31 @@ export default function CodeEditor(props) {
           >
             Compile
           </Button>
-
-          <Button
+          {!hasArguments && 
+            <Button
             sx={{ margin: "0 0.5rem" }}
             color="secondary"
             variant="contained"
             disabled={!canDeploy()}
             onClick={deploy}
-          >
-            Deploy
-          </Button>
+            >
+              Deploy
+            </Button>
+          }
+          {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
+          {hasArguments && 
+            <Formik initialValues={initialValues} onSubmit={onSubmit} sx={{ style: "inherit" }}>
+            {(props) => (
+              <Form>
+                <Button type="submit" sx={{ margin: "0 0.5rem", padding: "" }} color="secondary" variant="contained" disabled={!canDeploy()}>
+                  Deploy
+                </Button>
+                <Field as={TextField} inputProps={{ style: {fontSize: 12}}} label="arguments" name="arguments" placeholder={placeHolderText} variant="standard" required/>
+              </Form>
+            )}
+          </Formik>
+          }
+          
         </Box>
       </Box>
     </Box>
