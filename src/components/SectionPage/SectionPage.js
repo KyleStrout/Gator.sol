@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 // Custom Components
 import SectionContent from "../SectionContent";
 import SectionInteraction from "../SectionInteraction";
-import {ThemeContext, themes} from '../ThemeContext';
+import { ThemeContext, themes } from "../ThemeContext";
 
 const SectionPageContainer = styled(Box)(() => ({
   display: "flex",
@@ -19,13 +19,14 @@ const SectionPageContainer = styled(Box)(() => ({
 }));
 
 export default function SectionPage(props) {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
   return (
-    <SectionPageContainer id="section-page-container"
-    sx={{
-      backgroundColor: customTheme.backgroundColor,
-    }}>
-
+    <SectionPageContainer
+      id="section-page-container"
+      sx={{
+        backgroundColor: customTheme.backgroundColor,
+      }}
+    >
       <SectionContent
         id="section-content"
         sx={{

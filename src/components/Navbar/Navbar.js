@@ -4,25 +4,24 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import ThemeSwitch from "../ThemeSwitch/ThemeSwitch.js" 
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch.js";
 import AddressContext from "../AddressContext";
-import {ThemeContext, themes} from '../ThemeContext';
+import { ThemeContext, themes } from "../ThemeContext";
 
-
+import OnboardingButton from "../Metamask";
 
 export default function Navbar() {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
   const [checked, setChecked] = React.useState(false);
   let navigate = useNavigate();
 
   const { address, setAddress } = React.useContext(AddressContext);
 
-
   React.useEffect(() => {
-    const mode = checked ? themes.dark : themes.light
-    setCustomTheme(mode)
-    console.log(customTheme)
-  }, [checked])
+    const mode = checked ? themes.dark : themes.light;
+    setCustomTheme(mode);
+    console.log(customTheme);
+  }, [checked]);
 
   function handleSwitchChange(event) {
     setChecked(event.target.checked);
@@ -58,7 +57,6 @@ export default function Navbar() {
   };
 
   const WalletConnect = () => {
-
     if (address) {
       return (
         <Typography variant="h6" color="inherit">
@@ -68,9 +66,9 @@ export default function Navbar() {
     } else {
       return (
         <Button
-             sx = {{
-               color: customTheme.textColor
-             }}
+          sx={{
+            color: customTheme.textColor,
+          }}
           onClick={() => {
             connectToWallet();
           }}
@@ -86,12 +84,20 @@ export default function Navbar() {
   });
 
   return (
-    <AppBar position="sticky" sx={{ height: "4rem",  backgroundColor: customTheme.topBar}}>
+    <AppBar
+      position="sticky"
+      sx={{ height: "4rem", backgroundColor: customTheme.topBar }}
+    >
       <Toolbar>
-        <Typography color={customTheme.textColor} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          color={customTheme.textColor}
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1 }}
+        >
           <Button
-            sx = {{
-              color: customTheme.textColor
+            sx={{
+              color: customTheme.textColor,
             }}
             onClick={() => {
               navigate("/home");
@@ -101,12 +107,13 @@ export default function Navbar() {
             Blockchain Education
           </Button>
         </Typography>
-          <ThemeSwitch
-            checked={checked}
-            onChange={handleSwitchChange}
-            inputProps={{ "aria-label": "controlled" }}
-          />
+        <ThemeSwitch
+          checked={checked}
+          onChange={handleSwitchChange}
+          inputProps={{ "aria-label": "controlled" }}
+        />
         <WalletConnect />
+        <OnboardingButton />
       </Toolbar>
     </AppBar>
   );

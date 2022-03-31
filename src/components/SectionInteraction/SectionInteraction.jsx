@@ -9,7 +9,7 @@ import { styled } from "@mui/styles";
 import CodeEditor from "../CodeEditor";
 import OutputPanel from "../OutputPanel";
 
-import {ThemeContext, themes} from '../ThemeContext';
+import { ThemeContext, themes } from "../ThemeContext";
 
 const SectionInteractionContainer = styled(Box)(() => ({
   display: "flex",
@@ -23,7 +23,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
 }));
 
 function SectionInteractionContent(props) {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
   if (props.hasCodeEditor) {
     return (
       <Box
@@ -49,9 +49,10 @@ function SectionInteractionContent(props) {
   } else {
     return (
       <Box
-      sx={{
-        backgroundColor: customTheme.backgroundColor,
-      }}>
+        sx={{
+          backgroundColor: customTheme.backgroundColor,
+        }}
+      >
         <h1>Section Interaction</h1>
       </Box>
     );
@@ -59,14 +60,15 @@ function SectionInteractionContent(props) {
 }
 
 export default function SectionInteraction(props) {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
   return (
     <SectionInteractionContainer
-     id="section-interaction-conatainer"
-     sx={{
-      backgroundColor: customTheme.backgroundColor,
-      border: customTheme.border
-    }}>
+      id="section-interaction-conatainer"
+      sx={{
+        backgroundColor: customTheme.backgroundColor,
+        border: customTheme.border,
+      }}
+    >
       <SectionInteractionContent
         id="section-interaction-content"
         sx={{

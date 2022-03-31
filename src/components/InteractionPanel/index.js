@@ -2,14 +2,17 @@ import React, { useRef, useState, useEffect } from "react";
 import AddressContext from "../AddressContext";
 import { useContext } from "react";
 import ContractContext from "../ContractContext";
-import {ThemeContext, themes} from '../ThemeContext';
+import { ThemeContext, themes } from "../ThemeContext";
+const Web3 = require("web3");
+
+const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
   const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
 
-  const interact = async (contractAddress, method, ...args) => {
+  const interact = async (contractAddress, method, contractName, ...args) => {
     let transactionObject = {
       from: address,
       to: contractAddress,
@@ -40,31 +43,34 @@ export default function InteractionPanel(props) {
         method: "eth_call",
         params: [transactionObject, "latest"],
       });
-
       let newTransactions;
       if (contractData[url].transactions) {
         newTransactions = [
           ...contractData[url].transactions,
           {
             method: method.name,
+            contractName: contractName,
+            //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            inputs: args,
-            result: res,
-            logs: [],
-            transactionIndex: contractData[url].transactions.length,
+            result: web3.eth.abi.decodeParameters(
+              method.outputs.map((output) => output.type),
+              res
+            ),
           },
         ];
       } else {
         newTransactions = [
           {
             method: method.name,
+            contractName: contractName,
+            //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            inputs: args,
-            result: res,
-            logs: [],
-            transactionIndex: 0,
+            result: web3.eth.abi.decodeParameters(
+              method.outputs.map((output) => output.type),
+              res
+            ),
           },
         ];
       }
@@ -88,13 +94,22 @@ export default function InteractionPanel(props) {
             params: [res],
           });
           if (rec) {
-            console.log("Receipt:", rec);
+            //console.log("Receipt:", rec);
             const url = window.location.href.split("/").pop();
             let newTransactions;
+            let transaction = {
+              method: method.name,
+              contractName: contractName,
+              //mutability: method.stateMutability,
+              ...rec,
+            };
             if (contractData[url].transactions) {
-              newTransactions = [...contractData[url].transactions, rec];
+              newTransactions = [
+                ...contractData[url].transactions,
+                transaction,
+              ];
             } else {
-              newTransactions = [rec];
+              newTransactions = [transaction];
             }
             setContractData((prevState) => ({
               ...prevState,
@@ -121,8 +136,6 @@ export default function InteractionPanel(props) {
     });
   };
 
-  console.log(props.deployed);
-
   if (props.deployed) {
     return props.src.map((contract, index) => {
       return (
@@ -136,19 +149,27 @@ export default function InteractionPanel(props) {
                 <form
                   onSubmit={(e) => {
                     const parameters = onSubmit(e);
-                    interact(contract.address, method, ...parameters);
+                    interact(
+                      contract.address,
+                      method,
+                      contract.name,
+                      ...parameters
+                    );
                   }}
                 >
-                  <button type="submit">{method.name}</button>
-                  {method.inputs.map((input, index) => {
-                    return (
-                      <div key={index}>
-                        <h3>{input.name}</h3>
-                        <p>{input.type}</p>
-                        <input name={`${input.name}-${input.type}`}></input>
-                      </div>
-                    );
-                  })}
+                  {typeof method.name !== "undefined" && (
+                    <button type="submit">{method.name}</button>
+                  )}
+                  {method.type !== "constructor" &&
+                    method.inputs.map((input, index) => {
+                      return (
+                        <div key={index}>
+                          <h3>{input.name}</h3>
+                          <p>{input.type}</p>
+                          <input name={`${input.name}-${input.type}`}></input>
+                        </div>
+                      );
+                    })}
                 </form>
               </div>
             );
