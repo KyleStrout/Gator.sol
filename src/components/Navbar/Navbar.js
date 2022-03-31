@@ -112,7 +112,6 @@ export default function Navbar() {
           onChange={handleSwitchChange}
           inputProps={{ "aria-label": "controlled" }}
         />
-        <WalletConnect />
         <OnboardingButton />
       </Toolbar>
     </AppBar>

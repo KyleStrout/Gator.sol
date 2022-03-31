@@ -42,7 +42,8 @@ export default function SimpleSnackbar(props) {
         size="small"
         aria-label="close"
         color="inherit"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           navigator.clipboard.writeText(props.content);
           setOpen(true);
         }}

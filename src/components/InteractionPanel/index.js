@@ -1,24 +1,26 @@
-import React, { useRef, useState, useEffect } from "react";
 import AddressContext from "../AddressContext";
 import { useContext, useState } from "react";
 import ContractContext from "../ContractContext";
 import SimpleSnackbar from "../Snackbar";
-
+import { styled } from "@mui/material/styles";
 import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import { ThemeContext } from "../ThemeContext";
+import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
-
   const { contractData, setContractData } = useContext(ContractContext);
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
 
+  const { customTheme } = useContext(ThemeContext);
   const interact = async (contractAddress, method, contractName, ...args) => {
     let transactionObject = {
       from: address,
@@ -143,68 +145,116 @@ export default function InteractionPanel(props) {
     });
   };
 
-  const { contract } = props;
-  return (
-    <div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <div
-            slot="header"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              margin: "10px",
-            }}
-          >
-            <h3>{contract.name}</h3> <small>at</small>{" "}
-            <i>
-              {contract.address.slice(0, 8) +
-                "..." +
-                contract.address.slice(-5)}
-            </i>
-            <SimpleSnackbar content={contract.address}></SimpleSnackbar>
-          </div>
-        </AccordionSummary>
-        <AccordionDetails>
-          {contract.abi.map((method, index) => {
-            return (
-              <div key={index} slot="details">
-                <h2>{method.name}</h2>
-                <form
-                  onSubmit={(e) => {
-                    const parameters = onSubmit(e);
-                    interact(
-                      contract.address,
-                      method,
-                      contract.name,
-                      ...parameters
-                    );
-                  }}
-                >
-                  {typeof method.name !== "undefined" && (
-                    <button type="submit">{method.name}</button>
-                  )}
-                  {method.type !== "constructor" &&
-                    method.inputs.map((input, index) => {
-                      return (
-                        <div key={index}>
-                          <h3>{input.name}</h3>
-                          <p>{input.type}</p>
-                          <input name={`${input.name}-${input.type}`}></input>
-                        </div>
-                      );
-                    })}
-                </form>
+  const AccordionSummary = styled((props) => (
+    <MuiAccordionSummary
+      expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
+      {...props}
+    />
+  ))(({ theme }) => ({
+    backgroundColor: "rgba(0, 0, 0, .03)",
+    flexDirection: "row-reverse",
+    "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+      transform: "rotate(0deg)",
+    },
+    "& .MuiAccordionSummary-expandIconWrapper": {
+      transform: "rotate(-90deg)",
+    },
+    "& .MuiAccordionSummary-content": {
+      marginLeft: "4px",
+    },
+  }));
+
+  if (props.deployed) {
+    return props.src.map((contract, index) => {
+      return (
+        <div key={index}>
+          <Accordion defaultExpanded={true} square>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                <h3>{contract.name}</h3> <small>at</small>{" "}
+                <i>
+                  {contract.address.slice(0, 8) +
+                    "..." +
+                    contract.address.slice(-5)}
+                </i>
+                {/* copy icon */}
+                <SimpleSnackbar content={contract.address}></SimpleSnackbar>
               </div>
-            );
-          })}
-        </AccordionDetails>
-      </Accordion>
-    </div>
-  );
+            </AccordionSummary>
+            <AccordionDetails>
+              {contract.abi.map((method, index) => {
+                return (
+                  <div key={index}>
+                    <form
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        width: "100%",
+                      }}
+                      onSubmit={(e) => {
+                        const parameters = onSubmit(e);
+                        interact(
+                          contract.address,
+                          method,
+                          contract.name,
+                          ...parameters
+                        );
+                      }}
+                    >
+                      {typeof method.name !== "undefined" && (
+                        <Button
+                          sx={{
+                            backgroundColor: customTheme.compileButton,
+                            color: "white",
+                            fontSize: "1.2rem",
+                            margin: "0.5rem",
+                          }}
+                          type="submit"
+                          variant="contained"
+                        >
+                          {method.name}
+                        </Button>
+                      )}
+                      {method.type !== "constructor" &&
+                        method.inputs.map((input, index) => {
+                          return (
+                            <div
+                              key={index}
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                flexGrow: 1,
+                              }}
+                            >
+                              <TextField
+                                name={`${input.name}-${input.type}`}
+                                id="filled-basic"
+                                label={input.name + ": " + input.type}
+                                variant="filled"
+                              />
+                            </div>
+                          );
+                        })}
+                    </form>
+                  </div>
+                );
+              })}
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      );
+    });
+  }
+  return <></>;
 }
