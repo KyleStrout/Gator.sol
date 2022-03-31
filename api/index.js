@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const solc = require("solc");
 const Web3 = require("web3");
 
-const web3 = new Web3("ws://178.128.155.103:8545");
+const web3 = new Web3("ws://localhost:8545");
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -36,15 +36,8 @@ app.post("/compile", (req, res, next) => {
 
 app.post("/deploy", async (req, res) => {
   const contracts = req.body;
-  // log the network name that we're on
-  console.log(await web3.eth.getChainId());
-  const accounts = await web3.eth.getAccounts();
-  console.log(accounts);
-  // get account balances
-  console.log(await web3.eth.getBalance(accounts[0]));
-
+  const data = [];
   for (let i = 0; i < contracts.length; i++) {
-    console.log("here");
     // create a web3 contract
     const contract = new web3.eth.Contract(contracts[i].abi);
     // deploy the contract
@@ -52,27 +45,89 @@ app.post("/deploy", async (req, res) => {
       data: contracts[i].bytecode,
     });
 
+    // estimate gas
+    const gas = await deployData.estimateGas();
+
     let signedTransaction = await web3.eth.accounts.signTransaction(
-      { ...deployData, gas: "1000000" },
-      "0x299f7f8b4b5398c8532b437f4398af61be9c97f753699da5772d1d11e07be485"
+      { ...deployData, gas: gas },
+      "0xc3f2c5637b88aa992af89fc5e10f5bbd3d533424097c43d0a126a25e1e8ae051"
     );
     const deploy = await web3.eth.sendSignedTransaction(
       signedTransaction.rawTransaction
     );
-    console.log(deploy);
+    data.push(deploy);
   }
+  res.send(
+    JSON.stringify({
+      data,
+    })
+  );
+});
+
+app.post("/transact", async (req, res) => {
+  const transactionObject = req.body.transactionObject;
+  const method = req.body.method;
+  // get accounts
+  const accounts = await web3.eth.getAccounts();
+  // get first account
+  const address = accounts[0];
+  // add the address to the transaction object
+  transactionObject.from = address;
+  // console.log(transactionObject);
+
+  if (method.stateMutability === "view") {
+    console.log("here");
+
+    web3.eth
+      .getCode("0xf0754adb533140e31510418d236614bc282a4947")
+      .then(console.log);
+    // web3.eth.call(
+    //   {
+    //     to: transactionObject.to,
+    //     data: transactionObject.data,
+    //     from: address,
+    //   },
+    //   "latest",
+    //   (err, res) => {
+    //     console.log("error", err);
+    //     console.log("res", res);
+    //   }
+    // );
+    // console.log(response);
+    return;
+  }
+
+  const gas = await web3.eth.estimateGas({
+    to: transactionObject.to,
+    data: transactionObject.data,
+  });
+  transactionObject.gas = gas;
+
+  // console.log(gas);
+  // const gas = await transactionObject.estimateGas();
+  // console.log(gas);
+  // let signedTransaction = await web3.eth.accounts.signTransaction(
+  //   { ...transactionObject, gas: gas },
+  //   "0x06ce293b3fdf650353d342e8d3a296b0ec788dc497c6dc034f119d3a55828315"
+  // );
+  // // console.log(signedTransaction);
+  // web3.eth
+  //   .sendSignedTransaction(signedTransaction.rawTransaction)
+  //   .on("transactionHash", console.log)
+  //   .on("receipt", console.log);
+
+  // const transactionData = await web3.eth.getTransaction(
+  //   transaction.transactionHash
+  // );
+  // console.log(transactionData);
+
+  // res.send(JSON.stringify({ transaction }));
 });
 
 app.post("/getMethodData", (req, res) => {
   const method = req.body.method;
   const inputs = req.body.inputs;
-  console.log("inputs: ", inputs);
-  console.log(method, inputs);
-
   const encodedFunc = web3.eth.abi.encodeFunctionCall(method, inputs);
-
-  console.log("encoded function: ", encodedFunc);
-
   res.send({ encodedFunc });
 });
 

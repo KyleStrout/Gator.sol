@@ -10,6 +10,7 @@ import ThemeSwitch from "./ThemeSwitch";
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
 
+const IP = "178.128.155.103";
 // Can have default code/imports/version here and can be dynamic for exercises
 
 export default function CodeEditor(props) {
@@ -94,7 +95,7 @@ export default function CodeEditor(props) {
   }, [props.defaultCode]);
 
   async function compile() {
-    const response = await fetch("http://178.128.155.103:3001/compile", {
+    const response = await fetch("http://localhost:3001/compile", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -135,17 +136,39 @@ export default function CodeEditor(props) {
   }
 
   async function deploy() {
-    // IF USER DOESN'T HAVE METAMASK, USE LOCAL CHAIN
-    // const response = await fetch("http://178.128.155.103:3001/deploy", {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "POST",
-    //   body: JSON.stringify(compilerData),
-    // });
-    // console.log(response);
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
+    // IF USER DOESN'T HAVE METAMASK, USE LOCAL CHAIN
+    if (!window.ethereum) {
+      const response = await fetch("http://localhost:3001/deploy", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(compilerData),
+      });
+      const { data } = await response.json();
+      for (let i = 0; i < data.length; i++) {
+        const out = compilerData.map((contract) => {
+          return {
+            ...contract,
+            address: data[i].contractAddress,
+          };
+        });
+        setOutputWithAddress(out);
+        let transaction = {
+          method: "constructor",
+          contractName: compilerData[i].name,
+          //mutability: "pure",
+          ...data[i],
+        };
+        setNewTransactions((newTransactions) => [
+          ...newTransactions,
+          transaction,
+        ]);
+      }
+      return;
+    }
 
     for (let i = 0; i < compilerData.length; i++) {
       const { bytecode } = compilerData[i];

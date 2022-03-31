@@ -3,7 +3,7 @@ import { useContext } from "react";
 import ContractContext from "../ContractContext";
 const Web3 = require("web3");
 
-const web3 = new Web3(Web3.givenProvider || "ws://178.128.155.103:3000");
+const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
 export default function InteractionPanel(props) {
   const { address } = useContext(AddressContext);
@@ -14,10 +14,9 @@ export default function InteractionPanel(props) {
       from: address,
       to: contractAddress,
       data: "",
-      gas: "",
     };
 
-    const response = await fetch("http://178.128.155.103:3001/getMethodData", {
+    const response = await fetch("http://localhost:3001/getMethodData", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -25,6 +24,22 @@ export default function InteractionPanel(props) {
       body: JSON.stringify({ method, inputs: args }),
     });
     const { encodedFunc } = await response.json();
+    transactionObject.data = encodedFunc;
+    // if user doesn't have metamaks, use local chain
+    if (!window.ethereum) {
+      const response = await fetch("http://localhost:3001/transact", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          transactionObject,
+          method,
+        }),
+      });
+      // const { transaction } = await response.json();
+      return;
+    }
     // send the transaction
     transactionObject.data = encodedFunc;
     const gas = await window.ethereum.request({
