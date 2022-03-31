@@ -20,9 +20,7 @@ const Hero = (props) => {
   const classes = useStyles();
 
   const theme = useTheme();
-  const isMd = useMediaQuery(theme.breakpoints.up("md"), {
-    defaultMatches: true,
-  });
+
 
   return (
     <div className={className} {...rest}>
@@ -30,7 +28,8 @@ const Hero = (props) => {
         container
         justify="space-between"
         spacing={4}
-        direction={isMd ? "row" : "column-reverse"}
+        direction="row"
+        //{isMd ? "row" : "column-reverse"} 
       >
         <Grid
           item

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "100%",
   },
   square: {
-    borderRadius: theme.spacing(2),
+    borderRadius: 8,
   },
 }));
 
