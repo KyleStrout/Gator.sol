@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import AddressContext from "../AddressContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ContractContext from "../ContractContext";
-import { ThemeContext, themes } from "../ThemeContext";
+import SimpleSnackbar from "../Snackbar";
+
 const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
@@ -140,8 +141,23 @@ export default function InteractionPanel(props) {
     return props.src.map((contract, index) => {
       return (
         <div key={index}>
-          <h1>{contract.name}</h1>
-          <p>{contract.address}</p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              margin: "10px",
+            }}
+          >
+            <h3>{contract.name}</h3> <small>at</small>{" "}
+            <i>
+              {contract.address.slice(0, 8) +
+                "..." +
+                contract.address.slice(-5)}
+            </i>
+            {/* copy icon */}
+            <SimpleSnackbar content={contract.address}></SimpleSnackbar>
+          </div>
           {contract.abi.map((method, index) => {
             return (
               <div key={index}>
