@@ -1,7 +1,7 @@
 import AddressContext from "../AddressContext";
 import { useContext, useState } from "react";
 import ContractContext from "../ContractContext";
-import SimpleSnackbar from "../Snackbar";
+import Snackbar from "@mui/material/Snackbar";
 import { styled } from "@mui/material/styles";
 import Accordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
@@ -12,6 +12,10 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import LanguageIcon from "@mui/icons-material/Language";
+import CloseIcon from "@mui/icons-material/Close";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
@@ -28,6 +32,10 @@ export default function InteractionPanel(props) {
       data: "",
       gas: "",
     };
+
+    setOpen(false);
+    setMessage("Calling method: " + method.name + "...");
+    setOpen(true);
 
     const response = await fetch("http://localhost:3001/getMethodData", {
       headers: {
@@ -52,6 +60,11 @@ export default function InteractionPanel(props) {
         method: "eth_call",
         params: [transactionObject, "latest"],
       });
+      const decoded = await web3.eth.abi.decodeParameters(
+        method.outputs.map((output) => output.type),
+        res
+      );
+      method.result = decoded[0];
       let newTransactions;
       if (contractData[url].transactions) {
         newTransactions = [
@@ -62,10 +75,7 @@ export default function InteractionPanel(props) {
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            result: web3.eth.abi.decodeParameters(
-              method.outputs.map((output) => output.type),
-              res
-            ),
+            result: decoded[0],
           },
         ];
       } else {
@@ -90,11 +100,17 @@ export default function InteractionPanel(props) {
           transactions: newTransactions,
         },
       }));
+      setTimeout(() => {
+        setOpen(false);
+        setMessage("Received response from blockchain!");
+        setOpen(true);
+      }, 1100);
     } else {
       const res = await window.ethereum.request({
         method: "eth_sendTransaction",
         params: [transactionObject],
       });
+
       let intervalId;
       intervalId = setInterval(
         async function () {
@@ -102,6 +118,9 @@ export default function InteractionPanel(props) {
             method: "eth_getTransactionReceipt",
             params: [res],
           });
+          setMessage("Got TX recepit! Waiting on confirmation...");
+          setCloseDuration(60000);
+          setOpen(true);
           if (rec) {
             //console.log("Receipt:", rec);
             const url = window.location.href.split("/").pop();
@@ -128,6 +147,10 @@ export default function InteractionPanel(props) {
               },
             }));
             clearInterval(intervalId);
+            setOpen(false);
+            setMessage("Confirmed!");
+            setCloseDuration(1000);
+            setOpen(true);
           }
         },
         1000,
@@ -161,8 +184,35 @@ export default function InteractionPanel(props) {
     },
     "& .MuiAccordionSummary-content": {
       marginLeft: "4px",
+      marginTop: "0",
+      marginBottom: "0",
     },
   }));
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [closeDuration, setCloseDuration] = useState(1000);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
 
   if (props.deployed) {
     return props.src.map((contract, index) => {
@@ -173,6 +223,9 @@ export default function InteractionPanel(props) {
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
+              sx={{
+                marginBlock: 0,
+              }}
             >
               <div
                 style={{
@@ -188,8 +241,54 @@ export default function InteractionPanel(props) {
                     "..." +
                     contract.address.slice(-5)}
                 </i>
-                {/* copy icon */}
-                <SimpleSnackbar content={contract.address}></SimpleSnackbar>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexGrow: "1",
+                  }}
+                >
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={closeDuration}
+                    onClose={handleClose}
+                    message={message}
+                    action={action}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                  />
+                  <IconButton
+                    size="small"
+                    aria-label="close"
+                    color="inherit"
+                    onClick={(e) => {
+                      setMessage("Address copied to clipboard!");
+                      setCloseDuration(1000);
+                      setOpen(true);
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(contract.address);
+                      setOpen(true);
+                    }}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    aria-label="close"
+                    color="inherit"
+                    onClick={(e) => {
+                      // navigate to rinkbey ether scan for contract address
+                      window.open(
+                        `https://rinkeby.etherscan.io/address/${contract.address}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <LanguageIcon fontSize="small" />
+                  </IconButton>
+                </div>
               </div>
             </AccordionSummary>
             <AccordionDetails>
@@ -233,7 +332,8 @@ export default function InteractionPanel(props) {
                               key={index}
                               style={{
                                 display: "flex",
-                                flexDirection: "column",
+                                flexDirection: "row",
+                                justifyContent: "flex-end",
                                 flexGrow: 1,
                               }}
                             >
@@ -246,6 +346,22 @@ export default function InteractionPanel(props) {
                             </div>
                           );
                         })}
+                      {method.result && (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            flexGrow: 1,
+                          }}
+                        >
+                          <span>
+                            <small> Result:</small>
+                            <strong>{method.result}</strong>
+                          </span>
+                        </div>
+                      )}
                     </form>
                   </div>
                 );

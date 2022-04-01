@@ -1,5 +1,4 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,9 +21,6 @@ export default function SimpleSnackbar(props) {
 
   const action = (
     <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button>
       <IconButton
         size="small"
         aria-label="close"
@@ -50,17 +46,6 @@ export default function SimpleSnackbar(props) {
       >
         <ContentCopyIcon fontSize="small" />
       </IconButton>
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        message="Address copied to clipboard"
-        action={action}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-      />
     </div>
   );
 }

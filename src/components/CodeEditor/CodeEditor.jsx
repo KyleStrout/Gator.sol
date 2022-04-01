@@ -5,6 +5,9 @@ import Editor from "@monaco-editor/react";
 // mui
 import { Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useLocation } from "react-router-dom";
 
@@ -59,6 +62,21 @@ export default function CodeEditor(props) {
   }, [location]);
 
   const editorRef = useRef(null);
+
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const { address } = React.useContext(AddressContext);
   //const [currentTheme, setCustomTheme] = React.useContext(ThemeContext);
@@ -205,6 +223,9 @@ export default function CodeEditor(props) {
   }, [props.defaultCode]);
 
   async function compile() {
+    setOpen(false);
+    setMessage("Compiling...");
+    setOpen(true);
     const response = await fetch("http://localhost:3001/compile", {
       headers: {
         "Content-Type": "application/json",
@@ -217,6 +238,11 @@ export default function CodeEditor(props) {
     const errorInfo = checkError(data);
     const url = window.location.href.split("/").pop();
     if (errorInfo?.length > 0) {
+      setTimeout(() => {
+        setOpen(false);
+        setMessage("Error compiling!");
+        setOpen(true);
+      }, 1100);
       setContractData((prevState) => ({
         ...prevState,
         [url]: {
@@ -226,6 +252,11 @@ export default function CodeEditor(props) {
       }));
       return;
     }
+    setTimeout(() => {
+      setOpen(false);
+      setMessage("Done!");
+      setOpen(true);
+    }, 1100);
 
     const output = Object.keys(data.contracts["test.sol"]).map((key) => {
       return {
@@ -259,6 +290,9 @@ export default function CodeEditor(props) {
   }
 
   async function deploy() {
+    setOpen(false);
+    setMessage("Deploying...");
+    setOpen(true);
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 
@@ -286,6 +320,9 @@ export default function CodeEditor(props) {
             method: "eth_getTransactionReceipt",
             params: [res],
           });
+          setOpen(false);
+          setMessage("Got TX receipt! Waiting for contract to be mined...");
+          setOpen(true);
           if (rec) {
             const out = compilerData.map((contract) => {
               return {
@@ -306,6 +343,9 @@ export default function CodeEditor(props) {
             ]);
 
             clearInterval(intervalId);
+            setOpen(false);
+            setMessage("Contract mined! Check the interaction panel!");
+            setOpen(true);
           }
         },
         1000,
@@ -323,6 +363,19 @@ export default function CodeEditor(props) {
       contractData[url].compilerData?.some((contract) => contract.abi)
     );
   };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <Box
@@ -377,16 +430,29 @@ export default function CodeEditor(props) {
           >
             Compile
           </Button>
+          <Snackbar
+            open={open}
+            autoHideDuration={1000}
+            onClose={handleClose}
+            message={message}
+            action={action}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          />
           {!hasArguments && (
-            <Button
-              sx={{ margin: "0 0.5rem" }}
-              color="secondary"
-              variant="contained"
-              disabled={!canDeploy()}
-              onClick={deploy}
-            >
-              Deploy
-            </Button>
+            <>
+              <Button
+                sx={{ margin: "0 0.5rem" }}
+                color="secondary"
+                variant="contained"
+                disabled={!canDeploy()}
+                onClick={deploy}
+              >
+                Deploy
+              </Button>
+            </>
           )}
           {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
           {hasArguments && (
