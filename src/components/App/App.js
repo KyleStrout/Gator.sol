@@ -8,10 +8,13 @@ import SectionPage from "../SectionPage";
 import course from "../../data/course.js";
 import { AddressProvider } from "../AddressContext";
 import { ContractProvider } from "../ContractContext";
-import { ThemeContext } from "../ThemeContext";
 import Navbar from "../Navbar";
 
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../ThemeContext";
+
 import DesktopApp from "../DesktopApp/";
+
 const AppContainer = styled(Box)(() => ({
   height: "100vh",
   width: `100%`,
@@ -24,11 +27,8 @@ function App() {
   const [contractData, setContractData] = React.useState({});
   const contractValue = { contractData, setContractData };
 
-  const [customTheme, setCustomTheme] = React.useState("light");
-  const themeValue = { customTheme, setCustomTheme };
-
   return (
-    <ThemeContext.Provider value={themeValue}>
+    <ThemeProvider theme={theme}>
       <AddressProvider value={value}>
         <ContractProvider value={contractValue}>
           <AppContainer id="app-container">
@@ -58,7 +58,7 @@ function App() {
           </AppContainer>
         </ContractProvider>
       </AddressProvider>
-    </ThemeContext.Provider>
+    </ThemeProvider>
   );
 }
 

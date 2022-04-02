@@ -13,15 +13,14 @@ import { useLocation } from "react-router-dom";
 
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
-import { ThemeContext } from "../ThemeContext";
-
+import { useTheme } from "@mui/styles";
 import { Formik, Field, Form } from "formik";
 
 import web3 from "web3";
 
 export default function CodeEditor(props) {
+  const theme = useTheme();
   const [newTransactions, setNewTransactions] = useState([]);
-  const { customTheme } = React.useContext(ThemeContext);
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
   const [hasArguments, setHasArguments] = useState(false);
@@ -79,7 +78,6 @@ export default function CodeEditor(props) {
   };
 
   const { address } = React.useContext(AddressContext);
-  //const [currentTheme, setCustomTheme] = React.useContext(ThemeContext);
 
   function handleEditorDidMount(editor) {
     editorRef.current = editor;
@@ -380,7 +378,7 @@ export default function CodeEditor(props) {
   return (
     <Box
       sx={{
-        borderBottom: customTheme.border,
+        borderBottom: theme.palette.border,
       }}
     >
       <Editor
@@ -389,7 +387,7 @@ export default function CodeEditor(props) {
         defaultLanguage="sol"
         defaultValue={props.defaultCode}
         language="sol"
-        theme={customTheme.codeEditor} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
+        theme={theme.palette.codeEditor} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
         onMount={handleEditorDidMount}
         onChange={handleEditorChange}
         onValidate={handleEditorValidation}
@@ -407,7 +405,7 @@ export default function CodeEditor(props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: customTheme.buttonsbackground,
+          backgroundColor: theme.palette.buttonsbackground,
           height: "4rem",
         }}
       >
@@ -422,10 +420,9 @@ export default function CodeEditor(props) {
           <Button
             sx={{
               margin: "0 0.5rem",
-              backgroundColor: customTheme.compileButton,
+              backgroundColor: theme.palette.compileButton,
             }}
             onClick={compile}
-            //color= {customTheme.backgroundColor}
             variant="contained"
           >
             Compile

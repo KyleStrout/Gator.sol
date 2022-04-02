@@ -1,12 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 // Material Components
 import { Drawer } from "@mui/material";
 import { styled } from "@mui/material/styles";
 // Custom Components
 import SideNavAccordion from "../SideNavAccordion";
 //Custom Theme
-import {ThemeContext, themes} from '../ThemeContext';
-
+import { useTheme } from "@mui/styles";
 const SideNavDrawer = styled(Drawer)(() => ({
   flexShrink: 0,
   "& .MuiDrawer-paper": {
@@ -18,11 +17,18 @@ const SideNavDrawer = styled(Drawer)(() => ({
 }));
 
 export default function SideNav() {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const theme = useTheme();
   return (
-    <SideNavDrawer variant="permanent" anchor="left" PaperProps={{ sx: 
-    {color:customTheme.textColor, 
-    backgroundColor: customTheme.backgroundColor}}}>
+    <SideNavDrawer
+      variant="permanent"
+      anchor="left"
+      PaperProps={{
+        sx: {
+          backgroundColor: theme.palette.backgroundColor,
+          color: theme.palette.textColor,
+        },
+      }}
+    >
       <SideNavAccordion />
     </SideNavDrawer>
   );

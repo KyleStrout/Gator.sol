@@ -7,8 +7,6 @@ import Accordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import { ThemeContext } from "../ThemeContext";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -16,15 +14,17 @@ import IconButton from "@mui/material/IconButton";
 import LanguageIcon from "@mui/icons-material/Language";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useTheme } from "@mui/styles";
+
 const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
 export default function InteractionPanel(props) {
+  const theme = useTheme();
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
 
-  const { customTheme } = useContext(ThemeContext);
   const interact = async (contractAddress, method, contractName, ...args) => {
     let transactionObject = {
       from: address,
@@ -314,7 +314,7 @@ export default function InteractionPanel(props) {
                       {typeof method.name !== "undefined" && (
                         <Button
                           sx={{
-                            backgroundColor: customTheme.compileButton,
+                            backgroundColor: theme.palette.compileButton,
                             color: "white",
                             fontSize: "1.2rem",
                             margin: "0.5rem",
