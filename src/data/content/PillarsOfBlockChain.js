@@ -13,25 +13,25 @@ Please watch the short videos for each pillar to better understand the importanc
 of each.
 
 ## Decentralization
-<iframe width="560" height="315"
+<iframe width="560" height="560"
 src="https://www.youtube.com/embed/3hnO4REnj7Q" 
 frameborder="0" 
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe>
 
+
 ## Immutability
-<iframe width="560" height="315"
+<iframe width="560" height="560"
 src="https://www.youtube.com/embed/dxh5wmD_nqA" 
 frameborder="0" 
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe>
 
+
 ## Transparency
-<iframe width="560" height="315"
+<iframe width="560" height="560"
 src="https://www.youtube.com/embed/s69y0VNSDFk" 
 frameborder="0" 
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe>
-
-
 `;
