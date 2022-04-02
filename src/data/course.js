@@ -35,6 +35,7 @@ const course = {
         {
           title: "Pillars of Blockchain",
           url: "pillars-of-blockchain",
+          contentUrl: "PillarsOfBlockChain.js",
           hasCodeEditor: false,
           defaultCode: "",
         },
