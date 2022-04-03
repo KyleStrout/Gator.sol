@@ -49,7 +49,7 @@ const Hero = (props) => {
                 </Typography>
               </span>
             }
-            subtitle="Learn, compile and deploy smart contracts with this interactive tutorial. Get started with the basics of blockchain and solidity today."
+            subtitle="Learn, compile and deploy smart contracts with this interactive course. Get started with the basics of blockchain and solidity today."
             ctaGroup={[
               <Button
                 variant="contained"

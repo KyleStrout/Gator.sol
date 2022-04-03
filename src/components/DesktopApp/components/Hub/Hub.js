@@ -76,7 +76,7 @@ const Features = (props) => {
                     </Typography>
                   </span>
                 }
-                subtitle="Our interactive tutorial will take from blockchain zero to blockchain hero."
+                subtitle="Our interactive course will take you from blockchain zero to blockchain hero."
                 align="left"
                 fadeUp
                 disableGutter
@@ -87,25 +87,26 @@ const Features = (props) => {
               <div className={classes.placementGrid}>
                 <div>
                   <CountUpNumber
-                    end={400}
-                    label="Components"
+                    end={20}
+                    label="Lessons"
                     textColor="primary"
                     suffix="+"
                   />
                 </div>
                 <div className={classes.placementGridItemMiddle}>
                   <CountUpNumber
-                    end={100}
-                    label="Satisfaction"
+                    end={5}
+                    label="Projects"
                     textColor="primary"
-                    suffix="%"
+                    suffix="+"
                   />
                 </div>
                 <div>
                   <CountUpNumber
-                    end={5.0}
-                    label="Review Score"
+                    end={100}
+                    label="Satisfaction"
                     textColor="primary"
+                    suffix="%"
                   />
                 </div>
               </div>
