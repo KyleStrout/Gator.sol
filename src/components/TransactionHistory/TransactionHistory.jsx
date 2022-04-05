@@ -10,8 +10,10 @@ import {
 } from "@mui/material";
 import * as Icons from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/styles";
 
 const TransactionHistory = (props) => {
+  const theme = useTheme();
   const [copyText, setCopyText] = useState("Copy");
   const [, setOpen] = useState(false);
 
@@ -37,11 +39,21 @@ const TransactionHistory = (props) => {
         props.history.map((item, index) => {
           const accordionTitle = `${item.contractName}.(${item.method})`
           return (
-            <Accordion key={index}>
+            <Accordion key={index}
+            sx={{
+              //color for interact pannel after/under expansion
+              backgroundColor: theme.palette.sideNavAccordion,
+              color: theme.palette.textColor,
+            }}>
               <AccordionSummary
                 expandIcon={<Icons.ExpandMore />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
+                sx={{
+                  marginBlock: 0,
+                  backgroundColor: theme.palette.sideNavAccordion,
+                  color: theme.palette.textColor,
+                }}
               >
                 <Typography component={"span"} variant="caption">
                   {accordionTitle}

@@ -24,7 +24,7 @@ export default function SideNav() {
       anchor="left"
       PaperProps={{
         sx: {
-          backgroundColor: theme.palette.backgroundColor,
+          backgroundColor: theme.palette.sideNavAccordion,
           color: theme.palette.textColor,
         },
       }}

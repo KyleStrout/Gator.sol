@@ -14,6 +14,7 @@ export const themes = {
     landingPageBigBox: "gray",
     sideNavAccordion: "white",
     border: "0.5rem solid #f0f0f0",
+    outputPanelTheme: 'rjv-default',
     alternate: {
       main: "rgb(247, 249, 250)",
       dark: "#e8eaf6",
@@ -58,6 +59,7 @@ export const themes = {
     landingPageBigBox: "white",
     sideNavAccordion: "#2E3134",
     border: "0.5rem solid #000000",
+    outputPanelTheme: 'twilight',
   },
 };
 
