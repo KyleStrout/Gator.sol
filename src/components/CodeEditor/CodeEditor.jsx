@@ -18,6 +18,8 @@ import { Formik, Field, Form } from "formik";
 
 import web3 from "web3";
 
+const URL = "178.128.155.103";
+
 export default function CodeEditor(props) {
   const theme = useTheme();
   const [newTransactions, setNewTransactions] = useState([]);
@@ -148,7 +150,7 @@ export default function CodeEditor(props) {
 
     const args = contractData[window.location.href.split("/").pop()].arguments;
 
-    const response = await fetch("http://localhost:3001/deployWithArguments", {
+    const response = await fetch(`http://${URL}:3001/deployWithArguments`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -224,7 +226,7 @@ export default function CodeEditor(props) {
     setOpen(false);
     setMessage("Compiling...");
     setOpen(true);
-    const response = await fetch("http://localhost:3001/compile", {
+    const response = await fetch(`http://${URL}:3001/compile`, {
       headers: {
         "Content-Type": "application/json",
       },
