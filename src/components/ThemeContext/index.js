@@ -74,30 +74,31 @@ export const sessionStorage =
         setItem: () => undefined,
       };
 
-const mode = sessionStorage.getItem("themeMode") || "light";
+const getTheme = (_mode) => {
+  const mode = _mode ? sessionStorage.getItem("themeMode") : "light";
 
-console.log("MODE HERE:", mode);
-const theme = responsiveFontSizes(
-  createTheme({
-    palette: mode === "light" ? themes.light : themes.dark,
-    layout: {
-      contentWidth: 1236,
-    },
-    typography: {
-      fontFamily: "Lato",
-    },
-    zIndex: {
-      appBar: 1200,
-      drawer: 1100,
-    },
-    overrides: {
-      MuiButton: {
-        containedSecondary: {
-          color: "white",
+  return responsiveFontSizes(
+    createTheme({
+      palette: mode === "light" ? themes.light : themes.dark,
+      layout: {
+        contentWidth: 1236,
+      },
+      typography: {
+        fontFamily: "Lato",
+      },
+      zIndex: {
+        appBar: 1200,
+        drawer: 1100,
+      },
+      overrides: {
+        MuiButton: {
+          containedSecondary: {
+            color: "white",
+          },
         },
       },
-    },
-  })
-);
+    })
+  );
+};
 
-export default theme;
+export default getTheme;

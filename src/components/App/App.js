@@ -11,7 +11,7 @@ import { ContractProvider } from "../ContractContext";
 import Navbar from "../Navbar";
 
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "../ThemeContext";
+import getTheme from "../ThemeContext";
 
 import DesktopApp from "../DesktopApp/";
 
@@ -27,12 +27,15 @@ function App() {
   const [contractData, setContractData] = React.useState({});
   const contractValue = { contractData, setContractData };
 
+  const [mode, setMode] = React.useState("light");
+  const theme = getTheme(mode);
+
   return (
     <ThemeProvider theme={theme}>
       <AddressProvider value={value}>
         <ContractProvider value={contractValue}>
           <AppContainer id="app-container">
-            <Navbar />
+            <Navbar setMode={setMode} />
 
             <Routes>
               <Route exact path="/" element={<DesktopApp />}></Route>

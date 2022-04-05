@@ -53,7 +53,7 @@ function SectionInteractionContent(props) {
           backgroundColor: theme.palette.backgroundColor,
         }}
       >
-        <h1>Section Interaction</h1>
+        <h1>Course Overview</h1>
       </Box>
     );
   }
