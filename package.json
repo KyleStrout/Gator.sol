@@ -17,6 +17,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "formik": "^2.2.9",
+    "highlightjs": "^9.16.2",
+    "highlightjs-solidity": "^2.0.5",
     "monaco-editor": "^0.31.1",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",

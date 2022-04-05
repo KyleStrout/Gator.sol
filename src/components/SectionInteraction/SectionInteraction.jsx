@@ -19,6 +19,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
   height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
+  fontFamily: "Lato",
 }));
 
 function SectionInteractionContent(props) {
