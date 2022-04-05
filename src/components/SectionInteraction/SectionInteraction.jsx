@@ -1,5 +1,5 @@
 // react
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // Material UI Components
 import { Box } from "@mui/material";
@@ -9,7 +9,8 @@ import { styled } from "@mui/styles";
 import CodeEditor from "../CodeEditor";
 import OutputPanel from "../OutputPanel";
 
-import { ThemeContext, themes } from "../ThemeContext";
+// Custom Theme
+import { useTheme } from "@mui/styles";
 
 const SectionInteractionContainer = styled(Box)(() => ({
   display: "flex",
@@ -18,19 +19,18 @@ const SectionInteractionContainer = styled(Box)(() => ({
   height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
-  // backgroundColor: "white",
-  // border: "0.5rem solid #f0f0f0",
 }));
 
 function SectionInteractionContent(props) {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
+  const theme = useTheme();
+
   if (props.hasCodeEditor) {
     return (
       <Box
         sx={{
           height: "100%",
           width: "100%",
-          backgroundColor: customTheme.backgroundColor,
+          backgroundColor: theme.palette.backgroundColor,
         }}
       >
         <CodeEditor defaultCode={props.defaultCode} />
@@ -38,8 +38,8 @@ function SectionInteractionContent(props) {
           sx={{
             height: "calc(50vh - 3.5rem)",
             width: "100%",
-            backgroundColor: customTheme.backgroundColor,
-            borderBottom: customTheme.backgroundColor,
+            backgroundColor: theme.palette.backgroundColor,
+            borderBottom: theme.palette.backgroundColor,
           }}
         >
           <OutputPanel></OutputPanel>
@@ -50,7 +50,7 @@ function SectionInteractionContent(props) {
     return (
       <Box
         sx={{
-          backgroundColor: customTheme.backgroundColor,
+          backgroundColor: theme.palette.backgroundColor,
         }}
       >
         <h1>Section Interaction</h1>
@@ -60,19 +60,19 @@ function SectionInteractionContent(props) {
 }
 
 export default function SectionInteraction(props) {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
+  const theme = useTheme();
   return (
     <SectionInteractionContainer
       id="section-interaction-conatainer"
       sx={{
-        backgroundColor: customTheme.backgroundColor,
-        border: customTheme.border,
+        backgroundColor: theme.palette.backgroundColor,
+        border: theme.palette.border,
       }}
     >
       <SectionInteractionContent
         id="section-interaction-content"
         sx={{
-          backgroundColor: customTheme.backgroundColor,
+          backgroundColor: theme.palette.backgroundColor,
         }}
         hasCodeEditor={props.hasCodeEditor}
         defaultCode={props.defaultCode}

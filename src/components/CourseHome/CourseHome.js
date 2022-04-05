@@ -1,12 +1,13 @@
 // React Components
 import { Outlet } from "react-router-dom";
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 // Material Components
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 // Custom Components
 import SideNav from "../SideNav";
-import {ThemeContext, themes} from '../ThemeContext';
+// Theme
+import { useTheme } from "@mui/styles";
 
 const CourseHomeContainer = styled(Box)(() => ({
   display: "flex",
@@ -23,14 +24,16 @@ const ContentContainer = styled(Box)(() => ({
 }));
 
 export default function CourseHome() {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const theme = useTheme();
   return (
-    <CourseHomeContainer id="course-home-container" >
+    <CourseHomeContainer id="course-home-container">
       <SideNav id="side-nav"></SideNav>
-      <ContentContainer id="content-container"
-                sx={{
-                  backgroundColor: customTheme.backgroundColor
-                }}>
+      <ContentContainer
+        id="content-container"
+        sx={{
+          backgroundColor: theme.palette.backgroundColor,
+        }}
+      >
         <Outlet></Outlet>
       </ContentContainer>
     </CourseHomeContainer>

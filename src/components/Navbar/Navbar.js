@@ -6,26 +6,27 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch.js";
 import AddressContext from "../AddressContext";
-import { ThemeContext, themes } from "../ThemeContext";
 
 import OnboardingButton from "../Metamask";
 
+import { useTheme } from "@mui/styles";
+
+import { sessionStorage } from "../ThemeContext/index.js";
 export default function Navbar() {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext);
+  const theme = useTheme();
   const [checked, setChecked] = React.useState(false);
   let navigate = useNavigate();
 
-  const { address, setAddress } = React.useContext(AddressContext);
+  const { setAddress } = React.useContext(AddressContext);
 
   React.useEffect(() => {
-    const mode = checked ? themes.dark : themes.light;
-    setCustomTheme(mode);
-    console.log(customTheme);
+    sessionStorage.setItem("themeMode", checked ? "dark" : "light");
   }, [checked]);
 
   function handleSwitchChange(event) {
     setChecked(event.target.checked);
   }
+
   const connectToWallet = async () => {
     if (
       typeof window !== "undefined" &&
@@ -56,29 +57,6 @@ export default function Navbar() {
     }
   };
 
-  const WalletConnect = () => {
-    if (address) {
-      return (
-        <Typography variant="h6" color="inherit">
-          {address}
-        </Typography>
-      );
-    } else {
-      return (
-        <Button
-          sx={{
-            color: customTheme.textColor,
-          }}
-          onClick={() => {
-            connectToWallet();
-          }}
-        >
-          Connect to Wallet
-        </Button>
-      );
-    }
-  };
-
   React.useEffect(() => {
     connectToWallet();
   });
@@ -86,18 +64,18 @@ export default function Navbar() {
   return (
     <AppBar
       position="sticky"
-      sx={{ height: "4rem", backgroundColor: customTheme.topBar }}
+      sx={{ height: "4rem", backgroundColor: theme.palette.topBar }}
     >
       <Toolbar>
         <Typography
-          color={customTheme.textColor}
+          color={theme.palette.textColor}
           variant="h6"
           component="div"
           sx={{ flexGrow: 1 }}
         >
           <Button
             sx={{
-              color: customTheme.textColor,
+              color: theme.palette.textColor,
             }}
             onClick={() => {
               navigate("/home");
@@ -112,7 +90,6 @@ export default function Navbar() {
           onChange={handleSwitchChange}
           inputProps={{ "aria-label": "controlled" }}
         />
-        <WalletConnect />
         <OnboardingButton />
       </Toolbar>
     </AppBar>

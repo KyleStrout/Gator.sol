@@ -8,7 +8,9 @@ import ReactJson from "react-json-view";
 import TransactionHistory from "../TransactionHistory";
 import InteractionPanel from "../InteractionPanel";
 import ContractContext from "../ContractContext";
-import {ThemeContext, themes} from '../ThemeContext';
+
+// theme
+import { useTheme } from "@mui/styles";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -40,11 +42,11 @@ function a11yProps(index) {
 }
 
 export default function OutputPanel(props) {
-  const { customTheme, setCustomTheme } = React.useContext(ThemeContext)
+  const theme = useTheme();
+
   const { contractData } = React.useContext(ContractContext);
   const [compilerData, setCompilerData] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
-  
 
   React.useEffect(() => {
     //console.log("contractData", contractData);
@@ -54,27 +56,25 @@ export default function OutputPanel(props) {
     if (section) {
       setCompilerData(section.compilerData);
       setTransactions(section.transactions);
-    }
-    else {
+    } else {
       setCompilerData([]);
       setTransactions([]);
     }
   }, [contractData]);
 
-  const location = useLocation()
+  const location = useLocation();
 
   React.useEffect(() => {
-      const url = location.pathname.split("/").pop();
-      const section = contractData[url];
-      if (section) {
-        setCompilerData(section.compilerData);
-        setTransactions(section.transactions);
-      }
-      else {
-        setCompilerData([]);
-        setTransactions([]);
-      }
-  },[location])
+    const url = location.pathname.split("/").pop();
+    const section = contractData[url];
+    if (section) {
+      setCompilerData(section.compilerData);
+      setTransactions(section.transactions);
+    } else {
+      setCompilerData([]);
+      setTransactions([]);
+    }
+  }, [location]);
 
   const [value, setValue] = React.useState(0);
 
@@ -85,8 +85,8 @@ export default function OutputPanel(props) {
   return (
     <Box
       sx={{
-        color: customTheme.textColor,
-        border: customTheme.border,
+        color: theme.palette.textColor,
+        border: theme.palette.border,
         width: "100%",
         maxWidth: "40vw",
         overflow: "overlay",
@@ -95,13 +95,13 @@ export default function OutputPanel(props) {
     >
       <Box
         sx={{
-          color: customTheme.textColor,
+          color: theme.palette.textColor,
           position: "sticky",
           top: "0",
           left: "0",
           borderBottom: 1,
           width: "100%",
-          backgroundColor: customTheme.backgroundColor,
+          backgroundColor: theme.palette.backgroundColor,
           zIndex: "1",
           borderColor: "divider",
         }}
@@ -110,7 +110,6 @@ export default function OutputPanel(props) {
           value={value}
           onChange={handleChange}
           aria-label="output panel"
-          textColor= {customTheme.textColor}
           sx={{
             position: "sticky",
             top: 0,
@@ -121,7 +120,7 @@ export default function OutputPanel(props) {
           <Tab label="History" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <TabPanel  value={value} index={0}>
+      <TabPanel value={value} index={0}>
         <ReactJson src={compilerData}></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
