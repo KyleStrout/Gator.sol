@@ -12,39 +12,47 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/compile", (req, res, next) => {
-  const content = req.body.value;
+  try {
+    const content = req.body.value;
 
-  const input = {
-    language: "Solidity",
-    sources: {
-      "test.sol": {
-        content: content,
-      },
-    },
-    settings: {
-      outputSelection: {
-        "*": {
-          "*": ["*"],
+    const input = {
+      language: "Solidity",
+      sources: {
+        "test.sol": {
+          content: content,
         },
       },
-    },
-  };
+      settings: {
+        outputSelection: {
+          "*": {
+            "*": ["*"],
+          },
+        },
+      },
+    };
 
-  const output = JSON.parse(solc.compile(JSON.stringify(input)));
-  res.send(output);
+    const output = JSON.parse(solc.compile(JSON.stringify(input)));
+    res.send(output);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 app.post("/getMethodData", (req, res) => {
-  const method = req.body.method;
-  const inputs = req.body.inputs;
-  console.log("inputs: ", inputs);
-  console.log(method, inputs);
+  try {
+    const method = req.body.method;
+    const inputs = req.body.inputs;
+    console.log("inputs: ", inputs);
+    console.log(method, inputs);
 
-  const encodedFunc = web3.eth.abi.encodeFunctionCall(method, inputs);
+    const encodedFunc = web3.eth.abi.encodeFunctionCall(method, inputs);
 
-  console.log("encoded function: ", encodedFunc);
+    console.log("encoded function: ", encodedFunc);
 
-  res.send({ encodedFunc });
+    res.send({ encodedFunc });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 app.post("/deployWithArguments", async (req, res) => {
@@ -96,7 +104,6 @@ app.post("/deployWithArguments", async (req, res) => {
         }
       }
 
-      // TODO: Type current args if needed
       const contract = new web3.eth.Contract(abi);
       const encodedAbi = contract
         .deploy({
@@ -108,22 +115,8 @@ app.post("/deployWithArguments", async (req, res) => {
       encodedAbis.push(encodedAbi);
     }
     res.send(encodedAbis);
-
-    // const currentArgValues = argValues[i];
-    // console.log("currentArgValues", currentArgValues);
-    // const typedArgs = Object.values(currentArgs).map((arg) => {
-    //   // console.log(arg);
-    // });
-
-    // const abi = req.body.abi;
-    // const bytecode = req.body.bytecode;
-    // const args = req.body.args;
-    // var contract = new eth.Contract(abi);
-    // const transactionObject = contract.deploy(bytecode, args);
-    // const encodedAbi = await transactionObject.encodeABI();
-    // req.send({ encodedAbi });
   } catch (e) {
-    console.log(e);
+    res.status(500).send(e);
   }
 });
 
