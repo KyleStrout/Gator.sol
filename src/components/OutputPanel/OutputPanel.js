@@ -121,7 +121,10 @@ export default function OutputPanel(props) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ReactJson src={compilerData}></ReactJson>
+        <ReactJson 
+        src={compilerData} theme = {theme.palette.outputPanelTheme}>
+ 
+        </ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <InteractionPanel

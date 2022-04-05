@@ -14,6 +14,7 @@ export const themes = {
     landingPageBigBox: "gray",
     sideNavAccordion: "white",
     border: "0.5rem solid #f0f0f0",
+    outputPanelTheme: 'rjv-default',
     alternate: {
       main: "rgb(247, 249, 250)",
       dark: "#e8eaf6",
@@ -47,17 +48,18 @@ export const themes = {
   },
   dark: {
     codeEditor: "vs-dark",
-    backgroundColor: "gray",
-    backgroundColorSecondary: "black",
-    textColor: "white",
-    fontColor: "white",
-    topBar: "#003366",
+    backgroundColor: "#202124",
+    backgroundColorSecondary: "#2E3134",
+    textColor: "#F8F9FA",
+    fontColor: "#F8F9FA",
+    topBar: "#OE1013",
     compileButton: "#5d3264",
     deployButton: "black",
     buttonsbackground: "gray",
     landingPageBigBox: "white",
-    sideNavAccordion: "gray",
+    sideNavAccordion: "#2E3134",
     border: "0.5rem solid #000000",
+    outputPanelTheme: 'twilight',
   },
 };
 

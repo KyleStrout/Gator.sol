@@ -31,7 +31,7 @@ export default function CourseHome() {
       <ContentContainer
         id="content-container"
         sx={{
-          backgroundColor: theme.palette.backgroundColor,
+          backgroundColor: 'white',
         }}
       >
         <Outlet></Outlet>
