@@ -9,6 +9,14 @@ In order to interact with the blockchain, you need to have a wallet. So let's ge
 
 **Come back to this page after completing the onboarding process!**
 
+### Tutorial Video
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/s1kFOInRz5s" 
+frameborder="0" 
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
 <button id="install-metamask">Install Metamask</button>
 
 #### Connecting your wallet to this website
@@ -22,7 +30,7 @@ If you don't see it open, please check your extensions tab for the metamask exte
 
 #### Getting test ether.
 
-First, switch your network to the Rinkeby test network in your metamask extension.
+First, switch your network to the Rinkeby test network in your metamask extension. To do this, you will have to toggle the "Show test networks" option.
 
 Then, click the "Get Test Ether" button below.
 
