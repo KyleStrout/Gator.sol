@@ -123,7 +123,6 @@ export default function OutputPanel(props) {
       <TabPanel value={value} index={0}>
         <ReactJson 
         src={compilerData} theme = {theme.palette.outputPanelTheme}>
- 
         </ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>

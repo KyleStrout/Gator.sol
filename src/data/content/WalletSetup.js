@@ -11,33 +11,39 @@ In order to interact with the blockchain, you need to have a wallet. So let's ge
 
 ### Tutorial Video
 
+<div style= "height: 450px">
 <iframe width="560" height="315"
 src="https://www.youtube.com/embed/s1kFOInRz5s" 
 frameborder="0" 
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe>
+</div>
+
+
+## 1. Install MetaMask Extension and Create A MetaMask account
 
 <button id="install-metamask">Install Metamask</button>
 
-#### Connecting your wallet to this website
+## 2. Connect your wallet to the website
 
-Congrats! You now have a  wallet. You can now connect it to this website.
-
-Click the "connect" button in the navbar to connect your wallet to this website. The metamask extension will open and ask for your signature. 
+Refresh the page. Click the "connect" button in the navbar to connect your wallet to this website. The metamask extension will open and ask for your signature. 
 
 If you don't see the connect button, please make sure metamask is installed in your browser and refresh the page.
 If you don't see it open, please check your extensions tab for the metamask extension to see if there is a pending request. 
 
-#### Getting test ether.
+## 3. Switch MetaMask Networks
 
-First, switch your network to the Rinkeby test network in your metamask extension. To do this, you will have to toggle the "Show test networks" option.
+With your MetaMask Extension opened, Click the drop down on top of the window, next to your profile icon. The drop down should say "Ethereum Mainnet" by default.
+After clicking the drop down click "Show/hide test networks". This will bring you to an option to show test networks, you must turn this ON. After you turn this on
+you can click the dropdown at the top of the MetaMask App again and select the Rinkeby Test Network.
 
-Then, click the "Get Test Ether" button below.
 
-<button id="get-test-ether">Get Test Ether</button>
-** THIS DOESN'T WORK YET **
+## 4. Get test ETH to run smart contracts
+Navigate to a Rinkeby Faucedt, Ex: https://rinkebyfaucet.com/
 
-Finally, you should see a transaction in your metamask extension adding 0.5 ETH in a moment. This should be enough ether to complete the course.
+You then copy your wallet address by opening MetaMask and clicking the copy icon directly above the amount of ETH you have and below the account name. 
+
+You should see a transaction in your metamask extension adding 0.1 ETH in a moment. This should be enough ether to complete the course.
 
 #### Verifying that you are connected to the blockchain
 
