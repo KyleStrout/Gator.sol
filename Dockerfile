@@ -5,4 +5,5 @@ COPY package-lock.json ./
 COPY ./ ./
 RUN npm ci
 
+
 CMD npm run server
