@@ -76,10 +76,10 @@ const course = {
         {
           title: "Hello World",
           url: "solidity-basic",
-          contentUrl: "SolidityBasic.js",
+          contentUrl: "HelloWorld.js",
           hasCodeEditor: true,
           defaultCode:
-            'pragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring public greet = "Hello World!";\n}\n\n\n',
+            '// SPDX-License-Identifier: GPL-3.0\n\npragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring greeting = "Hello World!";\n\n\tfunction setGreeting(string memory greet) public {\n\t\tgreeting = greet;\n\t}\n\n\tfunction getGreeting() public view returns (string memory){\n\t\treturn greeting;\n\t}\n}',
         },
         {
           title: "...and more",

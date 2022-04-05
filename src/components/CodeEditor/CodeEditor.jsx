@@ -344,7 +344,7 @@ export default function CodeEditor(props) {
         options={{
           minimap: { enabled: false },
           scrollBeyondLastLine: false,
-          lineNumbers: "off",
+          lineNumbers: "on",
         }}
       />
       {/* This button is like run/compile and will send value to remix api*/}
