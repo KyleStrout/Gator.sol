@@ -12,7 +12,7 @@ import OnboardingButton from "../Metamask";
 import { useTheme } from "@mui/styles";
 
 import { sessionStorage } from "../ThemeContext/index.js";
-export default function Navbar() {
+export default function Navbar(props) {
   const theme = useTheme();
   const [checked, setChecked] = React.useState(false);
   let navigate = useNavigate();
@@ -20,7 +20,10 @@ export default function Navbar() {
   const { setAddress } = React.useContext(AddressContext);
 
   React.useEffect(() => {
+    console.log("setting new theme");
     sessionStorage.setItem("themeMode", checked ? "dark" : "light");
+    props.setMode(checked ? "dark" : "light");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked]);
 
   function handleSwitchChange(event) {

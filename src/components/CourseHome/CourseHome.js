@@ -26,7 +26,10 @@ const ContentContainer = styled(Box)(() => ({
 export default function CourseHome() {
   const theme = useTheme();
   return (
-    <CourseHomeContainer id="course-home-container">
+    <CourseHomeContainer
+      id="course-home-container"
+      style={{ backgroundColor: theme.palette.sideNavAccordion }}
+    >
       <SideNav id="side-nav"></SideNav>
       <ContentContainer
         id="content-container"

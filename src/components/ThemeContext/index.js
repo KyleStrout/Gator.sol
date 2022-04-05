@@ -8,7 +8,7 @@ export const themes = {
     textColor: "black",
     fontColor: "black",
     topBar: "#1976d2",
-    compileButton: "#9c27b0",
+    compileButton: "#0000FF",
     deployButton: "#A4A4A4",
     buttonsbackground: "white",
     landingPageBigBox: "gray",
@@ -47,16 +47,16 @@ export const themes = {
   },
   dark: {
     codeEditor: "vs-dark",
-    backgroundColor: "gray",
-    backgroundColorSecondary: "black",
-    textColor: "white",
-    fontColor: "white",
-    topBar: "#003366",
+    backgroundColor: "#202124",
+    backgroundColorSecondary: "#2E3134",
+    textColor: "#F8F9FA",
+    fontColor: "#F8F9FA",
+    topBar: "#OE1013",
     compileButton: "#5d3264",
     deployButton: "black",
     buttonsbackground: "gray",
     landingPageBigBox: "white",
-    sideNavAccordion: "gray",
+    sideNavAccordion: "#2E3134",
     border: "0.5rem solid #000000",
   },
 };
@@ -74,30 +74,35 @@ export const sessionStorage =
         setItem: () => undefined,
       };
 
-const mode = sessionStorage.getItem("themeMode") || "light";
+const getTheme = (_mode) => {
+  const mode = _mode
+    ? _mode
+    : sessionStorage.getItem("themeMode")
+    ? sessionStorage.getItem("themeMode")
+    : "light";
 
-console.log("MODE HERE:", mode);
-const theme = responsiveFontSizes(
-  createTheme({
-    palette: mode === "light" ? themes.light : themes.dark,
-    layout: {
-      contentWidth: 1236,
-    },
-    typography: {
-      fontFamily: "Lato",
-    },
-    zIndex: {
-      appBar: 1200,
-      drawer: 1100,
-    },
-    overrides: {
-      MuiButton: {
-        containedSecondary: {
-          color: "white",
+  return responsiveFontSizes(
+    createTheme({
+      palette: mode === "light" ? themes.light : themes.dark,
+      layout: {
+        contentWidth: 1236,
+      },
+      typography: {
+        fontFamily: "Lato",
+      },
+      zIndex: {
+        appBar: 1200,
+        drawer: 1100,
+      },
+      overrides: {
+        MuiButton: {
+          containedSecondary: {
+            color: "white",
+          },
         },
       },
-    },
-  })
-);
+    })
+  );
+};
 
-export default theme;
+export default getTheme;

@@ -6173,6 +6173,16 @@
   "resolved" "https://registry.npmjs.org/he/-/he-1.2.0.tgz"
   "version" "1.2.0"
 
+"highlightjs-solidity@^2.0.5":
+  "integrity" "sha512-ReXxQSGQkODMUgHcWzVSnfDCDrL2HshOYgw3OlIYmfHeRzUPkfJTUIp95pK4CmbiNG2eMTOmNLpfCz9Zq7Cwmg=="
+  "resolved" "https://registry.npmjs.org/highlightjs-solidity/-/highlightjs-solidity-2.0.5.tgz"
+  "version" "2.0.5"
+
+"highlightjs@^9.16.2":
+  "integrity" "sha512-FK1vmMj8BbEipEy8DLIvp71t5UsC7n2D6En/UfM/91PCwmOpj6f2iu0Y0coRC62KSRHHC+dquM2xMULV/X7NFg=="
+  "resolved" "https://registry.npmjs.org/highlightjs/-/highlightjs-9.16.2.tgz"
+  "version" "9.16.2"
+
 "history@^5.2.0":
   "integrity" "sha512-uPSF6lAJb3nSePJ43hN3eKj1dTWpN9gMod0ZssbFTIsen+WehTmEadgL+kg78xLJFdRfrrC//SavDzmRVdE+Ig=="
   "resolved" "https://registry.npmjs.org/history/-/history-5.2.0.tgz"

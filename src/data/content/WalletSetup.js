@@ -11,11 +11,13 @@ In order to interact with the blockchain, you need to have a wallet. So let's ge
 
 ### Tutorial Video
 
+<div style="height: 450px">
 <iframe width="560" height="315"
 src="https://www.youtube.com/embed/s1kFOInRz5s" 
 frameborder="0" 
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe>
+</div>
 
 <button id="install-metamask">Install Metamask</button>
 

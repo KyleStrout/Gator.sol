@@ -1,6 +1,11 @@
 const webpack = require("webpack");
 
 module.exports = function override(config) {
+  var hljs = require("highlightjs");
+  var hljsDefineSolidity = require("highlightjs-solidity");
+
+  hljsDefineSolidity(hljs);
+  hljs.initHighlightingOnLoad();
   const fallback = config.resolve.fallback || {};
   config.ignoreWarnings = [/Failed to parse source map/];
   Object.assign(fallback, {

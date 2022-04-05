@@ -23,6 +23,7 @@ const ContentContainer = styled(Box)(() => ({
   padding: "0 .5rem",
   border: "0.5rem solid #f0f0f0",
   borderRight: "0",
+  fontFamily: "Lato",
 }));
 
 export default function SectionContent(props) {

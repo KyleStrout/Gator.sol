@@ -19,6 +19,7 @@ const SectionInteractionContainer = styled(Box)(() => ({
   height: "calc(100vh - 5rem)",
   justifyContent: "flex-start",
   alignItems: "flex-start",
+  fontFamily: "Lato",
 }));
 
 function SectionInteractionContent(props) {
@@ -53,7 +54,7 @@ function SectionInteractionContent(props) {
           backgroundColor: theme.palette.backgroundColor,
         }}
       >
-        <h1>Section Interaction</h1>
+        <h1>Course Overview</h1>
       </Box>
     );
   }
