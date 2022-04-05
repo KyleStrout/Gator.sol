@@ -10,7 +10,10 @@ const useStyles = makeStyles((theme) => ({
   image: {
     boxShadow:
       "25px 60px 125px -25px rgba(80,102,144,.1), 16px 40px 75px -40px rgba(0,0,0,.2)",
-    borderRadius: "4px",
+    borderRadius: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 500,
+    },
   },
 }));
 
@@ -21,7 +24,6 @@ const Hero = (props) => {
 
   const theme = useTheme();
 
-
   return (
     <div className={className} {...rest}>
       <Grid
@@ -29,7 +31,7 @@ const Hero = (props) => {
         justify="space-between"
         spacing={4}
         direction="row"
-        //{isMd ? "row" : "column-reverse"} 
+        //{isMd ? "row" : "column-reverse"}
       >
         <Grid
           item

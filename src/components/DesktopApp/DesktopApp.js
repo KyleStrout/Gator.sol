@@ -9,10 +9,13 @@ import { support } from "./data";
 
 const useStyles = makeStyles((theme) => ({
   pagePaddingTop: {
-    paddingTop: 16,
+    paddingTop: 3,
+    [theme.breakpoints.up("md")]: {
+      paddingTop: theme.spacing(5),
+    },
   },
   sectionNoPaddingTop: {
-    paddingTop: 16,
+    paddingTop: 0,
   },
   shape: {
     background: "rgb(247, 249, 250)",
@@ -26,10 +29,12 @@ const DesktopApp = () => {
 
   return (
     <div>
-      <div className={classes.shape}
-             sx={{
-              background: 'rgb(139 139 139)',
-            }}>
+      <div
+        className={classes.shape}
+        sx={{
+          background: "rgb(139 139 139)",
+        }}
+      >
         <Section className={classes.pagePaddingTop}>
           <Hero />
         </Section>

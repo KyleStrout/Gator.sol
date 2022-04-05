@@ -16,16 +16,17 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   placementGridItemMiddle: {
-    margin: `0 ${24}px`,
+    margin: `0 ${theme.spacing(3)}px`,
   },
   coverImage: {
     boxShadow:
       "25px 60px 125px -25px rgba(80,102,144,.1), 16px 40px 75px -40px rgba(0,0,0,.2)",
-    borderRadius: 16,
-    maxWidth: 500,
+    borderRadius: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 500,
+    },
   },
 }));
-
 const Features = (props) => {
   const { className, ...rest } = props;
   const classes = useStyles();
