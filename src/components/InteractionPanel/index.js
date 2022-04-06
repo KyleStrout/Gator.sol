@@ -16,7 +16,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useTheme } from "@mui/styles";
 
-
 const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
@@ -220,13 +219,14 @@ export default function InteractionPanel(props) {
     return props.src.map((contract, index) => {
       return (
         <div key={index}>
-          <Accordion 
-          sx={{
-            //color for interact pannel after/under expansion
-            backgroundColor: theme.palette.sideNavAccordion,
-            color: theme.palette.textColor,
-          }}
-          defaultExpanded={true} square
+          <Accordion
+            sx={{
+              //color for interact pannel after/under expansion
+              backgroundColor: theme.palette.sideNavAccordion,
+              color: theme.palette.textColor,
+            }}
+            defaultExpanded={true}
+            square
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -327,9 +327,11 @@ export default function InteractionPanel(props) {
                           sx={{
                             backgroundColor: theme.palette.compileButton,
                             color: "white",
-                            fontSize: "1.2rem",
                             margin: "0.5rem",
+                            textTransform: "none",
+                            fontSize: "1rem",
                           }}
+                          size="medium"
                           type="submit"
                           variant="contained"
                         >
@@ -351,8 +353,19 @@ export default function InteractionPanel(props) {
                               <TextField
                                 name={`${input.name}-${input.type}`}
                                 id="filled-basic"
-                                label={input.name + ": " + input.type}
+                                label={
+                                  <span
+                                    style={{
+                                      color: theme.palette.outputPanelText,
+                                    }}
+                                  >
+                                    {input.name + ": " + input.type}
+                                  </span>
+                                }
+                                //label={input.name + ": " + input.type}
                                 variant="filled"
+                                size="small"
+                                sx={{ paddingTop: ".2rem" }}
                               />
                             </div>
                           );

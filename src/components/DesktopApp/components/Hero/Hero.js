@@ -46,7 +46,7 @@ const Hero = (props) => {
               <span>
                 Learn Blockchain and Solidity
                 <br />
-                <Typography component="span" variant="inherit" color="primary">
+                <Typography component="span" variant="inherit" color="#1976D2">
                   the right way.
                 </Typography>
               </span>
@@ -55,7 +55,7 @@ const Hero = (props) => {
             ctaGroup={[
               <Button
                 variant="contained"
-                color="primary"
+                style={{ backgroundColor: "#1976D2" }}
                 size="large"
                 onClick={() => {
                   navigate("/course/course-introduction/course-overview");
@@ -65,7 +65,7 @@ const Hero = (props) => {
               </Button>,
               <Button
                 variant="outlined"
-                color="primary"
+                style={{ color: "#1976D2", outlineColor: "#1976D2" }}
                 size="large"
                 onClick={() => {
                   navigate("/about");

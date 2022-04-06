@@ -87,7 +87,7 @@ const SectionHeader = (props) => {
         <Grid item xs={12} className="section-header__label-wrapper">
           <Typography
             variant="overline"
-            color="primary"
+            color="#1976D2"
             component="p"
             align={align || "center"}
             {...labelProps}
@@ -222,12 +222,7 @@ SectionHeader.propTypes = {
   /**
    * SubTitle color
    */
-  subtitleColor: PropTypes.oneOf([
-    "textPrimary",
-    "textSecondary",
-    "primary",
-    "secondary",
-  ]),
+  subtitleColor: PropTypes.string,
   /**
    * Additional properties to pass to the label Typography component
    */

@@ -16,3 +16,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+[data-color-scheme="dark"] {
+  color-scheme: dark;
+}
+
+[data-color-scheme="light"] {
+  color-scheme: light;
+}

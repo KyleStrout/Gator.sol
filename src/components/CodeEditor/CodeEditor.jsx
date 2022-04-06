@@ -407,7 +407,7 @@ export default function CodeEditor(props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: theme.palette.buttonsbackground,
+          backgroundColor: theme.palette.backgroundColor,
           height: "4rem",
         }}
       >
@@ -443,8 +443,7 @@ export default function CodeEditor(props) {
           {!hasArguments && (
             <>
               <Button
-                sx={{ margin: "0 0.5rem" }}
-                color="secondary"
+                sx={{ margin: "0 0.5rem", backgroundColor: theme.palette.deployButton }}
                 variant="contained"
                 disabled={!canDeploy()}
                 onClick={deploy}

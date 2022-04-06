@@ -115,15 +115,37 @@ export default function OutputPanel(props) {
             top: 0,
           }}
         >
-          <Tab label="Output " {...a11yProps(0)} />
-          <Tab label="Interact" {...a11yProps(1)} />
-          <Tab label="History" {...a11yProps(2)} />
+          <Tab
+            label={
+              <span style={{ color: theme.palette.outputPanelText }}>
+                Output
+              </span>
+            }
+            {...a11yProps(0)}
+          />
+          <Tab
+            label={
+              <span style={{ color: theme.palette.outputPanelText }}>
+                Interact
+              </span>
+            }
+            {...a11yProps(1)}
+          />
+          <Tab
+            label={
+              <span style={{ color: theme.palette.outputPanelText }}>
+                History
+              </span>
+            }
+            {...a11yProps(2)}
+          />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ReactJson 
-        src={compilerData} theme = {theme.palette.outputPanelTheme}>
-        </ReactJson>
+        <ReactJson
+          src={compilerData}
+          theme={theme.palette.outputPanelTheme}
+        ></ReactJson>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <InteractionPanel

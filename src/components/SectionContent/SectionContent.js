@@ -7,18 +7,21 @@ import { styled } from "@mui/material/styles";
 // Third Party Imports
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import Prism from "prismjs";
+import "./prism.css";
+import rehypePrism from "@mapbox/rehype-prism";
 
 // Theme
 import { useTheme } from "@mui/styles";
 
 const ContentContainer = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "column",
+  //display: "flex",
+  //flexDirection: "column",
   width: "100%",
   height: "calc(100vh - 5rem)",
-  justifyContent: "flex-start",
-  alignItems: "flex-start",
-  overflow: "overlay",
+  //justifyContent: "flex-start",
+  //alignItems: "flex-start",
+  overflow: "scroll",
   backgroundColor: "white",
   padding: "0 .5rem",
   border: "0.5rem solid #f0f0f0",
@@ -55,7 +58,7 @@ export default function SectionContent(props) {
       }}
     >
       <ReactMarkdown
-        rehypePlugins={[rehypeRaw]}
+        rehypePlugins={[rehypeRaw, rehypePrism]}
         id="markdown"
         children={content}
       />
