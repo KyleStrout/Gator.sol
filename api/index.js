@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/compile", (req, res, next) => {
+app.post("/api/compile", (req, res, next) => {
   try {
     const content = req.body.value;
 
@@ -38,7 +38,7 @@ app.post("/compile", (req, res, next) => {
   }
 });
 
-app.post("/getMethodData", (req, res) => {
+app.post("/api/getMethodData", (req, res) => {
   try {
     const method = req.body.method;
     const inputs = req.body.inputs;
@@ -55,7 +55,7 @@ app.post("/getMethodData", (req, res) => {
   }
 });
 
-app.post("/deployWithArguments", async (req, res) => {
+app.post("/api/deployWithArguments", async (req, res) => {
   try {
     //console.log(req.body.compilerData);
     //console.log(JSON.stringify(req.body.args, "", 4));
@@ -123,5 +123,7 @@ app.post("/deployWithArguments", async (req, res) => {
 app.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
+
+module.exports = app;
 
 // get value from codeeditor and send it to the server
