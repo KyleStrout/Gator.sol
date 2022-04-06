@@ -87,7 +87,7 @@ const course = {
           contentUrl: "PrimitiveDataTypes.js",
           hasCodeEditor: true,
           defaultCode:
-            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract DataTypes {\n    // List of some primitive data types\n    string public myString = "Hello World!";\n    bytes32 public myBytes32 = "Hello World!";\n    int public signedInteger = -1;\n    uint public unsignedInteger = 1;\n    uint8 public unsignedInteger8 = 1;\n    bool public myBool = true;\n    address public myAdress = 0x26Dc8a529E05ea3cDb1d77079959F28Cd3342A09;\n}',
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract DataTypes {\n    // Integer data types\n    int public signedInteger = -1;\n    uint public unsignedInteger = 1;\n    uint8 public unsignedInteger8 = 1;\n\n    // Bool and address data types\n    bool public myBool = true;\n    address public myAddress = 0x26Dc8a529E05ea3cDb1d77079959F28Cd3342A09;\n\n    // Fixed size bytes and string data types\n    bytes32 public myBytes32 = "Hello World!";\n    string public myString = "Hello World!";\n    \n}',
         },
         {
           title: "Variables",

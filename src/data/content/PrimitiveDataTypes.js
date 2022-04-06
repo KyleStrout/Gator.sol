@@ -32,7 +32,7 @@ Holds a 20 byte value which is the size of an ethereum address. Must always be p
 
 ### bytes1 to bytes32
 
-These value types hold a sequence of bytes from one up to 32 bytes. They are fixed size so they are passed by value and not by reference.
+These value types hold a sequence of bytes from one up to 32 bytes. They are a fixed size so they are passed by value and not by reference.
 
 ### string
 
