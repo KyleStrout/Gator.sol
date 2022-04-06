@@ -79,8 +79,30 @@ const course = {
           url: "solidity-basic",
           contentUrl: "HelloWorld.js",
           hasCodeEditor: true,
+          defaultCode: "",
+        },
+        {
+          title: "Primitive Data Types",
+          url: "primitive-data-types",
+          contentUrl: "PrimitiveDataTypes.js",
+          hasCodeEditor: true,
           defaultCode:
-            '// SPDX-License-Identifier: GPL-3.0\n\npragma solidity ^0.8.10;\n\ncontract HelloWorld {\n\tstring greeting = "Hello World!";\n\n\tfunction setGreeting(string memory greet) public {\n\t\tgreeting = greet;\n\t}\n\n\tfunction getGreeting() public view returns (string memory){\n\t\treturn greeting;\n\t}\n}',
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract DataTypes {\n    // List of primitive data type examples\n    string public myString = "Hello World!";\n    bytes32 public myBytes32 = "HelloWorld!";\n    int public signedInteger = -1;\n    uint public unsignedInteger = 1;\n    uint8 public unsignedInteger8 = 1;\n    bool public myBool = true;\n    address public myAdress = 0x26Dc8a529E05ea3cDb1d77079959F28Cd3342A09;\n}',
+        },
+        {
+          title: "Variables",
+          url: "variables",
+          contentUrl: "Variables.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Variables {\n    // State variables\n    uint stateNum = 10;\n    // Public state variables automatically come with a getter function\n    // This can be seen in the interact panel\n    string public myString = "State variable";\n\n    function getLocalVariable() public view returns(uint) {\n        // Local variables\n        uint localNum = 20;\n        return localNum;\n    }\n\n    function updateStateVariable(uint newValue) public {\n        // Update state variable\n        stateNum = newValue;\n    }\n\n    function getStateVariable() public view returns(uint) {\n        // Return state variable\n        return stateNum;\n    }\n\n    function globalVariables() public {\n        // Example of global variables\n        address sender = msg.sender;\n        uint timestamp = block.timestamp;\n    }\n}',
+        },
+        {
+          title: "Constants",
+          url: "constants",
+          contentUrl: "Constants.js",
+          hasCodeEditor: true,
+          defaultCode: "",
         },
         {
           title: "...and more",
