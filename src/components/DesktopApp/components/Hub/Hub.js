@@ -71,7 +71,7 @@ const Features = (props) => {
                     <Typography
                       component="span"
                       variant="inherit"
-                      color="primary"
+                      color="#1976D2"
                     >
                       to deploy any smart contracts.
                     </Typography>
@@ -90,7 +90,7 @@ const Features = (props) => {
                   <CountUpNumber
                     end={20}
                     label="Lessons"
-                    textColor="primary"
+                    textColor="#1976D2"
                     suffix="+"
                   />
                 </div>
@@ -98,7 +98,7 @@ const Features = (props) => {
                   <CountUpNumber
                     end={5}
                     label="Projects"
-                    textColor="primary"
+                    textColor="#1976D2"
                     suffix="+"
                   />
                 </div>
@@ -106,7 +106,7 @@ const Features = (props) => {
                   <CountUpNumber
                     end={100}
                     label="Satisfaction"
-                    textColor="primary"
+                    textColor="#1976D2"
                     suffix="%"
                   />
                 </div>

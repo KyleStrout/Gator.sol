@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import SectionHeader from "../SectionHeader";
 import IconAlternate from "../IconAlternate";
+import { useTheme } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   listItemAvatar: {
@@ -45,7 +46,7 @@ const Contact = (props) => {
   const classes = useStyles();
 
   const { items, team } = data;
-
+  const theme = useTheme();
   return (
     <div className={className} {...rest}>
       <Grid container spacing={4}>
@@ -54,10 +55,10 @@ const Contact = (props) => {
             label="support team"
             title={
               <>
-                <span>
+                <span style={{ color: theme.palette.landingPageSpan }}>
                   Our development team
                   <Typography
-                    color="secondary"
+                    color="#1976D2"
                     variant="inherit"
                     component="span"
                   >
@@ -70,6 +71,7 @@ const Contact = (props) => {
             subtitle="We want to see you succeeed. If you have an issue with a lesson, suggestion for improvement, or request for a feature, please contact us."
             align="center"
             disableGutter
+            subtitleColor={theme.palette.landingPageSubText}
           />
         </Grid>
         <Grid item xs={12}>
@@ -85,7 +87,7 @@ const Contact = (props) => {
                       color={colors.deepOrange}
                     />
                   </ListItemAvatar>
-                  <Typography variant="subtitle1" color="secondary" noWrap>
+                  <Typography variant="subtitle1" color="#1976D2" noWrap>
                     {item}
                   </Typography>
                 </ListItem>

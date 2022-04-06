@@ -12,6 +12,9 @@ import OnboardingButton from "../Metamask";
 import { useTheme } from "@mui/styles";
 
 import { sessionStorage } from "../ThemeContext/index.js";
+
+import gatorLogo from "./gatorlogo.png";
+
 export default function Navbar(props) {
   const theme = useTheme();
   const [checked, setChecked] = React.useState(false);
@@ -23,6 +26,10 @@ export default function Navbar(props) {
     console.log("setting new theme");
     sessionStorage.setItem("themeMode", checked ? "dark" : "light");
     props.setMode(checked ? "dark" : "light");
+    document.documentElement.setAttribute(
+      "data-color-scheme",
+      checked ? "dark" : "light"
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked]);
 
@@ -69,7 +76,14 @@ export default function Navbar(props) {
       position="sticky"
       sx={{ height: "4rem", backgroundColor: theme.palette.topBar }}
     >
-      <Toolbar>
+      <Toolbar disableGutters={true}>
+        <img
+          src={gatorLogo}
+          alt="Gator Logo"
+          height={65}
+          width={65}
+          style={{ paddingLeft: "10px" }}
+        />
         <Typography
           color={theme.palette.textColor}
           variant="h6"
@@ -78,14 +92,21 @@ export default function Navbar(props) {
         >
           <Button
             sx={{
-              color: theme.palette.textColor,
+              color: "white",
+              textTransform: "none",
+              fontSize: "23px",
+              backgroundColor: "transparent",
+              marginTop: "2px",
+              fontFamily:
+                "apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+              paddingRight: "20px",
             }}
             onClick={() => {
               navigate("/home");
             }}
             variant="text"
           >
-            Blockchain Education
+            Gator.sol
           </Button>
         </Typography>
         <ThemeSwitch

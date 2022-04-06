@@ -4,23 +4,20 @@ This is a simple Hello World contract meant to get you familiarized with our cod
 
 ### Compile and Output Panel
 
-<pre><code class="language-solidity">
-// SPDX-License-Identifier: GPL-3.0
-
+<div>
+<pre><code class="language-solidity">// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.10;
-
 contract HelloWorld {
 	string greeting = "Hello World!";
-
 	function setGreeting(string memory greet) public {
 		greeting = greet;
 	}
-
 	function getGreeting() public view returns (string memory){
 		return greeting;
 	}
 }
 </code></pre>
+</div>
 
 
 To compile the code, click the "Compile" button and refer to the output panel to check for abi information or any compilation errors. Smart contracts can't be deployed without a valid abi. 
