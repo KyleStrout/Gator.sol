@@ -102,6 +102,46 @@ const course = {
           url: "constants",
           contentUrl: "Constants.js",
           hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Constants {\n    string public constant greeting = "Hello World!";\n    uint public constant num = 1;\n    address public constant myAddress = 0xb42515a694854b3eF7c7ebf8db0B475C4EfcC436;\n}',
+        },
+        {
+          title: "Variable Visibility",
+          url: "variable-visibility",
+          contentUrl: "VariableVisibility.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract VariableVisibility {\n    string public greeting = "Hello World!";\n    uint private num = 1;\n    // These two are the same since the default for state variables is internal\n    uint defualtNum = 1;\n    uint internal internalNum = 1;\n\n\n    function externalFunction() external view returns (uint) {\n        uint num2 = 1;\n        return num2;\n    }\n}',
+        },
+        {
+          title: "Arrays",
+          url: "arrays",
+          contentUrl: "Arrays.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Arrays {\n    // init array of unsigned integers\n    uint[] public arr;\n    // init array of strings\n    string[] public stringArr = ["apple", "banana", "carrot"];\n\n    function getElementAtIndex(uint i) public view returns (uint) {\n        // access element at index i\n        // since the arrays are public, you can also access elements by index\n        // in the interaction panel\n        return arr[i];\n    }\n\n    function addElement(uint i) public {\n        // push value to end of array\n        arr.push(i);\n    }\n\n    function removeLastElement() public {\n        // remove last element of array\n        arr.pop();\n    }\n\n    function getLength() public view returns (uint) {\n        // get arrary length\n        return arr.length;\n    }\n}',
+        },
+        {
+          title: "Structs",
+          url: "structs",
+          contentUrl: "Structs.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Structs {\n    // init a Car struct that holds data for the make, model, and year manufactured\n    struct Car {\n        string make;\n        string model;\n        uint year;\n    }\n\n    // create a new Car called myCar\n    Car public myCar = Car("Honda", "Civic", 1998);\n}',
+        },
+        {
+          title: "Mappings",
+          url: "mappings",
+          contentUrl: "Mappings.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Mapping {\n    // init mapping with uint key and string values\n    mapping(uint => string) public names;\n\n    // init mapping with uint key and Person values\n    mapping(uint => Car) public cars;\n\n    // init nested mapping that holds cars that a user owns\n    mapping(address => mapping(uint => Car)) public myCars;\n\n    struct Car {\n        string make;\n        string model;\n    }\n\n    function addCar(uint _id, string memory _make, string memory _model) public {\n        // Normal mapping\n        cars[_id] = Car(_make, _model);\n    }\n\n    function addMyCar(uint _id, string memory _make, string memory _model) public {\n        // msg.sender gets address from person calling the function\n        /* After calling myCars in the interaction panel, you can get your address\n         from the history panel in Mapping.(addMyCar) next to "from:"\n         to use it as the address for myCars in the interaction panel.\n         Or if you\'re connected Metamask, you can get it from the extension. */\n        myCars[msg.sender][_id] = Car(_make, _model);\n    }\n}',
+        },
+        {
+          title: "Enums",
+          url: "enums",
+          contentUrl: "Enums.js",
+          hasCodeEditor: true,
           defaultCode: "",
         },
         {
