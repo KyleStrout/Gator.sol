@@ -111,7 +111,7 @@ const course = {
           contentUrl: "VariableVisibility.js",
           hasCodeEditor: true,
           defaultCode:
-            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract VariableVisibility {\n    string public greeting = "Hello World!";\n    uint private num = 1;\n    // These two are the same since the default for state variables is internal\n    uint defualtNum = 1;\n    uint internal internalNum = 1;\n\n\n    function externalFunction() external view returns (uint) {\n        uint num2 = 1;\n        return num2;\n    }\n}',
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract VariableVisibility {\n    string public greeting = "Hello World!";\n    uint private num = 1;\n    // These two are the same since the default for state variables is internal\n    uint defaultNum = 1;\n    uint internal internalNum = 1;\n\n\n    function externalFunction() external view returns (uint) {\n        uint num2 = 1;\n        return num2;\n    }\n}',
         },
         {
           title: "Arrays",
@@ -127,7 +127,7 @@ const course = {
           contentUrl: "Structs.js",
           hasCodeEditor: true,
           defaultCode:
-            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Structs {\n    // init a Car struct that holds data for the make, model, and year manufactured\n    struct Car {\n        string make;\n        string model;\n        uint year;\n    }\n\n    // create a new Car called myCar\n    Car public myCar = Car("Honda", "Civic", 1998);\n}',
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Structs {\n    // init a Car struct that holds data for the make, model, and year manufactured\n    struct Car {\n        string make;\n        string model;\n        uint year;\n    }\n\n    // create a new Car called myCar\n    Car public myCar = Car("Honda", "Civic", 1998);\n\n    function accessMyCarDetails() public view returns (string memory, string memory, uint) {\n        return (myCar.make, myCar.model, myCar.year);\n    }\n\n    function createNewCar(string memory _make, string memory _model, uint _year) public view returns (string memory, string memory, uint) {\n        // Create newCar in memory\n        Car memory newCar;\n        // assign values\n        newCar.make = _make;\n        newCar.model = _model;\n        newCar.year = _year;\n        // return newCar\n        return (newCar.make, newCar.model, newCar.year);\n    }\n}',
         },
         {
           title: "Mappings",
@@ -142,7 +142,8 @@ const course = {
           url: "enums",
           contentUrl: "Enums.js",
           hasCodeEditor: true,
-          defaultCode: "",
+          defaultCode:
+            "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract BasicEnums {\n    // define enum with possible choices/states\n    enum Status {\n        OFF, \n        ON\n    }\n\n    // default is automatically set to the first member (0)\n    Status public status;\n\n    // Set enum member by providing a uint (either 0 or 1)\n    function set(Status _status) public {\n        status = _status;\n    }\n\n    // Returns uint\n    // OFF - 0\n    // ON - 1\n    function get() view public returns (Status) {\n        return status;\n    }\n\n    function reset() public {\n        // resets the status back to default member\n        delete status;\n    }\n\n}\n\ncontract AdvancedEnums {\n    // define enum with possible choices/states\n    enum Role {\n        Member,\n        Premium,\n        Moderator,\n        Admin\n    }\n\n    // define user struct with associated role\n    struct User {\n        string name;\n        Role role;\n    }\n\n    // mapping with key: id and value: User \n    mapping(uint => User) public users;\n\n    function createUser(uint _id, string memory _name, Role _role) public {\n        users[_id] = User(_name, _role);\n    }\n\n    function updateUserRole(uint _id, Role _role) public {\n        // updates user role and returns the new role\n        users[_id].role = _role;\n    }\n\n    // Returns uint\n    // Member - 0\n    // Premium - 1\n    // Moderator - 2\n    // Admin - 3\n    function getUserRole(uint _id) public view returns (Role) {\n        return users[_id].role;\n    }\n\n}",
         },
         {
           title: "...and more",
