@@ -20,7 +20,7 @@ const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
-const URL = "178.128.155.103";
+const URL = "http://localhost:3001";
 export default function InteractionPanel(props) {
   const theme = useTheme();
   const { address } = useContext(AddressContext);
@@ -38,7 +38,7 @@ export default function InteractionPanel(props) {
     setMessage("Calling method: " + method.name + "...");
     setOpen(true);
 
-    const response = await fetch(`/api/getMethodData`, {
+    const response = await fetch(`${URL}/api/getMethodData`, {
       headers: {
         "Content-Type": "application/json",
       },
