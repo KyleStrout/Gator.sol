@@ -150,7 +150,7 @@ export default function CodeEditor(props) {
 
     const args = contractData[window.location.href.split("/").pop()].arguments;
 
-    const response = await fetch(`http://${URL}:3001/deployWithArguments`, {
+    const response = await fetch(`/api/deployWithArguments`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -226,7 +226,7 @@ export default function CodeEditor(props) {
     setOpen(false);
     setMessage("Compiling...");
     setOpen(true);
-    const response = await fetch(`http://${URL}:3001/compile`, {
+    const response = await fetch(`/api/compile`, {
       headers: {
         "Content-Type": "application/json",
       },

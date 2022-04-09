@@ -38,7 +38,7 @@ export default function InteractionPanel(props) {
     setMessage("Calling method: " + method.name + "...");
     setOpen(true);
 
-    const response = await fetch(`http://${URL}:3001/getMethodData`, {
+    const response = await fetch(`/api/getMethodData`, {
       headers: {
         "Content-Type": "application/json",
       },
