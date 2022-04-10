@@ -49,6 +49,7 @@ function App() {
                       element={
                         <SectionPage
                           contentUrl={section.contentUrl}
+                          secondaryContentUrl={section.secondaryContentUrl}
                           hasCodeEditor={section.hasCodeEditor}
                           defaultCode={section.defaultCode}
                         />

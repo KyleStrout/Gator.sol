@@ -29,6 +29,11 @@ const ContentContainer = styled(Box)(() => ({
   fontFamily: "Lato",
 }));
 
+const Content = styled(Box)(() => ({
+  maxWidth: "750px",
+  margin: "auto",
+}));
+
 export default function SectionContent(props) {
   const [content, setContent] = useState("");
   const theme = useTheme();
@@ -57,11 +62,13 @@ export default function SectionContent(props) {
         border: theme.palette.border,
       }}
     >
-      <ReactMarkdown
-        rehypePlugins={[rehypeRaw, rehypePrism]}
-        id="markdown"
-        children={content}
-      />
+      <Content>
+        <ReactMarkdown
+          rehypePlugins={[rehypeRaw, rehypePrism]}
+          id="markdown"
+          children={content}
+        />
+      </Content>
     </ContentContainer>
   );
 }

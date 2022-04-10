@@ -8,8 +8,6 @@ const course = {
           title: "Course Overview",
           url: "course-overview",
           contentUrl: "CourseOverview.js",
-          hasCodeEditor: false,
-          defaultCode: "",
         },
         {
           title: "Wallet setup",

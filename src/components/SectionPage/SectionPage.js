@@ -36,14 +36,22 @@ export default function SectionPage(props) {
         }}
         contentUrl={props.contentUrl}
       ></SectionContent>
-      <SectionInteraction
-        id="section-interaction"
-        sx={{
-          backgroundColor: theme.palette.backgroundColor,
-        }}
-        hasCodeEditor={props.hasCodeEditor}
-        defaultCode={props.defaultCode}
-      ></SectionInteraction>
+      {props.hasCodeEditor && (
+        <SectionInteraction
+          id="section-interaction"
+          sx={{
+            backgroundColor: theme.palette.backgroundColor,
+          }}
+          hasCodeEditor={props.hasCodeEditor}
+          defaultCode={props.defaultCode}
+        ></SectionInteraction>
+      )}
+      {props.secondaryContentUrl && (
+        <SectionContent
+          id="section-secondary-content"
+          contentUrl={props.secondaryContentUrl}
+        ></SectionContent>
+      )}
     </SectionPageContainer>
   );
 }
