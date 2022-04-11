@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 // monaco editor
 import Editor from "@monaco-editor/react";
 // mui
-import { Button, Box, DialogContentText } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
@@ -31,7 +31,6 @@ export default function CodeEditor(props) {
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
   const [hasArguments, setHasArguments] = useState(false);
-  const [placeHolderText, setPlaceHolderText] = useState("");
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -116,7 +115,7 @@ export default function CodeEditor(props) {
 
   function getArguments(contractData) {
     let argumentList = {};
-    contractData.forEach((contract) => {
+    contractData?.forEach((contract) => {
       if (contract.abi.find((abi) => abi.type === "constructor")) {
         argumentList[contract.name] = {
           arguments: contract.abi.find((abi) => abi.type === "constructor")
@@ -137,41 +136,44 @@ export default function CodeEditor(props) {
   };
 
   const onSubmit = async (values) => {
-    console.log("submitted");
-    console.log(values.arguments);
-    const data = values.arguments;
-    console.log("data", data);
+    console.log(values);
+    const data = Object.values(values).slice(1, Object.values(values).length);
+    console.log(data);
 
     const parsedData = [];
     // parse a comma seperated list of arguments
-    data.split(",").forEach((arg) => {
+    data.forEach((arg) => {
       parsedData.push(arg.trim());
     });
-    console.log(parsedData);
-    console.log(contractData);
     const encodedParsedData = [];
     // encode the arguments
     parsedData.forEach((arg) => {
       encodedParsedData.push(web3.utils.asciiToHex(arg));
     });
-    console.log(encodedParsedData);
+
+    console.log(parsedData);
 
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 
     const args = contractData[window.location.href.split("/").pop()].arguments;
 
-    const response = await fetch(`${URL}/api/deployWithArguments`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        compilerData,
-        args,
-        argValues: parsedData,
-      }),
-    });
+    let response;
+    try {
+      response = await fetch(`${URL}/api/deployWithArguments`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          compilerData,
+          args,
+          argValues: parsedData,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     const encodedData = await response.json();
     for (let i = 0; i < encodedData.length; i++) {
@@ -239,14 +241,21 @@ export default function CodeEditor(props) {
     setOpen(false);
     setMessage("Compiling...");
     setOpen(true);
-    const response = await fetch(`${URL}/api/compile`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ value: editorRef.current.getValue() }),
-    });
-
+    let response;
+    try {
+      response = await fetch(`${URL}/api/compile`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ value: editorRef.current.getValue() }),
+      });
+    } catch (error) {
+      setMessage("Compilation failed. Server Error.");
+    }
+    if (!response) {
+      return;
+    }
     const data = await response.json();
     const errorInfo = checkError(data);
     const url = window.location.href.split("/").pop();
@@ -290,16 +299,6 @@ export default function CodeEditor(props) {
         arguments: argumentList,
       },
     });
-
-    if (Object.values(argumentList).length > 0) {
-      let tempText = "";
-      Object.values(argumentList).forEach((contract) => {
-        contract.arguments.forEach((argument) => {
-          tempText += `${argument.type} ${argument.name}, `;
-        });
-      });
-      setPlaceHolderText(tempText);
-    }
   }
 
   async function deploy() {
@@ -476,8 +475,7 @@ export default function CodeEditor(props) {
                 <Form>
                   <DialogTitle>Deploy with Arguments</DialogTitle>
                   <DialogContent>
-                    {Object.values(argumentList).map((contract) => {
-                      console.log(contract.arguments);
+                    {Object.values(argumentList).map((contract, index) => {
                       return (
                         <Box
                           sx={{
@@ -486,8 +484,8 @@ export default function CodeEditor(props) {
                             justifyContent: "space-between",
                             gap: "1rem",
                           }}
+                          key={index}
                         >
-                          <DialogContentText>{contract.name}</DialogContentText>
                           {contract.arguments.map((argument) => {
                             return (
                               <Field
