@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/api/compile", (req, res, next) => {
+  console.log(req.body.value);
   try {
     const content = req.body.value;
 

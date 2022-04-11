@@ -30,7 +30,6 @@ export default function InteractionPanel(props) {
   const theme = useTheme();
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
-
   const interact = async (contractAddress, method, contractName, ...args) => {
     let transactionObject = {
       from: address,
