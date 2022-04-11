@@ -69,9 +69,22 @@ export default function InteractionPanel(props) {
         method.outputs.map((output) => output.type),
         res
       );
-      method.result = decoded[0];
+      console.log("decodedEntries: ", Object.values(decoded));
+      const decodedEntries = Object.values(decoded);
+      console.log("length: ", decodedEntries.length);
+      let tempResult = "";
+      for (let i = 0; i < decodedEntries.length - 1; i++) {
+        if (i === decodedEntries.length - 2) {
+          tempResult += `${decodedEntries[i]}`;
+        } else {
+          tempResult += `${decodedEntries[i]}, `;
+        }
+      }
+      method.result = tempResult;
+      console.log(method.result);
       let newTransactions;
       if (contractData[url].transactions) {
+        console.log("here");
         newTransactions = [
           ...contractData[url].transactions,
           {
@@ -385,8 +398,15 @@ export default function InteractionPanel(props) {
                           }}
                         >
                           <span>
-                            <small> Result:</small>
-                            <strong>{method.result}</strong>
+                            <small> Result: </small>
+                            {method.result.length <= 32 && (
+                              <strong> {method.result}</strong>
+                            )}
+                            {method.result.length > 32 && (
+                              <strong>
+                                {method.result.slice(0, 32) + "..."}
+                              </strong>
+                            )}
                           </span>
                         </div>
                       )}

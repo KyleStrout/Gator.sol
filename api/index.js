@@ -39,7 +39,7 @@ app.post("/api/compile", (req, res, next) => {
   }
 });
 
-app.post("/api/getMethodData", (req, res) => {
+app.post("/getMethodData", (req, res) => {
   try {
     const method = req.body.method;
     const inputs = req.body.inputs;
@@ -56,7 +56,7 @@ app.post("/api/getMethodData", (req, res) => {
   }
 });
 
-app.post("/api/deployWithArguments", async (req, res) => {
+app.post("/deployWithArguments", async (req, res) => {
   try {
     const compilerData = req.body.compilerData;
     const args = req.body.args;
