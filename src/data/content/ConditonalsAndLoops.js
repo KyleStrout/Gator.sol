@@ -1,5 +1,5 @@
 export const content = `
-### Conditionals
+## Conditionals
 
 Like other common languages, Solidity supports conditional statements <b>if</b>, <b>else if</b>, and <b>else</b>. 
 
