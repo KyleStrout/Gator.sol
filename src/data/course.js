@@ -156,7 +156,8 @@ const course = {
           url: "functions",
           contentUrl: "Functions.js",
           hasCodeEditor: true,
-          defaultCode: "",
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract Functions {\n\n    function basicFunction() public {\n        // do something\n    }\n\n    function functionWithParameters(uint num, string memory name) public {\n        num = 2;\n        name = "John";\n    }\n\n    function functionWithReturn() public view returns (uint, string memory) {\n        return (2, "John");\n    }\n\n    function functionWithNamedReturn() \n        public \n        view \n        returns (\n            uint num,\n            bool success\n        ) \n    {\n        num = 5;\n        success = true;\n    }\n\n}',
         },
         {
           title: "Function Modifiers",

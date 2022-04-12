@@ -21,7 +21,8 @@ invoke functions from the interaction panel.
 
 ### Function Parameters
 
-Solidity supports functions with zero, one, or multiple parameters. Multiple parameters are passed in by comma separated values. 
+Solidity supports functions with zero, one, or multiple parameters. Multiple parameters are passed in by comma separated values. Arrays can be passed or returned. 
+Maps cant be passed or returned.
 
 <pre>
 <code class="language-solidity">
@@ -56,11 +57,22 @@ function <b>name</b>(inputs) <b>scope</b> <b>returns</b> (uint num, bool success
 </code>
 </pre>
 
-## View and Pure Functions
+### View and Pure Functions
 
 A <b>view</b> function declares that no state changes will be made when the function is called.
 
 A <b>pure</b> function declares that no state variable will be changed or read.
+
+### Visibility
+
+<b>Public</b> functions can be called by from anywhere.
+
+<b>Private</b> functions can only be called by the contract that defines them. Can only be called from inside the current contract. Can't be called by inherited contracts.
+
+<b>Internal</b> functions can only be called inside the current contract's context. Inherited contracts can call internal functions.
+
+<b>External</b> functions can be called from outside the current contract, can't be called from inside in other functions or inherited contracts. 
+These functions have an address and function signature and can be passed and returned from external function calls.
 
 
 
