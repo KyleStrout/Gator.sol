@@ -67,6 +67,7 @@ app.post("/deployWithArguments", async (req, res) => {
     for (let i = 0; i < compilerData.length; i++) {
       const { abi, bytecode, name } = compilerData[i];
       const currentArgs = args[name];
+      console.log(currentArgs);
       const numOfArgs = currentArgs.arguments.length;
       // get slice of argValues based on length of numOfArgs
       const currentArgValues = argValues.slice(
@@ -114,7 +115,6 @@ app.post("/deployWithArguments", async (req, res) => {
     }
     res.send(encodedAbis);
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 });
