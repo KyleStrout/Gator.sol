@@ -23,7 +23,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import web3 from "web3";
 
-const URL = "http://localhost:3001";
+let URL;
+if (process.env.NODE_ENV === "development") {
+  URL = "http://localhost:3001";
+} else {
+  URL = "";
+}
 
 export default function CodeEditor(props) {
   const theme = useTheme();

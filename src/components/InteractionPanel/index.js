@@ -20,7 +20,12 @@ const Web3 = require("web3");
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 
-const URL = "http://localhost:3001";
+let URL;
+if (process.env.NODE_ENV === "development") {
+  URL = "http://localhost:3001";
+} else {
+  URL = "";
+}
 export default function InteractionPanel(props) {
   const theme = useTheme();
   const { address } = useContext(AddressContext);
