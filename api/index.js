@@ -57,8 +57,6 @@ app.post("/api/getMethodData", (req, res) => {
 
 app.post("/api/deployWithArguments", async (req, res) => {
   try {
-    //console.log(req.body.compilerData);
-    //console.log(JSON.stringify(req.body.args, "", 4));
     const compilerData = req.body.compilerData;
     const args = req.body.args;
     const argValues = req.body.argValues;
@@ -86,18 +84,17 @@ app.post("/api/deployWithArguments", async (req, res) => {
           //console.log(argValue);
           // make string into array
           const argValueArray = argValue.slice(1, -1).split(",");
+          console.log("argValueArray: ", argValueArray);
           // const newArray = JSON.parse(argValue.replace("'", '"'));
           const typedArgValueArray = argValueArray.map((arg) => {
             const hex = web3.utils.asciiToHex(arg);
             return web3.utils.padRight(hex, 64, "0");
           });
           currentArgValues[i] = typedArgValueArray;
-        }
-        if (argType === "bytes32") {
+        } else if (argType === "bytes32") {
           const hex = web3.utils.asciiToHex(argValue);
           currentArgValues[i] = web3.utils.padRight(hex, 64, "0");
-        }
-        if (argType === "uint256" || argType === "int256") {
+        } else if (argType === "uint256" || argType === "int256") {
           currentArgValues[i] = parseInt(argValue);
         } else {
           currentArgValues[i] = argValue;
@@ -116,6 +113,7 @@ app.post("/api/deployWithArguments", async (req, res) => {
     }
     res.send(encodedAbis);
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 });

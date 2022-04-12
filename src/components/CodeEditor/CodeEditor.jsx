@@ -16,9 +16,19 @@ import ContractContext from "../ContractContext";
 import { useTheme } from "@mui/styles";
 import { Formik, Field, Form } from "formik";
 
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+
 import web3 from "web3";
 
-const URL = "178.128.155.103";
+let URL;
+if (process.env.NODE_ENV === "development") {
+  URL = "http://localhost:3001";
+} else {
+  URL = "";
+}
 
 export default function CodeEditor(props) {
   const theme = useTheme();
@@ -26,7 +36,6 @@ export default function CodeEditor(props) {
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
   const [hasArguments, setHasArguments] = useState(false);
-  const [placeHolderText, setPlaceHolderText] = useState("");
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -65,10 +74,15 @@ export default function CodeEditor(props) {
   const editorRef = useRef(null);
 
   const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
   const handleClick = () => {
-    setOpen(true);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   const handleClose = (event, reason) => {
@@ -106,7 +120,7 @@ export default function CodeEditor(props) {
 
   function getArguments(contractData) {
     let argumentList = {};
-    contractData.forEach((contract) => {
+    contractData?.forEach((contract) => {
       if (contract.abi.find((abi) => abi.type === "constructor")) {
         argumentList[contract.name] = {
           arguments: contract.abi.find((abi) => abi.type === "constructor")
@@ -127,40 +141,51 @@ export default function CodeEditor(props) {
   };
 
   const onSubmit = async (values) => {
-    console.log("submitted");
-    console.log(values.arguments);
-    const data = values.arguments;
+    setDialogOpen(false);
+    setOpen(true);
+    setMessage("Deploying contract...");
+
+    console.log(values);
+    const data = Object.values(values).slice(1, Object.values(values).length);
+    console.log(data);
 
     const parsedData = [];
     // parse a comma seperated list of arguments
-    data.split(",").forEach((arg) => {
+    data.forEach((arg) => {
       parsedData.push(arg.trim());
     });
-    console.log(parsedData);
-    console.log(contractData);
     const encodedParsedData = [];
     // encode the arguments
     parsedData.forEach((arg) => {
       encodedParsedData.push(web3.utils.asciiToHex(arg));
     });
-    console.log(encodedParsedData);
+
+    console.log(parsedData);
 
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 
-    const args = contractData[window.location.href.split("/").pop()].arguments;
+    const args = argumentList;
+    console.log("args", args);
 
-    const response = await fetch(`/api/deployWithArguments`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        compilerData,
-        args,
-        argValues: parsedData,
-      }),
-    });
+    const body = {
+      compilerData,
+      args,
+      argValues: parsedData,
+    };
+    console.log(body);
+    let response;
+    try {
+      response = await fetch(`${URL}/api/deployWithArguments`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     const encodedData = await response.json();
     for (let i = 0; i < encodedData.length; i++) {
@@ -194,8 +219,9 @@ export default function CodeEditor(props) {
                 address: rec.contractAddress,
               };
             });
+            setOpen(true);
+            setMessage("Got transaction receipt! Waiting to be mined...");
             setOutputWithAddress(out);
-            console.log("RECEIPT", rec);
             let transaction = {
               method: "constructor",
               contractName: compilerData[i].name,
@@ -207,6 +233,8 @@ export default function CodeEditor(props) {
             ]);
 
             clearInterval(intervalId);
+            setOpen(true);
+            setMessage("Contract deployed successfully!");
           }
         },
         1000,
@@ -222,18 +250,27 @@ export default function CodeEditor(props) {
     }
   }, [props.defaultCode]);
 
+  const [argumentList, setArgumentList] = useState({});
+
   async function compile() {
     setOpen(false);
     setMessage("Compiling...");
     setOpen(true);
-    const response = await fetch(`/api/compile`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ value: editorRef.current.getValue() }),
-    });
-
+    let response;
+    try {
+      response = await fetch(`${URL}/api/compile`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ value: editorRef.current.getValue() }),
+      });
+    } catch (error) {
+      setMessage("Compilation failed. Server Error.");
+    }
+    if (!response) {
+      return;
+    }
     const data = await response.json();
     const errorInfo = checkError(data);
     const url = window.location.href.split("/").pop();
@@ -267,7 +304,7 @@ export default function CodeEditor(props) {
       };
     });
 
-    const argumentList = getArguments(output);
+    setArgumentList(getArguments(output));
 
     setContractData({
       ...contractData,
@@ -277,16 +314,6 @@ export default function CodeEditor(props) {
         arguments: argumentList,
       },
     });
-
-    if (Object.values(argumentList).length > 0) {
-      let tempText = "";
-      Object.values(argumentList).forEach((contract) => {
-        contract.arguments.forEach((argument) => {
-          tempText += `${argument.type} ${argument.name}, `;
-        });
-      });
-      setPlaceHolderText(tempText);
-    }
   }
 
   async function deploy() {
@@ -431,7 +458,7 @@ export default function CodeEditor(props) {
           </Button>
           <Snackbar
             open={open}
-            autoHideDuration={1000}
+            autoHideDuration={6000}
             onClose={handleClose}
             message={message}
             action={action}
@@ -440,18 +467,18 @@ export default function CodeEditor(props) {
               horizontal: "right",
             }}
           />
-          {!hasArguments && (
-            <>
-              <Button
-                sx={{ margin: "0 0.5rem", backgroundColor: theme.palette.deployButton }}
-                variant="contained"
-                disabled={!canDeploy()}
-                onClick={deploy}
-              >
-                Deploy
-              </Button>
-            </>
-          )}
+
+          <Button
+            sx={{
+              margin: "0 0.5rem",
+              backgroundColor: theme.palette.deployButton,
+            }}
+            variant="contained"
+            disabled={!canDeploy()}
+            onClick={hasArguments ? handleClick : deploy}
+          >
+            {hasArguments ? "Deploy with Arguments" : "Deploy"}
+          </Button>
           {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
           {hasArguments && (
             <Formik
@@ -459,28 +486,52 @@ export default function CodeEditor(props) {
               onSubmit={onSubmit}
               sx={{ style: "inherit" }}
             >
-              {(props) => (
+              <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <Form>
-                  <Button
-                    type="submit"
-                    sx={{ margin: "0 0.5rem", padding: "" }}
-                    color="secondary"
-                    variant="contained"
-                    disabled={!canDeploy()}
-                  >
-                    Deploy
-                  </Button>
-                  <Field
-                    as={TextField}
-                    inputProps={{ style: { fontSize: 12 } }}
-                    label="arguments"
-                    name="arguments"
-                    placeholder={placeHolderText}
-                    variant="standard"
-                    required
-                  />
+                  <DialogTitle>Deploy with Arguments</DialogTitle>
+                  <DialogContent>
+                    {Object.values(argumentList).map((contract, index) => {
+                      return (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            gap: "1rem",
+                          }}
+                          key={index}
+                        >
+                          {contract.arguments.map((argument) => {
+                            return (
+                              <Field
+                                as={TextField}
+                                inputProps={{ style: { fontSize: 12 } }}
+                                label={argument.name}
+                                name={argument.name}
+                                variant="standard"
+                                required
+                                key={argument.name}
+                              />
+                            );
+                          })}
+                        </Box>
+                      );
+                    })}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() => {
+                        handleCloseDialog();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" variant="contained">
+                      Deploy
+                    </Button>
+                  </DialogActions>
                 </Form>
-              )}
+              </Dialog>
             </Formik>
           )}
         </Box>
