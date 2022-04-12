@@ -13,6 +13,7 @@ contract X {
     string public name;
     constructor(string memory _name) {
         name = _name;
+        surname = _surname;
     }
 }
 </code>
