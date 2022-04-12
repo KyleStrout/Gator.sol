@@ -144,6 +144,28 @@ const course = {
             "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract BasicEnums {\n    // define enum with possible choices/states\n    enum Status {\n        OFF, \n        ON\n    }\n\n    // default is automatically set to the first member (0)\n    Status public status;\n\n    // Set enum member by providing a uint (either 0 or 1)\n    function setStatus(Status _status) public {\n        status = _status;\n    }\n\n    // Returns uint\n    // OFF - 0\n    // ON - 1\n    function getStatus() view public returns (Status) {\n        return status;\n    }\n\n    function resetStatus() public {\n        // resets the status back to default member\n        delete status;\n    }\n\n}\n\ncontract AdvancedEnums {\n    // define enum with possible choices/states\n    enum Role {\n        Member,\n        Premium,\n        Moderator,\n        Admin\n    }\n\n    // define user struct with associated role\n    struct User {\n        string name;\n        Role role;\n    }\n\n    // mapping with key: id and value: User \n    mapping(uint => User) public users;\n\n    function createUser(uint _id, string memory _name, Role _role) public {\n        users[_id] = User(_name, _role);\n    }\n\n    function updateUserRole(uint _id, Role _role) public {\n        // updates user role and returns the new role\n        users[_id].role = _role;\n    }\n\n    // Returns uint\n    // Member - 0\n    // Premium - 1\n    // Moderator - 2\n    // Admin - 3\n    function getUserRole(uint _id) public view returns (Role) {\n        return users[_id].role;\n    }\n\n}",
         },
         {
+          title: "Conditionals and Loops",
+          url: "conditionals-loops",
+          contentUrl: "ConditonalsAndLoops.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\n\ncontract ConditionalsAndLoops {\n    function ifElseIfElse(uint num) public view returns (uint) {\n        if (num < 5) {\n            return 0;\n        }\n        else if (num > 5) {\n            return 1;\n        }\n        else {\n            return 2;\n        }\n    }\n\n    function ternaryOperator(uint num) public view returns (uint) {\n        // If num > 5 return 1, else return 2\n        return num > 5 ? 1 : 2;\n    }\n\n    function loops() public {\n        // continue; and break; can also be used inside loops\n        for (uint i = 0; i < 10; i++) {\n            // do something\n        }\n\n        uint x = 0;\n        while (x < 10) {\n            x++;\n        }\n    } \n}",
+        },
+        {
+          title: "Functions",
+          url: "functions",
+          contentUrl: "Functions.js",
+          hasCodeEditor: true,
+          defaultCode: "",
+        },
+        {
+          title: "Function Modifiers",
+          url: "function-modifiers",
+          contentUrl: "FunctionModifiers.js",
+          hasCodeEditor: true,
+          defaultCode: "",
+        },
+        {
           title: "...and more",
           url: "and-more",
         },
