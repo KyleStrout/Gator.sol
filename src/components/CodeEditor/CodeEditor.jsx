@@ -136,6 +136,10 @@ export default function CodeEditor(props) {
   };
 
   const onSubmit = async (values) => {
+    setDialogOpen(false);
+    setOpen(true);
+    setMessage("Deploying contract...");
+
     console.log(values);
     const data = Object.values(values).slice(1, Object.values(values).length);
     console.log(data);
@@ -156,8 +160,15 @@ export default function CodeEditor(props) {
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 
-    const args = contractData[window.location.href.split("/").pop()].arguments;
+    const args = argumentList;
+    console.log("args", args);
 
+    const body = {
+      compilerData,
+      args,
+      argValues: parsedData,
+    };
+    console.log(body);
     let response;
     try {
       response = await fetch(`${URL}/api/deployWithArguments`, {
@@ -165,11 +176,7 @@ export default function CodeEditor(props) {
           "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify({
-          compilerData,
-          args,
-          argValues: parsedData,
-        }),
+        body: JSON.stringify(body),
       });
     } catch (error) {
       console.log(error);
@@ -207,8 +214,9 @@ export default function CodeEditor(props) {
                 address: rec.contractAddress,
               };
             });
+            setOpen(true);
+            setMessage("Got transaction receipt! Waiting to be mined...");
             setOutputWithAddress(out);
-            console.log("RECEIPT", rec);
             let transaction = {
               method: "constructor",
               contractName: compilerData[i].name,
@@ -220,6 +228,8 @@ export default function CodeEditor(props) {
             ]);
 
             clearInterval(intervalId);
+            setOpen(true);
+            setMessage("Contract deployed successfully!");
           }
         },
         1000,
@@ -443,7 +453,7 @@ export default function CodeEditor(props) {
           </Button>
           <Snackbar
             open={open}
-            autoHideDuration={1000}
+            autoHideDuration={6000}
             onClose={handleClose}
             message={message}
             action={action}
