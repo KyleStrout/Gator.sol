@@ -46,7 +46,7 @@ function <b>name</b>(inputs) <b>scope</b> <b>returns</b> (uint, bool, uint) {
 </pre>
 
 
-Returns values can optionally be named and can be returned by name as shown in the example below.
+Return values can optionally be named and can be returned by name as shown in the example below.
 
 <pre>
 <code class="language-solidity">
@@ -62,6 +62,9 @@ function <b>name</b>(inputs) <b>scope</b> <b>returns</b> (uint num, bool success
 A <b>view</b> function declares that no state changes will be made when the function is called.
 
 A <b>pure</b> function declares that no state variable will be changed or read.
+
+View and pure are special modifiers for functions and they describe how changes are permitted within the Ethereum global state.
+They are also known as state mutability attributes.
 
 ### Visibility
 

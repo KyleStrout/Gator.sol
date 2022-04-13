@@ -166,10 +166,6 @@ const course = {
           hasCodeEditor: true,
           defaultCode: "",
         },
-        {
-          title: "...and more",
-          url: "and-more",
-        },
       ],
     },
     {
