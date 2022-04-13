@@ -20,8 +20,6 @@ export default function Navbar(props) {
   const [checked, setChecked] = React.useState(false);
   let navigate = useNavigate();
 
-  const { setAddress } = React.useContext(AddressContext);
-
   React.useEffect(() => {
     console.log("setting new theme");
     sessionStorage.setItem("themeMode", checked ? "dark" : "light");
@@ -36,40 +34,6 @@ export default function Navbar(props) {
   function handleSwitchChange(event) {
     setChecked(event.target.checked);
   }
-
-  const connectToWallet = async () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof window.ethereum !== "undefined"
-    ) {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      let account = accounts[0];
-      setAddress(account);
-
-      window.ethereum.on("accountsChanged", (accounts) => {
-        let account;
-        if (accounts.length > 0) {
-          account = accounts[0];
-          console.log(`Using account ${account}`);
-        } else {
-          console.error("0 accounts.");
-        }
-        setAddress(account);
-      });
-      window.ethereum.on("connect", (info) => {
-        console.log(`Connected to network ${info}`);
-      });
-      window.ethereum.on("disconnect", (info) => {
-        console.log(`Disconnected from network ${info}`);
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    connectToWallet();
-  });
 
   return (
     <AppBar
