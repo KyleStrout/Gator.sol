@@ -10,6 +10,7 @@ import { AddressProvider } from "../AddressContext";
 import { ContractProvider } from "../ContractContext";
 import Navbar from "../Navbar";
 
+import WarningDialog from "../WarningDialog";
 import { ThemeProvider } from "@mui/material/styles";
 import getTheme from "../ThemeContext";
 
@@ -30,6 +31,35 @@ function App() {
   const [mode, setMode] = React.useState("light");
   const theme = getTheme(mode);
 
+  const [onWrongNetwork, setOnWrongNetwork] = React.useState(false);
+
+  function checkNetwork() {
+    // if not on rinekby network, show warning
+    // if window.ethereum
+    if (window !== "undefined" && window.ethereum !== "undefined") {
+      window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
+        if (chainId !== "0x4") {
+          setOnWrongNetwork(true);
+        } else {
+          setOnWrongNetwork(false);
+        }
+      });
+
+      window.ethereum.on("networkChanged", (networkId) => {
+        console.log("here");
+        if (networkId !== "0x4") {
+          setOnWrongNetwork(true);
+        } else {
+          setOnWrongNetwork(false);
+        }
+      });
+    }
+  }
+
+  React.useEffect(() => {
+    checkNetwork();
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <AddressProvider value={value}>
@@ -37,6 +67,16 @@ function App() {
           <AppContainer id="app-container">
             <Navbar setMode={setMode} />
 
+            <WarningDialog
+              warning="Incorrect Network"
+              open={onWrongNetwork}
+              message="Please open metamask and switch network to 'Rinekby'"
+              handleClose={() => {
+                if (checkNetwork()) {
+                  setOnWrongNetwork(false);
+                }
+              }}
+            />
             <Routes>
               <Route exact path="/" element={<DesktopApp />}></Route>
               <Route path="/about" element={<About />}></Route>

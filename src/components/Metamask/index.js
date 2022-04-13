@@ -43,6 +43,41 @@ export default function OnboardingButton() {
       window.ethereum
         .request({ method: "eth_requestAccounts" })
         .then(handleNewAccounts);
+
+      // GET CHAIN ID
+      window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
+        // if chain id isn't rinekby, ask to switch
+        console.log("chainID", chainId);
+        if (chainId !== "0x4") {
+          console.log("here");
+          window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId: "0x4",
+              },
+            ],
+          });
+        }
+      });
+
+      // on network change
+      window.ethereum.on("networkChanged", (networkId) => {
+        // if network id isn't rinkeby, ask to switch
+        console.log("networkID", networkId);
+        if (networkId !== "0x4") {
+          console.log("here");
+          window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId: "0x4",
+              },
+            ],
+          });
+        }
+      });
+
       window.ethereum.on("accountsChanged", handleNewAccounts);
       return () => {
         window.ethereum.removeListener("accountsChanged", handleNewAccounts);
