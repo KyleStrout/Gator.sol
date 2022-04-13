@@ -172,12 +172,21 @@ const course = {
       title: "Solidity Advanced",
       url: "solidity-advanced",
       sections: [
+        // {
+        //   title: "Functions",
+        //   url: "solidity-advanced",
+        //   contentUrl: "Functions.js",
+        //   hasCodeEditor: true,
+        //   defaultCode:
+        //     "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Function {\n    // Functions can return multiple values.\n    function returnMany()\n        public\n        pure\n        returns ( uint,\n            bool,\n            uint ) {\n        return (1, true, 2);\n    }\n\n    // Return values can be named.\n    function named()\n        public\n        pure\n        returns ( uint x,\n            bool b,\n            uint y ) {\n        return (1, true, 2);\n    }\n\n    // Return values can be assigned to their name.\n    // In this case the return statement can be omitted.\n    function assigned()\n        public\n        pure\n        returns ( uint x,\n            bool b,\n            uint y ) {\n        x = 1;\n        b = true;\n        y = 2;\n    }\n\n    // Use destructuring assignment when calling another\n    // function that returns multiple values.\n    function destructuringAssignments()\n        public\n        pure\n        returns ( uint,\n            bool,\n            uint,\n            uint,\n            uint ) {\n        (uint i, bool b, uint j) = returnMany();\n\n        // Values can be left out.\n        (uint x, , uint y) = (4, 5, 6);\n\n        return (i, b, j, x, y);\n    }\n\n    // Cannot use map for either input or output\n\n    // Can use array for input\n    function arrayInput(uint[] memory _arr) public {}\n\n    // Can use array for output\n    uint[] public arr;\n\n    function arrayOutput() public view returns (uint[] memory) {\n        return arr;\n    }\n}",
+        // },
         {
-          title: "Hello World",
+          title: "Data Locations",
           url: "solidity-advanced",
+          contentUrl: "DataLocations.js",
           hasCodeEditor: true,
           defaultCode:
-            "// SPDX-License-Identifier: GPL-3.0\n\npragma solidity >=0.7.0 <0.9.0;\n\n/**\n * @title Storage\n * @dev Store & retrieve value in a variable\n */\ncontract Storage {\n\n    uint256 number;\n\n    /**\n     * @dev Store value in variable\n     * @param num value to store\n     */\n    function store(uint256 num) public {\n        number = num;\n    }\n\n    /**\n     * @dev Return value \n     * @return value of 'number'\n     */\n    function retrieve() public view returns (uint256){\n        return number;\n    }\n}",
+            "pragma solidity ^0.8.10;\ncontract DataLocations {\n    uint[] public arr;\n    mapping(uint => address) map;\n    struct MyStruct {\n        uint foo;\n    }\n    mapping(uint => MyStruct) myStructs;\n    function f() public {\n        // call _f with state variables\n        _f(arr, map, myStructs[1]);\n\n        // get a struct from a mapping\n        MyStruct storage myStruct = myStructs[1];\n        // create a struct in memory\n        MyStruct memory myMemStruct = MyStruct(0);\n    }\n    function _f(\n        uint[] storage _arr,\n        mapping(uint => address) storage _map,\n        MyStruct storage _myStruct\n    ) internal {\n        // do something with storage variables\n    }\n    // You can return memory variables\n    function g(uint[] memory _arr) public returns (uint[] memory) {\n        // do something with memory array\n    }\n    function h(uint[] calldata _arr) external {\n        // do something with calldata array\n    }\n}",
         },
         {
           title: "Constructor",

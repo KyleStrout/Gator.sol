@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/api/compile", (req, res, next) => {
-  console.log(req.body.value);
   try {
     const content = req.body.value;
 
@@ -43,12 +42,8 @@ app.post("/api/getMethodData", (req, res) => {
   try {
     const method = req.body.method;
     const inputs = req.body.inputs;
-    console.log("inputs: ", inputs);
-    console.log(method, inputs);
 
     const encodedFunc = web3.eth.abi.encodeFunctionCall(method, inputs);
-
-    console.log("encoded function: ", encodedFunc);
 
     res.send({ encodedFunc });
   } catch (error) {
@@ -78,15 +73,11 @@ app.post("/api/deployWithArguments", async (req, res) => {
 
       for (let i = 0; i < currentArgs.arguments.length; i++) {
         const argType = currentArgs.arguments[i].type;
-        console.log("argType: ", argType);
         const argValue = currentArgValues[i];
 
-        //console.log("argType", argType);
         if (argType === "bytes32[]") {
-          //console.log(argValue);
           // make string into array
           const argValueArray = argValue.slice(1, -1).split(",");
-          console.log("argValueArray: ", argValueArray);
           // const newArray = JSON.parse(argValue.replace("'", '"'));
           const typedArgValueArray = argValueArray.map((arg) => {
             const hex = web3.utils.asciiToHex(arg);
@@ -110,7 +101,6 @@ app.post("/api/deployWithArguments", async (req, res) => {
           arguments: currentArgValues,
         })
         .encodeABI();
-      //console.log(encodedAbi);
       encodedAbis.push(encodedAbi);
     }
     res.send(encodedAbis);

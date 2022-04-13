@@ -60,7 +60,10 @@ export default function InteractionPanel(props) {
 
     const url = window.location.href.split("/").pop();
 
-    if (method.stateMutability === "view") {
+    if (
+      method.stateMutability === "view" ||
+      method.stateMutability === "pure"
+    ) {
       const res = await window.ethereum.request({
         method: "eth_call",
         params: [transactionObject, "latest"],
@@ -93,7 +96,7 @@ export default function InteractionPanel(props) {
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            result: decoded[0],
+            result: tempResult,
           },
         ];
       } else {
