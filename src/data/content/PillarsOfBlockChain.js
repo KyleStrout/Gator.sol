@@ -1,5 +1,4 @@
-export const content = 
-`
+export const content = `
 # The Three Pillars of Blockchain
 
 There are three essential concepts to understand regarding blockchain technology, they are: 
@@ -21,7 +20,6 @@ allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 allowfullscreen></iframe>
 </div>
 
-
 ## Immutability:
 <div style= "height: 450px">
 <iframe width="560" height="315"
@@ -30,7 +28,6 @@ frameborder="0"
 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe>
 </div>
-
 
 ## Transparency:
 <div style= "height: 450px">
