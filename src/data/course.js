@@ -172,14 +172,6 @@ const course = {
       title: "Solidity Advanced",
       url: "solidity-advanced",
       sections: [
-        // {
-        //   title: "Functions",
-        //   url: "solidity-advanced",
-        //   contentUrl: "Functions.js",
-        //   hasCodeEditor: true,
-        //   defaultCode:
-        //     "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Function {\n    // Functions can return multiple values.\n    function returnMany()\n        public\n        pure\n        returns ( uint,\n            bool,\n            uint ) {\n        return (1, true, 2);\n    }\n\n    // Return values can be named.\n    function named()\n        public\n        pure\n        returns ( uint x,\n            bool b,\n            uint y ) {\n        return (1, true, 2);\n    }\n\n    // Return values can be assigned to their name.\n    // In this case the return statement can be omitted.\n    function assigned()\n        public\n        pure\n        returns ( uint x,\n            bool b,\n            uint y ) {\n        x = 1;\n        b = true;\n        y = 2;\n    }\n\n    // Use destructuring assignment when calling another\n    // function that returns multiple values.\n    function destructuringAssignments()\n        public\n        pure\n        returns ( uint,\n            bool,\n            uint,\n            uint,\n            uint ) {\n        (uint i, bool b, uint j) = returnMany();\n\n        // Values can be left out.\n        (uint x, , uint y) = (4, 5, 6);\n\n        return (i, b, j, x, y);\n    }\n\n    // Cannot use map for either input or output\n\n    // Can use array for input\n    function arrayInput(uint[] memory _arr) public {}\n\n    // Can use array for output\n    uint[] public arr;\n\n    function arrayOutput() public view returns (uint[] memory) {\n        return arr;\n    }\n}",
-        // },
         {
           title: "Data Locations",
           url: "solidity-advanced",
@@ -195,6 +187,14 @@ const course = {
           contentUrl: "Constructor.js",
           defaultCode:
             "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n// Base contract X\ncontract X {\n    string public name;\n    constructor(string memory _name) {\n        name = _name;\n    }\n}",
+        },
+        {
+          title: "Error",
+          url: "error",
+          hasCodeEditor: true,
+          contentUrl: "Error.js",
+          defaultCode:
+            "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\ncontract Error {\n    function test(uint _i) public pure {\n        // add a statement here to throw an error\n    }\n}",
         },
         {
           title: "...and more",

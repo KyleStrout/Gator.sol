@@ -477,7 +477,7 @@ export default function CodeEditor(props) {
             disabled={!canDeploy()}
             onClick={hasArguments ? handleClick : deploy}
           >
-            {hasArguments ? "Deploy with Arguments" : "Deploy"}
+            {hasArguments ? "Constructor Deploy" : "Deploy"}
           </Button>
           {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
           {hasArguments && (
@@ -488,7 +488,7 @@ export default function CodeEditor(props) {
             >
               <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <Form>
-                  <DialogTitle>Deploy with Arguments</DialogTitle>
+                  <DialogTitle>Constructor Deploy</DialogTitle>
                   <DialogContent>
                     {Object.values(argumentList).map((contract, index) => {
                       return (
