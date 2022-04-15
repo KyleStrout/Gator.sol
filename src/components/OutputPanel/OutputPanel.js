@@ -155,7 +155,7 @@ export default function OutputPanel(props) {
       </TabPanel>
       <TabPanel value={value} index={2}>
         {/* TODO: get data from json object, put in text like markdown */}
-        <TransactionHistory history={transactions} />
+        <TransactionHistory src={compilerData} history={transactions} />
       </TabPanel>
     </Box>
   );

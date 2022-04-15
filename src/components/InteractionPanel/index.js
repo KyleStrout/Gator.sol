@@ -132,70 +132,58 @@ export default function InteractionPanel(props) {
       }, 1100);
     } else {
       try {
-        window.ethereum
-          .request({
-            method: "eth_sendTransaction",
-            params: [transactionObject],
-          })
-          .then((res) => {
-            console.log("RES", res);
-            let intervalId;
-            intervalId = setInterval(
-              async function () {
-                window.ethereum
-                  .request({
-                    method: "eth_getTransactionReceipt",
-                    params: [res],
-                  })
-                  .then((rec) => {
-                    console.log("REC", rec);
-                    setMessage("Got TX recepit! Waiting on confirmation...");
-                    setCloseDuration(60000);
-                    setOpen(true);
-                    if (rec) {
-                      //console.log("Receipt:", rec);
-                      const url = window.location.href.split("/").pop();
-                      let newTransactions;
-                      let transaction = {
-                        method: method.name,
-                        contractName: contractName,
-                        //mutability: method.stateMutability,
-                        ...rec,
-                      };
-                      if (contractData[url].transactions) {
-                        newTransactions = [
-                          ...contractData[url].transactions,
-                          transaction,
-                        ];
-                      } else {
-                        newTransactions = [transaction];
-                      }
-                      setContractData((prevState) => ({
-                        ...prevState,
-                        [url]: {
-                          ...prevState[url],
-                          transactions: newTransactions,
-                        },
-                      }));
-                      clearInterval(intervalId);
-                      setOpen(false);
-                      setMessage("Confirmed!");
-                      setCloseDuration(1000);
-                      setOpen(true);
-                    }
-                  })
-                  .error((err) => {
-                    console.log("Error:", err);
-                  });
-              },
-              1000,
-              res,
-              intervalId
-            );
-          })
-          .error((err) => {
-            console.log("Error:", err);
-          });
+        const res = await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [transactionObject],
+        });
+        console.log("RES", res);
+        let intervalId;
+        intervalId = setInterval(
+          async function () {
+            const rec = await window.ethereum.request({
+              method: "eth_getTransactionReceipt",
+              params: [res],
+            });
+            console.log("REC", rec);
+            setMessage("Got TX recepit! Waiting on confirmation...");
+            setCloseDuration(60000);
+            setOpen(true);
+            if (rec) {
+              //console.log("Receipt:", rec);
+              const url = window.location.href.split("/").pop();
+              let newTransactions;
+              let transaction = {
+                method: method.name,
+                contractName: contractName,
+                //mutability: method.stateMutability,
+                ...rec,
+              };
+              if (contractData[url].transactions) {
+                newTransactions = [
+                  ...contractData[url].transactions,
+                  transaction,
+                ];
+              } else {
+                newTransactions = [transaction];
+              }
+              setContractData((prevState) => ({
+                ...prevState,
+                [url]: {
+                  ...prevState[url],
+                  transactions: newTransactions,
+                },
+              }));
+              clearInterval(intervalId);
+              setOpen(false);
+              setMessage("Confirmed!");
+              setCloseDuration(1000);
+              setOpen(true);
+            }
+          },
+          1000,
+          res,
+          intervalId
+        );
       } catch (err) {
         console.log("Error:", err);
       }
@@ -364,23 +352,25 @@ export default function InteractionPanel(props) {
                           );
                         }}
                       >
-                        {typeof method.name !== "undefined" && (
-                          <Button
-                            sx={{
-                              backgroundColor: theme.palette.compileButton,
-                              color: "white",
-                              margin: "0.5rem",
-                              textTransform: "none",
-                              fontSize: "1rem",
-                            }}
-                            size="medium"
-                            type="submit"
-                            variant="contained"
-                          >
-                            {method.name}
-                          </Button>
-                        )}
+                        {typeof method.name !== "undefined" &&
+                          method.type !== "event" && (
+                            <Button
+                              sx={{
+                                backgroundColor: theme.palette.compileButton,
+                                color: "white",
+                                margin: "0.5rem",
+                                textTransform: "none",
+                                fontSize: "1rem",
+                              }}
+                              size="medium"
+                              type="submit"
+                              variant="contained"
+                            >
+                              {method.name}
+                            </Button>
+                          )}
                         {method.type !== "constructor" &&
+                          method.type !== "event" &&
                           method.inputs.map((input, index) => {
                             return (
                               <div

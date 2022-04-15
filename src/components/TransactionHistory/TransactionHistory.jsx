@@ -11,7 +11,9 @@ import {
 import * as Icons from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/styles";
+const Web3 = require("web3");
 
+const web3 = new Web3(Web3.givenProvider || "ws://localhost:3000");
 const TransactionHistory = (props) => {
   const theme = useTheme();
   const [copyText, setCopyText] = useState("Copy");
@@ -37,14 +39,16 @@ const TransactionHistory = (props) => {
       )}
       {props.history.length > 0 &&
         props.history.map((item, index) => {
-          const accordionTitle = `${item.contractName}.(${item.method})`
+          const accordionTitle = `${item.contractName}.(${item.method})`;
           return (
-            <Accordion key={index}
-            sx={{
-              //color for interact pannel after/under expansion
-              backgroundColor: theme.palette.sideNavAccordion,
-              color: theme.palette.textColor,
-            }}>
+            <Accordion
+              key={index}
+              sx={{
+                //color for interact pannel after/under expansion
+                backgroundColor: theme.palette.sideNavAccordion,
+                color: theme.palette.textColor,
+              }}
+            >
               <AccordionSummary
                 expandIcon={<Icons.ExpandMore />}
                 aria-controls="panel1a-content"
@@ -65,21 +69,68 @@ const TransactionHistory = (props) => {
                     /* TODO: order keys based on state mutability
                     DOCS: https://pub.dev/documentation/celodart/latest/contracts/StateMutability.html
                     */
-                    let keysToSkip = ['logs', 'transactionIndex', 'blocknumber', 'transactionIndex', 'logsBloom', 'type', 'blockNumber', 'blockHash', 'contractName'];
+                    let keysToSkip = [
+                      "transactionIndex",
+                      "blocknumber",
+                      "transactionIndex",
+                      "logsBloom",
+                      "type",
+                      "blockNumber",
+                      "blockHash",
+                      "contractName",
+                    ];
                     let keyToDisplay = setKeyDisplay(key);
                     let valueToDisplay = value;
                     if (!keysToSkip.includes(key)) {
+                      if (key === "logs") {
+                        console.log("ALL", value);
+                        console.log(props.src[0].abi);
+                        const events = props.src[0]?.abi.filter(
+                          (item) => item.type === "event"
+                        );
+                        const eventInputs = events?.map((item) => {
+                          return item.inputs.map((input) => {
+                            return {
+                              name: input.name,
+                              type: input.type,
+                              indexed: input.indexed,
+                            };
+                          });
+                        });
+                        const decodedLogs = [];
+                        for (let i = 0; i < value.length; i++) {
+                          const currentValue = value[i];
+
+                          // TODO: Get name of event from value ( need to decode it from the topics array somehow)
+                          // Match the event signature to the abi
+                          // use that event instead of eventInputs[i] to decode log
+                          const currentEvent = eventInputs[i];
+                          console.log("VALUE", currentValue);
+                          console.log("EVENT", currentEvent);
+                          const decodedLog = web3.eth.abi.decodeLog(
+                            currentEvent,
+                            currentValue.data,
+                            currentValue.topics
+                          );
+                          decodedLogs.push(decodedLog);
+                        }
+                        console.log(decodedLogs);
+                        valueToDisplay = "";
+                        console.log(valueToDisplay);
+                      }
                       if (key === "cumulativeGasUsed" || key === "gasUsed") {
                         valueToDisplay = `${parseInt(value, 16)}`;
                       }
                       if (key === "effectiveGasPrice") {
-                        valueToDisplay = `${value} (${parseInt(value, 16)} Wei)`;
+                        valueToDisplay = `${value} (${parseInt(
+                          value,
+                          16
+                        )} Wei)`;
                       }
                       if (key === "status") {
                         if (value === "0x1") {
                           valueToDisplay = "Success";
-                        }
-                        else {
+                        } else {
                           valueToDisplay = "Failure";
                         }
                       }
@@ -91,14 +142,19 @@ const TransactionHistory = (props) => {
                             if (currentValue[0] === "__length__") {
                               return previousValue;
                             }
-                            return previousValue + currentValue[1] + ", "
+                            return previousValue + currentValue[1] + ", ";
                           },
                           initialValue
                         );
                       }
-                      if (value !== null && valueToDisplay != null && valueToDisplay.length > 50) {
+                      if (
+                        value !== null &&
+                        valueToDisplay != null &&
+                        valueToDisplay.length > 50
+                      ) {
                         // Truncate long strings
-                        valueToDisplay = valueToDisplay.substring(0, 50) + "...";
+                        valueToDisplay =
+                          valueToDisplay.substring(0, 50) + "...";
                       }
                       return (
                         <Box
@@ -145,17 +201,13 @@ function setKeyDisplay(key) {
   let keyToDisplay = key;
   if (key === "cumulativeGasUsed") {
     keyToDisplay = "cumulative gas used";
-  }
-  else if (key === "gasUsed") {
+  } else if (key === "gasUsed") {
     keyToDisplay = "gas used";
-  }
-  else if (key === "transactionHash") {
+  } else if (key === "transactionHash") {
     keyToDisplay = "transaction hash";
-  }
-  else if (key === "effectiveGasPrice") {
+  } else if (key === "effectiveGasPrice") {
     keyToDisplay = "gas price";
-  }
-  else if (key === "contractAddress") {
+  } else if (key === "contractAddress") {
     keyToDisplay = "contract address";
   }
   return keyToDisplay;
