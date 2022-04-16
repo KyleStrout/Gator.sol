@@ -173,6 +173,14 @@ const course = {
       url: "solidity-advanced",
       sections: [
         {
+          title: "Message Object",
+          url: "msg-object",
+          contentUrl: "messageObject.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "pragma solidity ^0.8.11;\ncontract Message {\n    function data() public pure returns (bytes calldata) {\n        return msg.data;\n    }\n\n    function gas() public view returns (uint) {\n        return gasleft();\n    }\n\n    function sig() public view returns (bytes4) {\n        return msg.sig;\n    }\n\n    \n    function value() payable public returns (uint) {\n        return msg.value;\n    }\n}",
+        },
+        {
           title: "Data Locations",
           url: "solidity-advanced",
           contentUrl: "DataLocations.js",
