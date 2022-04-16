@@ -189,6 +189,14 @@ const course = {
             "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n// Base contract X\ncontract X {\n    string public name;\n    constructor(string memory _name) {\n        name = _name;\n    }\n}",
         },
         {
+          title: "Inheritance",
+          url: "inheritance",
+          hasCodeEditor: true,
+          contentUrl: "Inheritance.js",
+          defaultCode:
+            'pragma solidity ^0.8.10;\ncontract A {\n    function foo() public pure virtual returns (string memory) {\n        return "A";\n    }\n}\n\n// Add contracts "B" and "C" using the keyboard "is"\n\n',
+        },
+        {
           title: "Error",
           url: "error",
           hasCodeEditor: true,
