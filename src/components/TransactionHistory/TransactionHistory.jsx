@@ -83,39 +83,57 @@ const TransactionHistory = (props) => {
                     let valueToDisplay = value;
                     if (!keysToSkip.includes(key)) {
                       if (key === "logs") {
-                        console.log("ALL", value);
-                        console.log(props.src[0].abi);
                         const events = props.src[0]?.abi.filter(
                           (item) => item.type === "event"
                         );
-                        const eventInputs = events?.map((item) => {
-                          return item.inputs.map((input) => {
-                            return {
-                              name: input.name,
-                              type: input.type,
-                              indexed: input.indexed,
-                            };
-                          });
-                        });
+
                         const decodedLogs = [];
                         for (let i = 0; i < value.length; i++) {
                           const currentValue = value[i];
 
+                          const currentEvent = events.find((item) => {
+                            const signature =
+                              item.name +
+                              "(" +
+                              item.inputs
+                                .map(function (input) {
+                                  return input.type;
+                                })
+                                .join(",") +
+                              ")";
+                            const hash = web3.utils.sha3(signature);
+                            if (
+                              hash.substring(0, 10) ===
+                              currentValue.topics[0].substring(0, 10)
+                            ) {
+                              return true;
+                            }
+                            return false;
+                          });
+
                           // TODO: Get name of event from value ( need to decode it from the topics array somehow)
                           // Match the event signature to the abi
                           // use that event instead of eventInputs[i] to decode log
-                          const currentEvent = eventInputs[i];
-                          console.log("VALUE", currentValue);
-                          console.log("EVENT", currentEvent);
                           const decodedLog = web3.eth.abi.decodeLog(
-                            currentEvent,
+                            currentEvent.inputs,
                             currentValue.data,
-                            currentValue.topics
+                            currentValue.topics.slice(0)
                           );
                           decodedLogs.push(decodedLog);
                         }
-                        console.log(decodedLogs);
-                        valueToDisplay = "";
+                        valueToDisplay = decodedLogs.reduce(
+                          (previousValue, currentValue) => {
+                            let finalString = "";
+                            const length = currentValue.__length__;
+                            console.log(typeof length);
+                            for (let i = 0; i < length; i++) {
+                              console.log(`item ${i}`, currentValue[i]);
+                              finalString += currentValue[i]?.toString() + " ";
+                            }
+                            return previousValue + finalString + "\n";
+                          },
+                          ""
+                        );
                         console.log(valueToDisplay);
                       }
                       if (key === "cumulativeGasUsed" || key === "gasUsed") {

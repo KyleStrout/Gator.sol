@@ -202,7 +202,7 @@ const course = {
           hasCodeEditor: true,
           contentUrl: "Events.js",
           defaultCode:
-            '\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Event {\n    // Event declaration\n    // Up to 3 parameters can be indexed.\n    // Indexed parameters helps you filter the logs by the indexed parameter\n    event Log(address indexed sender, string message);\n    event AnotherLog();\n\n    function test() public {\n        emit Log(msg.sender, "Hello World!");\n        emit Log(msg.sender, "Hello EVM!");\n        emit AnotherLog();\n    }\n}',
+            '\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Event {\n    // Event declaration\n    // Up to 3 parameters can be indexed.\n    // Indexed parameters helps you filter the logs by the indexed parameter\n    event Log(string message);\n    event AnotherLog();\n\n    function test() public {\n        emit Log("Hello World!");\n        emit Log("Hello EVM!");\n        emit AnotherLog();\n    }\n}',
         },
         {
           title: "...and more",
