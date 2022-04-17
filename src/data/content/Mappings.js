@@ -10,4 +10,17 @@ Mappings are useful because you can model arbitrary and complex data in a way th
 
 Nested mappings are mappings that return other mappings. This is useful for storing data in a hierarchical structure. For example, you could store data that belongs to someone specifically
 based off an address or something else.
+
+### Syntax
+
+<pre>
+<code class="language-solidity">
+// create mapping
+mapping(keyType => valueType) <b>name</b>;
+// access/update mapping
+value = name[key];
+name[key] = value;
+</code>
+</pre>
+
 `;

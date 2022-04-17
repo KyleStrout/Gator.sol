@@ -3,16 +3,19 @@ import React, { useRef, useState, useEffect } from "react";
 // monaco editor
 import Editor from "@monaco-editor/react";
 // mui
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import RestoreIcon from '@mui/icons-material/Restore';
+import Tooltip from '@mui/material/Tooltip';
 
 import { useLocation } from "react-router-dom";
 
 import AddressContext from "../AddressContext";
 import ContractContext from "../ContractContext";
+import ResetDialog from "../ResetDialog";
 import { useTheme } from "@mui/styles";
 import { Formik, Field, Form } from "formik";
 
@@ -36,6 +39,18 @@ export default function CodeEditor(props) {
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
   const [hasArguments, setHasArguments] = useState(false);
+  const [defaultCode, setDefaultCode] = useState(props.defaultCode)
+
+  useEffect(() => {
+    const url = window.location.href.split("/").pop();
+    if (localStorage.getItem(url))
+    {
+      setDefaultCode(localStorage.getItem(url));
+    }
+    else {
+      setDefaultCode(props.defaultCode);
+    }
+  }, [])
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -76,6 +91,8 @@ export default function CodeEditor(props) {
   const [open, setOpen] = React.useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
+  const [resetOpen, setResetOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState("HI");
 
   const handleClick = () => {
     setDialogOpen(true);
@@ -93,13 +110,26 @@ export default function CodeEditor(props) {
     setOpen(false);
   };
 
+  const handleResetClickOpen = () => {
+    setResetOpen(true);
+  }
+
+  const handleResetClose = () => {
+    setResetOpen(false);
+  }
+
+  const handleResetTrue = () => {
+    editorRef.current.setValue(props.defaultCode)
+  }
+
   const { address } = React.useContext(AddressContext);
 
   function handleEditorDidMount(editor) {
     editorRef.current = editor;
   }
   function handleEditorChange(value, event) {
-    //console.log("here is the current model value:\n", value);
+    const url = window.location.href.split("/").pop();
+    localStorage.setItem(url, value);
   }
   function handleEditorValidation(markers) {
     markers.forEach((marker) => console.log("onValidate:", marker.message));
@@ -246,7 +276,15 @@ export default function CodeEditor(props) {
 
   useEffect(() => {
     if (editorRef.current) {
-      editorRef.current.setValue(props.defaultCode);
+      const url = window.location.href.split("/").pop();
+      if (localStorage.getItem(url))
+      {
+        editorRef.current.setValue(localStorage.getItem(url));
+      }
+      else {
+        editorRef.current.setValue(props.defaultCode);
+      }
+
     }
   }, [props.defaultCode]);
 
@@ -414,7 +452,7 @@ export default function CodeEditor(props) {
         height="calc(50vh - 6rem)"
         width="100%"
         defaultLanguage="sol"
-        defaultValue={props.defaultCode}
+        defaultValue={defaultCode}
         language="sol"
         theme={theme.palette.codeEditor} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
         onMount={handleEditorDidMount}
@@ -477,7 +515,7 @@ export default function CodeEditor(props) {
             disabled={!canDeploy()}
             onClick={hasArguments ? handleClick : deploy}
           >
-            {hasArguments ? "Deploy with Arguments" : "Deploy"}
+            {hasArguments ? "Constructor Deploy" : "Deploy"}
           </Button>
           {/* need help styling this it looks really bad and probably needing some sort of dropdown or way to expand the arguments */}
           {hasArguments && (
@@ -488,7 +526,7 @@ export default function CodeEditor(props) {
             >
               <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <Form>
-                  <DialogTitle>Deploy with Arguments</DialogTitle>
+                  <DialogTitle>Constructor Deploy</DialogTitle>
                   <DialogContent>
                     {Object.values(argumentList).map((contract, index) => {
                       return (
@@ -534,6 +572,15 @@ export default function CodeEditor(props) {
               </Dialog>
             </Formik>
           )}
+          <Tooltip title="Reset code" placement="top">
+            <IconButton onClick={handleResetClickOpen} 
+            color="primary" 
+            sx={{ position: "fixed", right: "1em" }}
+            >
+              <RestoreIcon />
+            </IconButton>
+          </Tooltip>
+          <ResetDialog open={resetOpen} onClose={handleResetClose} reset={handleResetTrue}/>
         </Box>
       </Box>
     </Box>

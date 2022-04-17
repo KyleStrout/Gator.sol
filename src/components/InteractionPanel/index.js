@@ -52,15 +52,26 @@ export default function InteractionPanel(props) {
     const { encodedFunc } = await response.json();
     // send the transaction
     transactionObject.data = encodedFunc;
-    const gas = await window.ethereum.request({
-      method: "eth_estimateGas",
-      params: [transactionObject],
-    });
+    let gas;
+    try {
+      gas = await window.ethereum.request({
+        method: "eth_estimateGas",
+        params: [transactionObject],
+      });
+    } catch (err) {
+      setOpen(false);
+      setMessage("Error: " + err.message);
+      setOpen(true);
+    }
+
     transactionObject.gas = gas;
 
     const url = window.location.href.split("/").pop();
 
-    if (method.stateMutability === "view") {
+    if (
+      method.stateMutability === "view" ||
+      method.stateMutability === "pure"
+    ) {
       const res = await window.ethereum.request({
         method: "eth_call",
         params: [transactionObject, "latest"],
@@ -69,9 +80,7 @@ export default function InteractionPanel(props) {
         method.outputs.map((output) => output.type),
         res
       );
-      console.log("decodedEntries: ", Object.values(decoded));
       const decodedEntries = Object.values(decoded);
-      console.log("length: ", decodedEntries.length);
       let tempResult = "";
       for (let i = 0; i < decodedEntries.length - 1; i++) {
         if (i === decodedEntries.length - 2) {
@@ -81,10 +90,8 @@ export default function InteractionPanel(props) {
         }
       }
       method.result = tempResult;
-      console.log(method.result);
       let newTransactions;
       if (contractData[url].transactions) {
-        console.log("here");
         newTransactions = [
           ...contractData[url].transactions,
           {
@@ -93,7 +100,7 @@ export default function InteractionPanel(props) {
             //mutability: method.stateMutability,
             from: address,
             to: contractAddress,
-            result: decoded[0],
+            result: tempResult,
           },
         ];
       } else {
@@ -124,57 +131,62 @@ export default function InteractionPanel(props) {
         setOpen(true);
       }, 1100);
     } else {
-      const res = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [transactionObject],
-      });
-
-      let intervalId;
-      intervalId = setInterval(
-        async function () {
-          let rec = await window.ethereum.request({
-            method: "eth_getTransactionReceipt",
-            params: [res],
-          });
-          setMessage("Got TX recepit! Waiting on confirmation...");
-          setCloseDuration(60000);
-          setOpen(true);
-          if (rec) {
-            //console.log("Receipt:", rec);
-            const url = window.location.href.split("/").pop();
-            let newTransactions;
-            let transaction = {
-              method: method.name,
-              contractName: contractName,
-              //mutability: method.stateMutability,
-              ...rec,
-            };
-            if (contractData[url].transactions) {
-              newTransactions = [
-                ...contractData[url].transactions,
-                transaction,
-              ];
-            } else {
-              newTransactions = [transaction];
-            }
-            setContractData((prevState) => ({
-              ...prevState,
-              [url]: {
-                ...prevState[url],
-                transactions: newTransactions,
-              },
-            }));
-            clearInterval(intervalId);
-            setOpen(false);
-            setMessage("Confirmed!");
-            setCloseDuration(1000);
+      try {
+        const res = await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [transactionObject],
+        });
+        console.log("RES", res);
+        let intervalId;
+        intervalId = setInterval(
+          async function () {
+            const rec = await window.ethereum.request({
+              method: "eth_getTransactionReceipt",
+              params: [res],
+            });
+            console.log("REC", rec);
+            setMessage("Got TX recepit! Waiting on confirmation...");
+            setCloseDuration(60000);
             setOpen(true);
-          }
-        },
-        1000,
-        res,
-        intervalId
-      );
+            if (rec) {
+              //console.log("Receipt:", rec);
+              const url = window.location.href.split("/").pop();
+              let newTransactions;
+              let transaction = {
+                method: method.name,
+                contractName: contractName,
+                //mutability: method.stateMutability,
+                ...rec,
+              };
+              if (contractData[url].transactions) {
+                newTransactions = [
+                  ...contractData[url].transactions,
+                  transaction,
+                ];
+              } else {
+                newTransactions = [transaction];
+              }
+              setContractData((prevState) => ({
+                ...prevState,
+                [url]: {
+                  ...prevState[url],
+                  transactions: newTransactions,
+                },
+              }));
+              clearInterval(intervalId);
+              setOpen(false);
+              setMessage("Confirmed!");
+              setCloseDuration(1000);
+              setOpen(true);
+            }
+          },
+          1000,
+          res,
+          intervalId
+        );
+      } catch (err) {
+        console.log("Error:", err);
+      }
     }
   };
 
@@ -234,190 +246,194 @@ export default function InteractionPanel(props) {
 
   if (props.deployed) {
     return props.src.map((contract, index) => {
-      return (
-        <div key={index}>
-          <Accordion
-            sx={{
-              //color for interact pannel after/under expansion
-              backgroundColor: theme.palette.sideNavAccordion,
-              color: theme.palette.textColor,
-            }}
-            defaultExpanded={true}
-            square
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
+      if (contract.address) {
+        return (
+          <div key={index}>
+            <Accordion
               sx={{
-                marginBlock: 0,
+                //color for interact pannel after/under expansion
                 backgroundColor: theme.palette.sideNavAccordion,
                 color: theme.palette.textColor,
               }}
+              defaultExpanded={true}
+              square
             >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: "1rem",
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                sx={{
+                  marginBlock: 0,
+                  backgroundColor: theme.palette.sideNavAccordion,
+                  color: theme.palette.textColor,
                 }}
               >
-                <h3>{contract.name}</h3> <small>at</small>{" "}
-                <i>
-                  {contract.address.slice(0, 8) +
-                    "..." +
-                    contract.address.slice(-5)}
-                </i>
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    flexGrow: "1",
+                    alignItems: "center",
+                    gap: "1rem",
                   }}
                 >
-                  <Snackbar
-                    open={open}
-                    autoHideDuration={closeDuration}
-                    onClose={handleClose}
-                    message={message}
-                    action={action}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    aria-label="close"
-                    color="inherit"
-                    onClick={(e) => {
-                      setMessage("Address copied to clipboard!");
-                      setCloseDuration(1000);
-                      setOpen(true);
-                      e.stopPropagation();
-                      navigator.clipboard.writeText(contract.address);
-                      setOpen(true);
+                  <h3>{contract.name}</h3> <small>at</small>{" "}
+                  <i>
+                    {contract.address?.slice(0, 8) +
+                      "..." +
+                      contract.address?.slice(-5)}
+                  </i>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      flexGrow: "1",
                     }}
                   >
-                    <ContentCopyIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    aria-label="close"
-                    color="inherit"
-                    onClick={(e) => {
-                      // navigate to rinkbey ether scan for contract address
-                      window.open(
-                        `https://rinkeby.etherscan.io/address/${contract.address}`,
-                        "_blank"
-                      );
-                    }}
-                  >
-                    <LanguageIcon fontSize="small" />
-                  </IconButton>
-                </div>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              {contract.abi.map((method, index) => {
-                return (
-                  <div key={index}>
-                    <form
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        width: "100%",
+                    <Snackbar
+                      open={open}
+                      autoHideDuration={closeDuration}
+                      onClose={handleClose}
+                      message={message}
+                      action={action}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
                       }}
-                      onSubmit={(e) => {
-                        const parameters = onSubmit(e);
-                        interact(
-                          contract.address,
-                          method,
-                          contract.name,
-                          ...parameters
+                    />
+                    <IconButton
+                      size="small"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={(e) => {
+                        setMessage("Address copied to clipboard!");
+                        setCloseDuration(1000);
+                        setOpen(true);
+                        e.stopPropagation();
+                        navigator.clipboard.writeText(contract.address);
+                        setOpen(true);
+                      }}
+                    >
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      aria-label="close"
+                      color="inherit"
+                      onClick={(e) => {
+                        // navigate to rinkbey ether scan for contract address
+                        window.open(
+                          `https://rinkeby.etherscan.io/address/${contract.address}`,
+                          "_blank"
                         );
                       }}
                     >
-                      {typeof method.name !== "undefined" && (
-                        <Button
-                          sx={{
-                            backgroundColor: theme.palette.compileButton,
-                            color: "white",
-                            margin: "0.5rem",
-                            textTransform: "none",
-                            fontSize: "1rem",
-                          }}
-                          size="medium"
-                          type="submit"
-                          variant="contained"
-                        >
-                          {method.name}
-                        </Button>
-                      )}
-                      {method.type !== "constructor" &&
-                        method.inputs.map((input, index) => {
-                          return (
-                            <div
-                              key={index}
-                              style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "flex-end",
-                                flexGrow: 1,
-                              }}
-                            >
-                              <TextField
-                                name={`${input.name}-${input.type}`}
-                                id="filled-basic"
-                                label={
-                                  <span
-                                    style={{
-                                      color: theme.palette.outputPanelText,
-                                    }}
-                                  >
-                                    {input.name + ": " + input.type}
-                                  </span>
-                                }
-                                //label={input.name + ": " + input.type}
-                                variant="filled"
-                                size="small"
-                                sx={{ paddingTop: ".2rem" }}
-                              />
-                            </div>
-                          );
-                        })}
-                      {method.result && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "flex-end",
-                            alignItems: "center",
-                            flexGrow: 1,
-                          }}
-                        >
-                          <span>
-                            <small> Result: </small>
-                            {method.result.length <= 32 && (
-                              <strong> {method.result}</strong>
-                            )}
-                            {method.result.length > 32 && (
-                              <strong>
-                                {method.result.slice(0, 32) + "..."}
-                              </strong>
-                            )}
-                          </span>
-                        </div>
-                      )}
-                    </form>
+                      <LanguageIcon fontSize="small" />
+                    </IconButton>
                   </div>
-                );
-              })}
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
+                </div>
+              </AccordionSummary>
+              <AccordionDetails>
+                {contract.abi.map((method, index) => {
+                  return (
+                    <div key={index}>
+                      <form
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          width: "100%",
+                        }}
+                        onSubmit={(e) => {
+                          const parameters = onSubmit(e);
+                          interact(
+                            contract.address,
+                            method,
+                            contract.name,
+                            ...parameters
+                          );
+                        }}
+                      >
+                        {typeof method.name !== "undefined" &&
+                          method.type !== "event" && (
+                            <Button
+                              sx={{
+                                backgroundColor: theme.palette.compileButton,
+                                color: "white",
+                                margin: "0.5rem",
+                                textTransform: "none",
+                                fontSize: "1rem",
+                              }}
+                              size="medium"
+                              type="submit"
+                              variant="contained"
+                            >
+                              {method.name}
+                            </Button>
+                          )}
+                        {method.type !== "constructor" &&
+                          method.type !== "event" &&
+                          method.inputs.map((input, index) => {
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: "flex-end",
+                                  flexGrow: 1,
+                                }}
+                              >
+                                <TextField
+                                  name={`${input.name}-${input.type}`}
+                                  id="filled-basic"
+                                  label={
+                                    <span
+                                      style={{
+                                        color: theme.palette.outputPanelText,
+                                      }}
+                                    >
+                                      {input.name + ": " + input.type}
+                                    </span>
+                                  }
+                                  //label={input.name + ": " + input.type}
+                                  variant="filled"
+                                  size="small"
+                                  sx={{ paddingTop: ".2rem" }}
+                                />
+                              </div>
+                            );
+                          })}
+                        {method.result && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "flex-end",
+                              alignItems: "center",
+                              flexGrow: 1,
+                            }}
+                          >
+                            <span>
+                              <small> Result: </small>
+                              {method.result.length <= 32 && (
+                                <strong> {method.result}</strong>
+                              )}
+                              {method.result.length > 32 && (
+                                <strong>
+                                  {method.result.slice(0, 32) + "..."}
+                                </strong>
+                              )}
+                            </span>
+                          </div>
+                        )}
+                      </form>
+                    </div>
+                  );
+                })}
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      }
     });
   }
   return <></>;
