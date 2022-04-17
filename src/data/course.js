@@ -164,7 +164,8 @@ const course = {
           url: "function-modifiers",
           contentUrl: "FunctionModifiers.js",
           hasCodeEditor: true,
-          defaultCode: "",
+          defaultCode:
+            '// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract FunctionModifier {\n    // We will use these variables to demonstrate how to use\n    // modifiers.\n    address public owner;\n    uint public x = 5;\n    bool public locked;\n\n    constructor() {\n        // Set the transaction sender as the owner of the contract.\n        owner = msg.sender;\n    }\n\n    // Modifier to check that the caller is the owner of\n    // the contract.\n    modifier onlyOwner() {\n        require(msg.sender == owner, "Not owner");\n        // Underscore is a special character only used inside\n        // a function modifier and it tells Solidity to\n        // execute the rest of the code.\n        _;\n    }\n\n    // Modifiers can take inputs. This modifier checks that the\n    // address passed in is not the zero address.\n    modifier validAddress(address _addr) {\n        require(_addr != address(0), "Not valid address");\n        _;\n    }\n\n    function changeOwner(address _newOwner) public onlyOwner validAddress(_newOwner) {\n        owner = _newOwner;\n    }\n\n    // Modifiers can be called before and / or after a function.\n    // This modifier prevents a function from being called while\n    // it is still executing.\n    modifier noReentrancy() {\n        require(!locked, "No reentrancy");\n\n        locked = true;\n        _;\n        locked = false;\n    }\n\n    function decrement(uint i) public noReentrancy {\n        x -= i;\n\n        if (i > 1) {\n            decrement(i - 1);\n        }\n    }\n}',
         },
       ],
     },

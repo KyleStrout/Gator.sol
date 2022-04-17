@@ -9,5 +9,20 @@ as well as reduce the risk of bugs. A default value can also be assigned to an e
 
 Enums are critical to understand in solidity so there's two contracts in the editor. One for basic enums, and one for slightly more advanced enums that includes using structs and mappings.
 
+### Syntax
+
+<pre>
+<code class="language-solidity">
+enum Name {
+    memberName;
+    memberName2;
+    ...
+}
+// initialize enum
+Name variableName;
+// update enum
+variableName = Name.memberName;
+</code>
+</pre>
 
 `;
