@@ -242,6 +242,14 @@ const course = {
             "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Payable {\n    // Payable address can receive Ether\n    address payable public owner;\n\n    // Payable constructor can receive Ether\n    constructor() payable {\n        owner = payable(msg.sender);\n    }\n}",
         },
         {
+          title: "Sending Ether",
+          url: "sending-ether",
+          contentUrl: "SendingEther.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "pragma solidity ^0.8.10;\ncontract SendEther {\n    function sendViaTransfer(address payable _to) public payable {\n        // use .transfer\n    }\n\n    function sendViaSend(address payable _to) public payable {\n        // use .send\n    }\n\n    function sendViaCall(address payable _to) public payable {\n        // use .call\n    }\n}\ncontract ReceiveEther {\n    /*\n    Which function is called, fallback() or receive()?\n\n           send Ether\n               |\n         msg.data is empty?\n              / \\\n            yes  no\n            /     \\\nreceive() exists?  fallback()\n         /   \\\n        yes   no\n        /      \\\n    receive()   fallback()\n    */\n\n    // Function to receive Ether. msg.data must be empty\n    receive() external payable {}\n\n    // Fallback function is called when msg.data is not empty\n    fallback() external payable {}\n\n    function getBalance() public view returns (uint) {\n        return address(this).balance;\n    }\n}",
+        },
+        {
           title: "Error",
           url: "error",
           hasCodeEditor: true,
