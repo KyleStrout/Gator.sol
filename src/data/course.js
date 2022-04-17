@@ -239,7 +239,7 @@ const course = {
           contentUrl: "Payable.js",
           hasCodeEditor: true,
           defaultCode:
-            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Payable {\n    // Payable address can receive Ether\n    address payable public owner;\n\n    // Payable constructor can receive Ether\n    constructor() payable {\n        owner = payable(msg.sender);\n    }\n}",
+            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Payable {\n}",
         },
         {
           title: "Sending Ether",
