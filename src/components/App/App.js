@@ -36,7 +36,7 @@ function App() {
   function checkNetwork() {
     // if not on rinekby network, show warning
     // if window.ethereum
-    if (window !== "undefined" && window.ethereum !== "undefined") {
+    if (window !== "undefined" && window.ethereum) {
       window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
         if (chainId !== "0x4") {
           setOnWrongNetwork(true);
