@@ -155,15 +155,7 @@ const TransactionHistory = (props) => {
                       if (key === "result") {
                         console.log("result: ", value);
                         const initialValue = "";
-                        valueToDisplay = Object.entries(value).reduce(
-                          (previousValue, currentValue) => {
-                            if (currentValue[0] === "__length__") {
-                              return previousValue;
-                            }
-                            return previousValue + currentValue[1] + ", ";
-                          },
-                          initialValue
-                        );
+                        valueToDisplay = value;
                       }
                       if (
                         value !== null &&
