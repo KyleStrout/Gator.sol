@@ -49,6 +49,7 @@ export default function InteractionPanel(props) {
     setMessage("Calling method: " + method.name + "...");
     setOpen(true);
 
+    console.log(method, args);
     const response = await fetch(`${URL}/api/getMethodData`, {
       headers: {
         "Content-Type": "application/json",
@@ -200,9 +201,12 @@ export default function InteractionPanel(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     const inputs = e.target.querySelectorAll("input");
-    const params = Array.from(inputs).filter(
+    const inputArgs = Array.from(inputs).filter(
       (input) => input.name !== "msg-value"
     );
+    const params = inputArgs.map((param) => {
+      return param.value;
+    });
     let msgValue = Array.from(inputs).find(
       (input) => input.name === "msg-value"
     )?.value;
@@ -421,24 +425,25 @@ export default function InteractionPanel(props) {
                               </div>
                             );
                           })}
-                        {method.stateMutability === "payable" && (
-                          <TextField
-                            name={`msg-value`}
-                            id="filled-basic-payable"
-                            label={
-                              <span
-                                style={{
-                                  color: theme.palette.outputPanelText,
-                                }}
-                              >
-                                Value:
-                              </span>
-                            }
-                            variant="filled"
-                            size="small"
-                            sx={{ paddingTop: ".2rem" }}
-                          />
-                        )}
+                        {method.type !== "constructor" &&
+                          method.stateMutability === "payable" && (
+                            <TextField
+                              name={`msg-value`}
+                              id="filled-basic-payable"
+                              label={
+                                <span
+                                  style={{
+                                    color: theme.palette.outputPanelText,
+                                  }}
+                                >
+                                  Value:
+                                </span>
+                              }
+                              variant="filled"
+                              size="small"
+                              sx={{ paddingTop: ".2rem" }}
+                            />
+                          )}
                         {method.result && (
                           <div
                             style={{

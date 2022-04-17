@@ -89,7 +89,7 @@ const Hero = (props) => {
           data-aos={"fade-up"}
         >
           <Image
-            src="https://assets.maccarianagency.com/the-front/illustrations/dashboard-screenshot.jpg"
+            src="dashboard.png"
             alt="TheFront Company"
             className={classes.image}
             data-aos="flip-left"
