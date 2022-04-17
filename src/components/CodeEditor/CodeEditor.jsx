@@ -39,6 +39,18 @@ export default function CodeEditor(props) {
   const [outputWithAddress, setOutputWithAddress] = useState([]);
   const { contractData, setContractData } = React.useContext(ContractContext);
   const [hasArguments, setHasArguments] = useState(false);
+  const [defaultCode, setDefaultCode] = useState(props.defaultCode)
+
+  useEffect(() => {
+    const url = window.location.href.split("/").pop();
+    if (localStorage.getItem(url))
+    {
+      setDefaultCode(localStorage.getItem(url));
+    }
+    else {
+      setDefaultCode(props.defaultCode);
+    }
+  }, [])
 
   useEffect(() => {
     const url = window.location.href.split("/").pop();
@@ -117,7 +129,7 @@ export default function CodeEditor(props) {
   }
   function handleEditorChange(value, event) {
     const url = window.location.href.split("/").pop();
-    sessionStorage.setItem(url, value);
+    localStorage.setItem(url, value);
   }
   function handleEditorValidation(markers) {
     markers.forEach((marker) => console.log("onValidate:", marker.message));
@@ -265,9 +277,9 @@ export default function CodeEditor(props) {
   useEffect(() => {
     if (editorRef.current) {
       const url = window.location.href.split("/").pop();
-      if (sessionStorage.getItem(url) !== props.defaultCode && sessionStorage.getItem(url))
+      if (localStorage.getItem(url))
       {
-        editorRef.current.setValue(sessionStorage.getItem(url));
+        editorRef.current.setValue(localStorage.getItem(url));
       }
       else {
         editorRef.current.setValue(props.defaultCode);
@@ -417,17 +429,6 @@ export default function CodeEditor(props) {
     );
   };
 
-  function setCode() {
-    const url = window.location.href.split("/").pop();
-    if (sessionStorage.getItem(url) !== props.defaultCode && sessionStorage.getItem(url))
-    {
-      return sessionStorage.getItem(url);
-    }
-    else {
-      return props.defaultCode;
-    }
-  }
-
   const action = (
     <React.Fragment>
       <IconButton
@@ -451,7 +452,7 @@ export default function CodeEditor(props) {
         height="calc(50vh - 6rem)"
         width="100%"
         defaultLanguage="sol"
-        defaultValue={setCode()}
+        defaultValue={defaultCode}
         language="sol"
         theme={theme.palette.codeEditor} // if we dont want dark theme, we can use theme="vs" for light mode (can also be dynamic if we add a button for it)
         onMount={handleEditorDidMount}
