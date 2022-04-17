@@ -14,11 +14,17 @@ import { useTheme } from "@mui/styles";
 import { sessionStorage } from "../ThemeContext/index.js";
 
 import gatorLogo from "./gatorlogo.png";
+import gatorLogoWhite from "./gatorlogowhite.png";
 
 export default function Navbar(props) {
   const theme = useTheme();
   const [checked, setChecked] = React.useState(false);
   let navigate = useNavigate();
+
+  const [currentLogo, setCurrentLogo] = React.useState(gatorLogo);
+
+  let logo = gatorLogoWhite;
+  
 
   React.useEffect(() => {
     console.log("setting new theme");
@@ -32,6 +38,8 @@ export default function Navbar(props) {
   }, [checked]);
 
   function handleSwitchChange(event) {
+
+    setCurrentLogo(checked ? gatorLogo : gatorLogoWhite);
     setChecked(event.target.checked);
   }
 
@@ -42,7 +50,7 @@ export default function Navbar(props) {
     >
       <Toolbar disableGutters={true}>
         <img
-          src={gatorLogo}
+          src={currentLogo}
           alt="Gator Logo"
           height={65}
           width={65}
