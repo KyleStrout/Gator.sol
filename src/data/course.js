@@ -1,3 +1,5 @@
+
+//Connor
 const course = {
   chapters: [
     {
