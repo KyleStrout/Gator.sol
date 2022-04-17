@@ -20,7 +20,10 @@ players' horses. Smart contracts come to play in the breeding feature. A player 
 entirely unique horse with their old one. These traits about the new horse come from its parents and 
 are determined by what is programmed in the smart contract.
 
-For more information, please watch the videos below to gain an enhanced overview on smart contracts use cases.
+Other uses for smart contracts include applications in the legal industry, real estate, and the creation 
+of Decentralized Autonomous Organizations (DAO).
+
+For more information, please watch the video below to gain an enhanced overview on smart contracts use cases.
 
 ## What is DeFi?:
 <div style= "height: 450px">
