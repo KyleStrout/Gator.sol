@@ -173,11 +173,20 @@ const course = {
       url: "solidity-advanced",
       sections: [
         {
-          title: "Hello World",
-          url: "solidity-advanced",
+          title: "Message Object",
+          url: "msg-object",
+          contentUrl: "messageObject.js",
           hasCodeEditor: true,
           defaultCode:
-            "// SPDX-License-Identifier: GPL-3.0\n\npragma solidity >=0.7.0 <0.9.0;\n\n/**\n * @title Storage\n * @dev Store & retrieve value in a variable\n */\ncontract Storage {\n\n    uint256 number;\n\n    /**\n     * @dev Store value in variable\n     * @param num value to store\n     */\n    function store(uint256 num) public {\n        number = num;\n    }\n\n    /**\n     * @dev Return value \n     * @return value of 'number'\n     */\n    function retrieve() public view returns (uint256){\n        return number;\n    }\n}",
+            "pragma solidity ^0.8.11;\ncontract Message {\n    function data() public pure returns (bytes calldata) {\n        return msg.data;\n    }\n\n    function gas() public view returns (uint) {\n        return gasleft();\n    }\n\n    function sig() public view returns (bytes4) {\n        return msg.sig;\n    }\n\n    \n    function value() payable public returns (uint) {\n        return msg.value;\n    }\n}",
+        },
+        {
+          title: "Data Locations",
+          url: "solidity-advanced",
+          contentUrl: "DataLocations.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "pragma solidity ^0.8.10;\ncontract DataLocations {\n    uint[] public arr;\n    mapping(uint => address) map;\n    struct MyStruct {\n        uint foo;\n    }\n    mapping(uint => MyStruct) myStructs;\n    function f() public {\n        // call _f with state variables\n        _f(arr, map, myStructs[1]);\n\n        // get a struct from a mapping\n        MyStruct storage myStruct = myStructs[1];\n        // create a struct in memory\n        MyStruct memory myMemStruct = MyStruct(0);\n    }\n    function _f(\n        uint[] storage _arr,\n        mapping(uint => address) storage _map,\n        MyStruct storage _myStruct\n    ) internal {\n        // do something with storage variables\n    }\n    // You can return memory variables\n    function g(uint[] memory _arr) public returns (uint[] memory) {\n        // do something with memory array\n    }\n    function h(uint[] calldata _arr) external {\n        // do something with calldata array\n    }\n}",
         },
         {
           title: "Constructor",
@@ -186,6 +195,30 @@ const course = {
           contentUrl: "Constructor.js",
           defaultCode:
             "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n// Base contract X\ncontract X {\n    string public name;\n    constructor(string memory _name) {\n        name = _name;\n    }\n}",
+        },
+        {
+          title: "Inheritance",
+          url: "inheritance",
+          hasCodeEditor: true,
+          contentUrl: "Inheritance.js",
+          defaultCode:
+            'pragma solidity ^0.8.10;\ncontract A {\n    function foo() public pure virtual returns (string memory) {\n        return "A";\n    }\n}\n\n// Add contracts "B" and "C" using the keyboard "is"\n\n',
+        },
+        {
+          title: "Error",
+          url: "error",
+          hasCodeEditor: true,
+          contentUrl: "Error.js",
+          defaultCode:
+            "\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\ncontract Error {\n    function test(uint _i) public pure {\n        // add a statement here to throw an error\n    }\n}",
+        },
+        {
+          title: "Events",
+          url: "events",
+          hasCodeEditor: true,
+          contentUrl: "Events.js",
+          defaultCode:
+            '\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Event {\n    // Event declaration\n    // Up to 3 parameters can be indexed.\n    // Indexed parameters helps you filter the logs by the indexed parameter\n    event Log(string message);\n    event AnotherLog();\n\n    function test() public {\n        emit Log("Hello World!");\n        emit Log("Hello EVM!");\n        emit AnotherLog();\n    }\n}',
         },
         {
           title: "...and more",
