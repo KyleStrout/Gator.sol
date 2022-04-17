@@ -56,13 +56,14 @@ app.post("/api/deployWithArguments", async (req, res) => {
     const compilerData = req.body.compilerData;
     const args = req.body.args;
     const argValues = req.body.argValues;
+    console.log(JSON.stringify(args));
 
     const encodedAbis = [];
     let lastIndex = 0;
     for (let i = 0; i < compilerData.length; i++) {
       const { abi, bytecode, name } = compilerData[i];
       const currentArgs = args[name];
-      console.log(currentArgs);
+
       const numOfArgs = currentArgs.arguments.length;
       // get slice of argValues based on length of numOfArgs
       const currentArgValues = argValues.slice(

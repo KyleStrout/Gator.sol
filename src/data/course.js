@@ -226,6 +226,22 @@ const course = {
             'pragma solidity ^0.8.10;\ncontract A {\n    function foo() public pure virtual returns (string memory) {\n        return "A";\n    }\n}\n\n// Add contracts "B" and "C" using the keyboard "is"\n\n',
         },
         {
+          title: "Function Visiblity",
+          url: "function-visibility",
+          contentUrl: "FunctionVisibility.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Base {\n    function privateFunc() private pure returns (string memory) {\n        return "private function called";\n    }\n\n    function internalFunc() internal pure returns (string memory) {\n        return "internal function called";\n    }\n\n    function publicFunc() public pure returns (string memory) {\n        return "public function called";\n    }\n\n    function externalFunc() external pure returns (string memory) {\n        return "external function called";\n    }\n\n}',
+        },
+        {
+          title: "Payable",
+          url: "payable",
+          contentUrl: "Payable.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Payable {\n    // Payable address can receive Ether\n    address payable public owner;\n\n    // Payable constructor can receive Ether\n    constructor() payable {\n        owner = payable(msg.sender);\n    }\n}",
+        },
+        {
           title: "Error",
           url: "error",
           hasCodeEditor: true,

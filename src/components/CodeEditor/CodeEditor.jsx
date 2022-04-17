@@ -152,10 +152,23 @@ export default function CodeEditor(props) {
     let argumentList = {};
     contractData?.forEach((contract) => {
       if (contract.abi.find((abi) => abi.type === "constructor")) {
-        argumentList[contract.name] = {
-          arguments: contract.abi.find((abi) => abi.type === "constructor")
-            .inputs,
-        };
+        const constructor = contract.abi.find(
+          (abi) => abi.type === "constructor"
+        );
+
+        if (constructor.stateMutability === "payable") {
+          const payableInput = {
+            name: "msgValue",
+            type: "uint256",
+          };
+          argumentList[contract.name] = {
+            arguments: [...constructor.inputs, payableInput],
+          };
+        } else {
+          argumentList[contract.name] = {
+            arguments: constructor.inputs,
+          };
+        }
       }
     });
     if (Object.values(argumentList).length > 0) {
@@ -175,9 +188,10 @@ export default function CodeEditor(props) {
     setOpen(true);
     setMessage("Deploying contract...");
 
-    console.log(values);
+    const msgValue = values.msgValue ?? null;
+    delete values.msgValue;
+
     const data = Object.values(values).slice(1, Object.values(values).length);
-    console.log(data);
 
     const parsedData = [];
     // parse a comma seperated list of arguments
@@ -190,20 +204,22 @@ export default function CodeEditor(props) {
       encodedParsedData.push(web3.utils.asciiToHex(arg));
     });
 
-    console.log(parsedData);
-
     const compilerData =
       contractData[window.location.href.split("/").pop()].compilerData;
 
     const args = argumentList;
-    console.log("args", args);
+    const debugArgs = Object.values(argumentList).forEach((contract) => {
+      contract.arguments = contract.arguments.filter((argument) => {
+        return argument.name !== "msgValue";
+      });
+    });
+    console.log(debugArgs);
 
     const body = {
       compilerData,
       args,
       argValues: parsedData,
     };
-    console.log(body);
     let response;
     try {
       response = await fetch(`${URL}/api/deployWithArguments`, {
@@ -228,6 +244,11 @@ export default function CodeEditor(props) {
         params: [transactionObject],
       });
       transactionObject.gas = gas;
+      // convert msgValue (float) to a number
+      if (msgValue) {
+        const wei = web3.utils.toWei(msgValue, "ether");
+        transactionObject.value = web3.utils.toHex(parseInt(wei));
+      }
 
       const res = await window.ethereum.request({
         method: "eth_sendTransaction",
