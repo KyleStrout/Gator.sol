@@ -1,5 +1,6 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
+
 export const themes = {
   light: {
     codeEditor: "vs-light",
@@ -55,7 +56,7 @@ export const themes = {
     backgroundColorSecondary: "#2E3134",
     textColor: "#CDD9E5",
     fontColor: "#CDD9E5",
-    topBar: "#OE1013",
+    topBar: "#1d2934",
     compileButton: "#004a9f",
     deployButton: "#004a9f",
     buttonsbackground: "gray",
