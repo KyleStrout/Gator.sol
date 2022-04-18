@@ -1,9 +1,9 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
-
 export const themes = {
   light: {
     codeEditor: "vs-light",
+    baseBackgroundColor: "#f0f0f0",
     backgroundColor: "white",
     backgroundColorSecondary: "white",
     textColor: "black",
@@ -53,6 +53,7 @@ export const themes = {
   dark: {
     codeEditor: "vs-dark",
     backgroundColor: "#202124",
+    baseBackgroundColor: "#000000",
     backgroundColorSecondary: "#2E3134",
     textColor: "#CDD9E5",
     fontColor: "#CDD9E5",
@@ -94,6 +95,7 @@ const getTheme = (_mode) => {
 
   return responsiveFontSizes(
     createTheme({
+      mode: mode,
       palette: mode === "light" ? themes.light : themes.dark,
       layout: {
         contentWidth: 1236,

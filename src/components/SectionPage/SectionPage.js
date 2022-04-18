@@ -21,12 +21,13 @@ const SectionPageContainer = styled(Box)(() => ({
 }));
 
 export default function SectionPage(props) {
+  console.log("PROPS HERE: ", props.answerCode);
   const theme = useTheme();
   return (
     <SectionPageContainer
       id="section-page-container"
       sx={{
-        backgroundColor: theme.palette.backgroundColor,
+        backgroundColor: theme.palette.baseBackgroundColor,
       }}
     >
       <SectionContent
@@ -44,6 +45,7 @@ export default function SectionPage(props) {
           }}
           hasCodeEditor={props.hasCodeEditor}
           defaultCode={props.defaultCode}
+          answerCode={props.answerCode}
         ></SectionInteraction>
       )}
       {props.secondaryContentUrl && (

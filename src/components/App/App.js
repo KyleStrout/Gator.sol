@@ -92,6 +92,7 @@ function App() {
                           secondaryContentUrl={section.secondaryContentUrl}
                           hasCodeEditor={section.hasCodeEditor}
                           defaultCode={section.defaultCode}
+                          answerCode={section.answerCode}
                         />
                       }
                     />

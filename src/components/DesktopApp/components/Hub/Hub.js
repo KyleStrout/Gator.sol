@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { makeStyles } from "@mui/styles";
+import { makeStyles, useTheme } from "@mui/styles";
 import { Grid, Typography } from "@mui/material";
 import Image from "../Image";
 import SectionHeader from "../SectionHeader";
@@ -31,6 +31,12 @@ const Features = (props) => {
   const { className, ...rest } = props;
   const classes = useStyles();
 
+  const theme = useTheme();
+  const [deployGif, setDeployGif] = React.useState("deploy.gif");
+  React.useEffect(() => {
+    setDeployGif(theme.mode === "light" ? "deploy.gif" : "deployDark.gif");
+  }, [theme.mode]);
+
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Grid container spacing={4}>
@@ -44,7 +50,7 @@ const Features = (props) => {
           data-aos="fade-up"
         >
           <Image
-            src="https://assets.maccarianagency.com/the-front/illustrations/dashboard-screenshot1.jpg"
+            src={deployGif}
             alt="..."
             className={classes.coverImage}
             data-aos="flip-left"
