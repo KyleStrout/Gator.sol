@@ -609,7 +609,10 @@ export default function CodeEditor(props) {
             </Formik>
           )}
           {props.answerCode && (
-            <Tooltip title="Show Answer" placement="top">
+            <Tooltip
+              title={showAnswer ? "Hide Answer" : "Show Answer"}
+              placement="top"
+            >
               <IconButton
                 onClick={() => {
                   setShowAnswer(!showAnswer);
