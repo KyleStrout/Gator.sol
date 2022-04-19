@@ -24,7 +24,7 @@ function About() {
         About Gator.sol
       </Typography>
       <Typography variant="h5" align="center" marginTop="20px">
-        Dev Team: Jack Driscoll, Kyle Strout, Connor Wilson, Collin Naehr
+        Dev Team: Jack Driscoll, Kyle Strout, Connor Wilson, Colin Naehr
       </Typography>
       {/*<Box textAlign="center" marginTop="20px">
         <Button
