@@ -23,7 +23,7 @@ allowfullscreen></iframe>
 
 ## 1. Install MetaMask Extension and Create A MetaMask account
 
-<button id="install-metamask">Install Metamask</button>
+<button class="metamask-button" id="install-metamask">Install Metamask</button>
 
 ## 2. Connect your wallet to the website
 
@@ -40,7 +40,7 @@ you can click the dropdown at the top of the MetaMask App again and select the R
 
 
 ## 4. Get test ETH to run smart contracts
-Navigate to a Rinkeby Faucedt, Ex: https://rinkebyfaucet.com/
+Navigate to a Rinkeby Fauced, Ex: <a href='https://rinkebyfaucet.com/'>Rinkeby Faucet</a>
 
 You then copy your wallet address by opening MetaMask and clicking the copy icon directly above the amount of ETH you have and below the account name. 
 
@@ -54,7 +54,7 @@ To make sure that you are connected to the blockchain, click the "Compile" and t
 
 If the contract deploys, you are connected! If not, please try following the instructions above again, or restarting your browser.
 
-Feel free to move onto the next page if you are connected. If not, try redoing the instructions above or contact me at jdriscoll98@ufl.edu with the subject line "Wallet Setup help".`;
+Feel free to move onto the next page if you are connected. If not, try redoing the instructions above or contact me at gator.sol.project@gmail.com with the subject line "Wallet Setup help".`;
 
 export const setupFn = () => {
   const installBtn = document.getElementById("install-metamask");
