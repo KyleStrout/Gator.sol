@@ -70,7 +70,7 @@ function App() {
             <WarningDialog
               warning="Incorrect Network"
               open={onWrongNetwork}
-              message="Please open metamask and switch network to 'Rinekby'"
+              message="Please open metamask and switch network to 'Rinekby'. See this link for our video on installing meta mask. https://youtu.be/7p_9weX17xk"
               handleClose={() => {
                 if (checkNetwork()) {
                   setOnWrongNetwork(false);
