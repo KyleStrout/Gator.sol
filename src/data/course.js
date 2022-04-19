@@ -1,5 +1,3 @@
-
-//Connor
 const course = {
   chapters: [
     {
@@ -29,6 +27,14 @@ const course = {
         {
           title: "What is Blockchain",
           url: "what-is-blockchain",
+          contentUrl: "WhatIsBlockchain.js",
+          hasCodeEditor: false,
+          defaultCode: "",
+        },
+        {
+          title: "Types of Blockchain",
+          url: "types-of-blockchain",
+          contentUrl: "TypesofBlockchain.js",
           hasCodeEditor: false,
           defaultCode: "",
         },
@@ -40,14 +46,10 @@ const course = {
           defaultCode: "",
         },
         {
-          title: "Types of Blockchain",
-          url: "types-of-blockchain",
-          defaultCode: "",
-        },
-        {
-          title: "What is Blockchain",
-          url: "what-is-blockchain",
+          title: "Key Blockchain Components",
+          url: "key-blockchain-components",
           hasCodeEditor: false,
+          contentUrl: "KeyBlockchainComponents.js",
           defaultCode: "",
         },
       ],
