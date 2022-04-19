@@ -111,6 +111,21 @@ const Contact = (props) => {
               {...item.authorPhoto}
             />
           ))}
+          <Typography
+            sx={{
+              textAlign: "center",
+              fontWeight: "bold",
+              color: theme.palette.landingPageSpan,
+              marginTop: theme.spacing(4),
+              marginBottom: theme.spacing(4),
+            }}
+          >
+            Contact us at{" "}
+            <a href="mailto:gator.sol.project@gmail.com">
+              gator.sol.project@gmail.com
+            </a>{" "}
+            for assistance
+          </Typography>
         </Grid>
       </Grid>
     </div>

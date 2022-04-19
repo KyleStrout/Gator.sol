@@ -24,6 +24,14 @@ const Hero = (props) => {
 
   const theme = useTheme();
 
+  const [dashboardImg, setDashboardImg] = React.useState("dashboard.png");
+
+  React.useEffect(() => {
+    setDashboardImg(
+      theme.mode === "light" ? "dashboard.png" : "dashboardDark.png"
+    );
+  }, [theme.mode]);
+
   return (
     <div className={className} {...rest}>
       <Grid
@@ -89,8 +97,8 @@ const Hero = (props) => {
           data-aos={"fade-up"}
         >
           <Image
-            src="https://assets.maccarianagency.com/the-front/illustrations/dashboard-screenshot.jpg"
-            alt="TheFront Company"
+            src={dashboardImg}
+            alt="Gator.SOL"
             className={classes.image}
             data-aos="flip-left"
             data-aos-easing="ease-out-cubic"

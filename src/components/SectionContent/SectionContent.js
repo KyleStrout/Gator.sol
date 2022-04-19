@@ -19,6 +19,7 @@ const ContentContainer = styled(Box)(() => ({
   //flexDirection: "column",
   width: "100%",
   height: "calc(100vh - 5rem)",
+  maxWidth: "850px",
   //justifyContent: "flex-start",
   //alignItems: "flex-start",
   overflow: "scroll",
@@ -27,6 +28,10 @@ const ContentContainer = styled(Box)(() => ({
   border: "0.5rem solid #f0f0f0",
   borderRight: "0",
   fontFamily: "Lato",
+
+  // box shadow
+
+  boxShadow: "0px 7px 23px 3px #000000",
 }));
 
 const Content = styled(Box)(() => ({

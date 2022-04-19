@@ -88,7 +88,7 @@ export default function OutputPanel(props) {
         color: theme.palette.textColor,
         border: theme.palette.border,
         width: "100%",
-        maxWidth: "40vw",
+        maxWidth: "45vw",
         overflow: "overlay",
         height: "100%",
       }}

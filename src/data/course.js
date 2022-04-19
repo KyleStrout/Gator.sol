@@ -70,7 +70,8 @@ const course = {
           url: "how-it-works",
           contentUrl: "HowItWorks.js",
           hasCodeEditor: true,
-          defaultCode: '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\ncontract HelloWorld {\n    string greeting = "Hello World!";\n    function setGreeting(string memory greet) public {\n        greeting = greet;\n    }\n    function getGreeting() public view returns (string memory){\n        return greeting;\n    }\n}',
+          defaultCode:
+            '// SPDX-License-Identifier: GPL-3.0\npragma solidity >=0.7.0 <0.9.0;\ncontract HelloWorld {\n    string greeting = "Hello World!";\n    function setGreeting(string memory greet) public {\n        greeting = greet;\n    }\n    function getGreeting() public view returns (string memory){\n        return greeting;\n    }\n}',
         },
         {
           title: "Web3.js",
@@ -226,6 +227,30 @@ const course = {
             'pragma solidity ^0.8.10;\ncontract A {\n    function foo() public pure virtual returns (string memory) {\n        return "A";\n    }\n}\n\n// Add contracts "B" and "C" using the keyboard "is"\n\n',
         },
         {
+          title: "Function Visiblity",
+          url: "function-visibility",
+          contentUrl: "FunctionVisibility.js",
+          hasCodeEditor: true,
+          defaultCode:
+            '// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Base {\n    function privateFunc() private pure returns (string memory) {\n        return "private function called";\n    }\n\n    function internalFunc() internal pure returns (string memory) {\n        return "internal function called";\n    }\n\n    function publicFunc() public pure returns (string memory) {\n        return "public function called";\n    }\n\n    function externalFunc() external pure returns (string memory) {\n        return "external function called";\n    }\n\n}',
+        },
+        {
+          title: "Payable",
+          url: "payable",
+          contentUrl: "Payable.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\ncontract Payable {\n}",
+        },
+        {
+          title: "Sending Ether",
+          url: "sending-ether",
+          contentUrl: "SendingEther.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "pragma solidity ^0.8.10;\ncontract SendEther {\n    function sendViaTransfer(address payable _to) public payable {\n        // use .transfer\n    }\n\n    function sendViaSend(address payable _to) public payable {\n        // use .send\n    }\n\n    function sendViaCall(address payable _to) public payable {\n        // use .call\n    }\n}\ncontract ReceiveEther {\n    /*\n    Which function is called, fallback() or receive()?\n\n           send Ether\n               |\n         msg.data is empty?\n              / \\\n            yes  no\n            /     \\\nreceive() exists?  fallback()\n         /   \\\n        yes   no\n        /      \\\n    receive()   fallback()\n    */\n\n    // Function to receive Ether. msg.data must be empty\n    receive() external payable {}\n\n    // Fallback function is called when msg.data is not empty\n    fallback() external payable {}\n\n    function getBalance() public view returns (uint) {\n        return address(this).balance;\n    }\n}",
+        },
+        {
           title: "Error",
           url: "error",
           hasCodeEditor: true,
@@ -244,6 +269,47 @@ const course = {
         {
           title: "...and more",
           url: "and-more",
+        },
+      ],
+    },
+    {
+      title: "Project 1: ERC20",
+      url: "project-erc20",
+      sections: [
+        {
+          title: "Introduction",
+          url: "erc20-introduction",
+          contentUrl: "Introduction.js",
+        },
+        {
+          title: "IERC20",
+          url: "erc20-interface",
+          contentUrl: "IERC20.js",
+        },
+        {
+          title: "IERC20",
+          url: "erc20-interface",
+          contentUrl: "IERC20.js",
+        },
+        {
+          title: "ERC20 - Part 1",
+          url: "erc20-part1",
+          contentUrl: "ERC20Part1.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\n// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.0.0/contracts/token/ERC20/IERC20.sol\ninterface IERC20 {\n    function totalSupply() external view returns (uint);\n\n    function balanceOf(address account) external view returns (uint);\n\n    function transfer(address recipient, uint amount) external returns (bool);\n\n    function allowance(address owner, address spender) external view returns (uint);\n\n    function approve(address spender, uint amount) external returns (bool);\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool);\n\n    event Transfer(address indexed from, address indexed to, uint value);\n    event Approval(address indexed owner, address indexed spender, uint value);\n}\n\n// Add your new contract here!",
+          answerCode:
+            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\n// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.0.0/contracts/token/ERC20/IERC20.sol\ninterface IERC20 {\n    function totalSupply() external view returns (uint);\n\n    function balanceOf(address account) external view returns (uint);\n\n    function transfer(address recipient, uint amount) external returns (bool);\n\n    function allowance(address owner, address spender) external view returns (uint);\n\n    function approve(address spender, uint amount) external returns (bool);\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool);\n\n    event Transfer(address indexed from, address indexed to, uint value);\n    event Approval(address indexed owner, address indexed spender, uint value);\n}\n\n// Add your new contract here!\n\ncontract ERC20 {\n    function totalSupply() external view returns (uint) {}\n\n    function balanceOf(address account) external view returns (uint) {}\n\n    function transfer(address recipient, uint amount) external returns (bool) {}\n\n    function allowance(address owner, address spender) external view returns (uint) {}\n\n    function approve(address spender, uint amount) external returns (bool) {}\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool) {}\n}",
+        },
+        {
+          title: "ERC20 - Part 2",
+          url: "erc20-part2",
+          contentUrl: "ERC20Part2.js",
+          hasCodeEditor: true,
+          defaultCode:
+            "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\n// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.0.0/contracts/token/ERC20/IERC20.sol\ninterface IERC20 {\n    function totalSupply() external view returns (uint);\n\n    function balanceOf(address account) external view returns (uint);\n\n    function transfer(address recipient, uint amount) external returns (bool);\n\n    function allowance(address owner, address spender) external view returns (uint);\n\n    function approve(address spender, uint amount) external returns (bool);\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool);\n\n    event Transfer(address indexed from, address indexed to, uint value);\n    event Approval(address indexed owner, address indexed spender, uint value);\n}\n\n// Add your new contract here!\n\ncontract ERC20 {\n    function totalSupply() external view returns (uint) {}\n\n    function balanceOf(address account) external view returns (uint) {}\n\n    function transfer(address recipient, uint amount) external returns (bool) {}\n\n    function allowance(address owner, address spender) external view returns (uint) {}\n\n    function approve(address spender, uint amount) external returns (bool) {}\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool) {}\n}",
+          answerCode:
+            '// SPDX-License-Identifier: MIT\npragma solidity ^0.8.10;\n\n// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.0.0/contracts/token/ERC20/IERC20.sol\ninterface IERC20 {\n    function balanceOf(address account) external view returns (uint);\n\n    function transfer(address recipient, uint amount) external returns (bool);\n\n    function allowance(address owner, address spender) external view returns (uint);\n\n    function approve(address spender, uint amount) external returns (bool);\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool);\n\n    event Transfer(address indexed from, address indexed to, uint value);\n    event Approval(address indexed owner, address indexed spender, uint value);\n}\n\n// Add your new contract here!\n\ncontract ERC20 {\n    string public name = "GatorSolCoin";\n    string public symbol = "GSOL";\n    uint8 public decimals = 18;\n\n    function totalSupply() external view returns (uint) {}\n\n    function balanceOf(address account) external view returns (uint) {}\n\n    function transfer(address recipient, uint amount) external returns (bool) {}\n\n    function allowance(address owner, address spender) external view returns (uint) {}\n\n    function approve(address spender, uint amount) external returns (bool) {}\n\n    function transferFrom(\n        address sender,\n        address recipient,\n        uint amount\n    ) external returns (bool) {}\n}',
         },
       ],
     },

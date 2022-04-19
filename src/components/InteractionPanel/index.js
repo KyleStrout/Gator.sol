@@ -30,18 +30,26 @@ export default function InteractionPanel(props) {
   const theme = useTheme();
   const { address } = useContext(AddressContext);
   const { contractData, setContractData } = useContext(ContractContext);
-  const interact = async (contractAddress, method, contractName, ...args) => {
+  const interact = async (
+    contractAddress,
+    method,
+    contractName,
+    messageValue,
+    ...args
+  ) => {
     let transactionObject = {
       from: address,
       to: contractAddress,
       data: "",
       gas: "",
+      value: messageValue,
     };
 
     setOpen(false);
     setMessage("Calling method: " + method.name + "...");
     setOpen(true);
 
+    console.log(method, args);
     const response = await fetch(`${URL}/api/getMethodData`, {
       headers: {
         "Content-Type": "application/json",
@@ -193,9 +201,21 @@ export default function InteractionPanel(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     const inputs = e.target.querySelectorAll("input");
-    return Array.from(inputs).map((i) => {
-      return i.value;
+    const inputArgs = Array.from(inputs).filter(
+      (input) => input.name !== "msg-value"
+    );
+    const params = inputArgs.map((param) => {
+      return param.value;
     });
+    let msgValue = Array.from(inputs).find(
+      (input) => input.name === "msg-value"
+    )?.value;
+    if (msgValue) {
+      const wei = web3.utils.toWei(msgValue, "ether");
+      msgValue = web3.utils.toHex(parseInt(wei));
+    }
+
+    return { params, msgValue };
   };
 
   const AccordionSummary = styled((props) => (
@@ -343,12 +363,15 @@ export default function InteractionPanel(props) {
                           width: "100%",
                         }}
                         onSubmit={(e) => {
-                          const parameters = onSubmit(e);
+                          console.log(e);
+                          const { params, msgValue } = onSubmit(e);
+                          console.log(params, msgValue);
                           interact(
                             contract.address,
                             method,
                             contract.name,
-                            ...parameters
+                            msgValue,
+                            ...params
                           );
                         }}
                       >
@@ -402,6 +425,25 @@ export default function InteractionPanel(props) {
                               </div>
                             );
                           })}
+                        {method.type !== "constructor" &&
+                          method.stateMutability === "payable" && (
+                            <TextField
+                              name={`msg-value`}
+                              id="filled-basic-payable"
+                              label={
+                                <span
+                                  style={{
+                                    color: theme.palette.outputPanelText,
+                                  }}
+                                >
+                                  Value:
+                                </span>
+                              }
+                              variant="filled"
+                              size="small"
+                              sx={{ paddingTop: ".2rem" }}
+                            />
+                          )}
                         {method.result && (
                           <div
                             style={{

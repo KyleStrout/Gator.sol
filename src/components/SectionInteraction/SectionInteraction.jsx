@@ -34,7 +34,10 @@ function SectionInteractionContent(props) {
           backgroundColor: theme.palette.backgroundColor,
         }}
       >
-        <CodeEditor defaultCode={props.defaultCode} />
+        <CodeEditor
+          defaultCode={props.defaultCode}
+          answerCode={props.answerCode}
+        />
         <Box
           sx={{
             height: "calc(50vh - 3.5rem)",
@@ -77,6 +80,7 @@ export default function SectionInteraction(props) {
         }}
         hasCodeEditor={props.hasCodeEditor}
         defaultCode={props.defaultCode}
+        answerCode={props.answerCode}
       ></SectionInteractionContent>
     </SectionInteractionContainer>
   );
