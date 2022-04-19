@@ -1,6 +1,9 @@
 export const content = `# What is blockchain?
 
 
+<img style="display: block;-webkit-user-select: none;margin: auto;cursor:
+ zoom-in;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
+ src="https://i.imgur.com/ZyOFaMD.jpg" width="700" height="394">
 
 According to Investopedia, a blockchain is a distributed database that is shared among the nodes of a computer network.
 As a database, a blockchain stores information electronically in digital format. Blockchains are best known for their crucial role
